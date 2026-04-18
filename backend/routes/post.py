@@ -6,7 +6,7 @@ import uuid
 from typing import List
 from database import get_db
 from models.user import User
-from models.post_model import Post, AnalysisStatus, Upvote, Downvote, View, NewsOutlet
+from models.post_model import Post, AnalysisStatus, Upvote, Downvote, View, NewsOutlet, Claim, ClaimSource, FactCheckSite, PostTag, RedFlag, TrustSignal
 import schemas
 from auth_deps import get_current_user, get_current_editor
 import config
@@ -432,10 +432,19 @@ def find_similar_posts(db: Session, source_posts: List[Post]) -> List[int]:
 
     similar_posts.sort(key=lambda x: x[1], reverse=True)
     return [pid for pid, _ in similar_posts[:10]]
-@router.get("/map/pins", response_model=List[schemas.PostOut])
+    
+@router.get("/map/pins", response_model=List[schemas.PostPinOut])
 def get_map_pins(db: Session = Depends(get_db)):
-    """Dedicated endpoint for high-fidelity 5000+ pin truth-signal heatmap."""
-    return db.query(Post).filter(Post.latitude.isnot(None)).all()
+    return db.query(
+        Post.id, 
+        Post.title, 
+        Post.latitude, 
+        Post.longitude, 
+        Post.credibility_score, 
+        Post.risk_type, 
+        Post.short_title, 
+        Post.summary_easy
+    ).filter(Post.latitude.isnot(None)).all()
 
 from task_queue import TaskQueue
 

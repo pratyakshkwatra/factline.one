@@ -32,25 +32,31 @@ class ConnectionManager:
                 await asyncio.gather(*tasks)
 
     async def listen_to_redis(self):
-        from redis_cache import RedisCache
+        import redis.asyncio as redis
+        from redis_cache import REDIS_URL
         import json
-        client = RedisCache.get_client()
+        
+        client = redis.from_url(REDIS_URL, decode_responses=True)
         pubsub = client.pubsub()
-        pubsub.subscribe("task_updates")
+        await pubsub.subscribe("task_updates")
         
-        print("DEBUG: WebSocket Manager listening to Redis 'task_updates'...")
+        print("DEBUG: WebSocket Manager listening to Redis 'task_updates' (ASYNCHRONOUS)...")
         
-        while True:
-            try:
-                # Use a non-blocking check or a small timeout
-                message = await asyncio.to_thread(pubsub.get_message, ignore_subscribe_messages=True, timeout=1.0)
+        try:
+            async for message in pubsub.listen():
                 if message and message['type'] == 'message':
-                    data = json.loads(message['data'])
-                    post_id = data.get("post_id")
-                    if post_id:
-                        await self.broadcast_status(post_id, data)
-            except Exception as e:
-                print(f"DEBUG: Redis listener error: {e}")
-            await asyncio.sleep(0.1)
+                    try:
+                        data = json.loads(message['data'])
+                        post_id = data.get("post_id")
+                        if post_id:
+                            # Use current loop for broadcasting
+                            await self.broadcast_status(int(post_id), data)
+                    except Exception as json_e:
+                        print(f"DEBUG: JSON Parse Error in WebSocket Listener: {json_e}")
+        except Exception as e:
+            print(f"DEBUG: Async Redis listener error: {e}")
+        finally:
+            await pubsub.unsubscribe("task_updates")
+            await client.close()
 
 manager = ConnectionManager()

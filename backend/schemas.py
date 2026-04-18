@@ -160,3 +160,15 @@ class GameArticle(BaseModel):
     body: str
     is_fake: bool
     source_url: str
+class PostPinOut(BaseModel):
+    id: int
+    title: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    credibility_score: Optional[int] = 0
+    risk_type: Optional[str] = "UNKNOWN"
+    short_title: Optional[str] = ""
+    summary_easy: Optional[str] = ""
+
+    class Config:
+        from_attributes = True

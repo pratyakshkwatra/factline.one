@@ -1,6 +1,6 @@
 # Factline: High-Fidelity Forensic Intelligence Platform
 
-Factline is a state-of-the-art, multi-modal news verification platform designed to combat modern digital disinformation. By combining distributed systems architecture (Kafka/Redis) with cutting-edge AI (Gemini 1.5/2.0) and forensic grounding, Factline provides investigative journalism tools at consumer scale.
+Factline is a state-of-the-art, multi-modal news verification platform designed to combat modern digital disinformation. By combining distributed systems architecture (Kafka/Redis) with cutting-edge AI (Gemini 3.1) and forensic grounding, Factline provides investigative journalism tools at consumer scale.
 
 ---
 
@@ -32,7 +32,7 @@ graph LR
     
     subgraph "Forensic Core"
     Worker --> Engine[NewsCredibilityEngine]
-    Engine --> Gemini[Gemini 1.5 Flash]
+    Engine --> Gemini[Gemini 3.1 Flash]
     Engine --> Tavily[Tavily Search]
     Engine --> Qdrant[Qdrant Vector DB]
     end

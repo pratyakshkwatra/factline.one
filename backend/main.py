@@ -65,13 +65,10 @@ async def startup_event():
     if not connected:
         print("CRITICAL: SQL Connection failed. Application might fail.")
 
-    # 2. Create tables if not exist
     Base.metadata.create_all(bind=engine)
 
-    # 3. Perform manual migrations for new columns
     try:
         with engine.connect() as conn:
-            # Post columns
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS refined_body TEXT"))
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS news_outlet_id INTEGER"))
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS counter_narrative TEXT"))
@@ -80,8 +77,10 @@ async def startup_event():
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS forensic_artifacts JSON"))
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS latitude FLOAT"))
             conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS longitude FLOAT"))
+            conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS evidence_chain JSON"))
+            conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS historical_context TEXT"))
+            conn.execute(text("ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_breaking_news BOOLEAN DEFAULT FALSE"))
             
-            # NewsOutlet columns
             conn.execute(text("ALTER TABLE news_outlets ADD COLUMN IF NOT EXISTS bias TEXT"))
             conn.execute(text("ALTER TABLE news_outlets ADD COLUMN IF NOT EXISTS official_url TEXT"))
             conn.execute(text("ALTER TABLE news_outlets ADD COLUMN IF NOT EXISTS img_url TEXT"))
@@ -94,7 +93,6 @@ async def startup_event():
     loop = asyncio.get_running_loop()
     manager.set_loop(loop)
     
-    # Start Redis Listener
     loop.create_task(manager.listen_to_redis())
     
     print("DEBUG: Registered Routes:")
@@ -102,6 +100,17 @@ async def startup_event():
         methods = getattr(route, "methods", "WS")
         print(f"DEBUG: Route {route.path} [{methods}] -> {route.name}")
 
+    loop.create_task(_run_background_seed())
+
+async def _run_background_seed():
+    import concurrent.futures
+    loop = asyncio.get_running_loop()
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        await loop.run_in_executor(pool, _seed_sync)
+
+def _seed_sync():
+    from database import SessionLocal
+    from seed import seed_forensic_news
     db = SessionLocal()
     try:
         seed_forensic_news(db)

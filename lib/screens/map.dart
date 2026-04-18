@@ -23,7 +23,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
-  List<Post> _posts = [];
+  List<PostPin> _posts = [];
   bool _isLoading = true;
 
   @override
@@ -167,7 +167,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  Marker _buildMarker(Post p) {
+  Marker _buildMarker(PostPin p) {
     final color = (p.credibilityScore ?? 0) > 70
         ? const Color(0xff457B9D)
         : const Color(0xffD90429);
@@ -256,14 +256,22 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _showPostDetails(Post post) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) =>
-          _PostDetailSheet(post: post, authService: widget.authService),
-    );
+  void _showPostDetails(PostPin post) async {
+    // We need the full post detail for the bottom sheet
+    try {
+      final fullPost = await PostAPI().getPostDetail(post.id);
+      if (fullPost != null && mounted) {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => _PostDetailSheet(
+              post: fullPost, authService: widget.authService),
+        );
+      }
+    } catch (e) {
+      // Handle error
+    }
   }
 }
 

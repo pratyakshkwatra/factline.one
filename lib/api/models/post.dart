@@ -360,3 +360,38 @@ class ForensicArtifact {
     );
   }
 }
+
+class PostPin {
+  final int id;
+  final String title;
+  final double? lat;
+  final double? long;
+  final int? credibilityScore;
+  final String? riskType;
+  final String? shortTitle;
+  final String? summaryEasy;
+
+  PostPin({
+    required this.id,
+    required this.title,
+    this.lat,
+    this.long,
+    this.credibilityScore,
+    this.riskType,
+    this.shortTitle,
+    this.summaryEasy,
+  });
+
+  factory PostPin.fromJson(Map<String, dynamic> json) {
+    return PostPin(
+      id: json['id'] ?? -1,
+      title: json['title'] ?? "",
+      lat: json["latitude"] != null ? (json["latitude"] as num).toDouble() : null,
+      long: json["longitude"] != null ? (json["longitude"] as num).toDouble() : null,
+      credibilityScore: json['credibility_score'],
+      riskType: json['risk_type'],
+      shortTitle: json['short_title'],
+      summaryEasy: json['summary_easy'],
+    );
+  }
+}
