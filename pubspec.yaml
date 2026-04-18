@@ -1,0 +1,45 @@
+name: factline
+description: "Global Misinformation Shield."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.3.0
+  carousel_slider_plus: ^7.1.1
+  font_awesome_flutter: ^10.9.0
+  shimmer_animation: ^2.2.2
+  auto_route: ^10.1.0+1
+  intl: ^0.20.2
+  dio: ^5.9.0
+  flutter_secure_storage: ^9.2.4
+  recase: ^4.1.0
+  crystal_navigation_bar: ^1.0.4
+  country_flags: ^3.3.0
+  flutter_map_tile_caching: ^10.1.1
+  latlong2: ^0.9.1
+  http: ^1.5.0
+  flutter_map: ^8.2.1
+  translator: ^1.0.4+1
+  file_picker: ^8.1.8
+  web_socket_channel: ^3.0.1
+  flutter_map_marker_cluster: ^8.2.2
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  auto_route_generator: ^10.2.3
+  build_runner: ^2.5.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/news_bg_1.jpg
+    - assets/news_bg_2.jpg
