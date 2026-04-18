@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:factline/screens/forensic_report.dart';
 import 'package:factline/router/router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')

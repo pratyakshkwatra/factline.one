@@ -46,16 +46,3 @@ app.*.map.json
 
 .env
 cert.pem
-# Critical Backend Core
-backend/agent.py
-backend/seed.py
-backend/worker.py
-backend/services/vector_service.py
-backend/task_queue.py
-
-# Critical Frontend Core
-lib/api/api_client.dart
-lib/api/post.dart
-backend/services/vector_service.py
-backend/task_queue.py
-backend/worker.py
