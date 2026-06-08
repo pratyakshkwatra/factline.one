@@ -1,152 +1,210 @@
-# Factline: High-Fidelity Forensic Intelligence Platform
+# Factline
 
-Factline is a state-of-the-art, multi-modal news verification platform designed to combat modern digital disinformation. By combining distributed systems architecture (Kafka/Redis) with cutting-edge AI (Gemini 3.1) and forensic grounding, Factline provides investigative journalism tools at consumer scale.
+**Tagline:** Autonomous Intelligence Discovery, Investigation & Verification Platform
 
----
-
-## 🚫 The Problem Statement
-In an era of deepfakes, algorithmic bias, and high-speed information voids, the "Truth" has become an elusive commodity.
-
-| Challenge | Impact on Society | Factline Intervention |
-| :--- | :--- | :--- |
-| **News Fragmentation** | Information travels via unverified links; source origin is lost. | **Source Origin Audit**: Recursive scraping to find the parent domain. |
-| **Breaking News Voids** | Rumors fill the gap before official reports are released. | **Uncertainty Engine**: Detects data voids and flags "Emerging Intel." |
-| **Neural Manipulation** | AI media is indistinguishable from reality. | **Multi-Modal Hub**: GAN artifact detection & metadata integrity checks. |
-| **Opaque Verification** | Users are told "Fact Check: False" without proof. | **Forensic Transparency**: Full access to scraped sources & reasoning. |
+Factline began as a multi-modal news verification platform focused on validating user-submitted content. The project has since evolved into a local-first intelligence operating system capable of discovering, investigating, verifying, and publishing evidence-backed reports autonomously.
 
 ---
 
-## ⚖️ The Solution
-Factline transforms news consumption into a **Forensic Ingestion** process. Submission is not just "reading"—it's an autonomous, multi-stage digital audit.
+## Evolution of Factline
+
+Factline began as a multi-modal news verification platform focused on validating user-submitted content.
+
+The project has since evolved into a local-first intelligence operating system capable of discovering, investigating, verifying, and publishing evidence-backed reports autonomously.
 
 ---
 
-## 🔄 Core Architecture & Data Flow
+## Factline V1 (Legacy)
 
-### 1. High-Level System Architecture
-```mermaid
-graph LR
-    User([User App]) -- Submission --> API[FastAPI Gateway]
-    API -- Publish --> Kafka{Kafka Topic: news-forensics}
-    Kafka -- Consume --> Worker[Forensic Worker]
-    
-    subgraph "Forensic Core"
-    Worker --> Engine[NewsCredibilityEngine]
-    Engine --> Gemini[Gemini 3.1 Flash]
-    Engine --> Tavily[Tavily Search]
-    Engine --> Qdrant[Qdrant Vector DB]
-    end
-    
-    Worker -- Telemetry --> Redis((Redis Pub/Sub))
-    Redis -- Broadcast --> WS[WebSocket Server]
-    WS -- Real-time Update --> User
-    
-    Worker -- Persistence --> DB[(PostgreSQL)]
-```
+### Factline V1 Interface
 
-### 2. The Investigative HUD State Machine
-```mermaid
-stateDiagram-v2
-    [*] --> PENDING: User Submits
-    PENDING --> INGESTING: Kafka Pickup
-    INGESTING --> REFINING: Content Scraped
-    REFINING --> VERIFYING: Primary Claims Extracted
-    VERIFYING --> GROUNDING: Cross-Ref with Global Intel
-    GROUNDING --> FINALIZING: Verdict Synthesis
-    FINALIZING --> COMPLETED: Report Delivered
-    COMPLETED --> [*]
-    
-    REFINING --> FAILED: Invalid Source
-    VERIFYING --> FAILED: Engine Timeout
-```
+![Factline V1 Screenshot 1](assets/screenshots/1.jpeg)
 
-### 3. Social Media Scouting Pipeline
+_Factline V1 Interface - Verification Dashboard_
+
+![Factline V1 Screenshot 2](assets/screenshots/2.jpeg)
+
+_Factline V1 Interface - Multi-Modal Analysis_
+
+The original Factline platform focused on:
+
+- User-submitted verification
+- Multi-modal analysis
+- News verification
+- Forensic scoring
+- Transparency-focused design
+
+The original system solved the problem of opaque verification and information voids by allowing users to submit claims for distributed digital audits.
+
+_(See [docs/v1/README.md](docs/v1/README.md) for legacy documentation.)_
+
+---
+
+## Why Factline Evolved
+
+User-submitted verification, while powerful, has fundamental limitations in the modern information ecosystem.
+
+- **Information Overload**: Users cannot manually submit every emerging claim.
+- **Emerging Discussions**: Critical intelligence often forms in niche communities before reaching mainstream awareness.
+- **Misinformation Velocity**: False narratives spread faster than they can be manually verified.
+- **Need for Proactive Intelligence Gathering**: To effectively combat disinformation, a system must discover and analyze claims autonomously, before they cause harm.
+
+This led to the transition to Factline V2.
+
+---
+
+## Factline V2 (Current)
+
+Factline is now an autonomous intelligence engine that:
+
+- Discovers discussions
+- Ranks opportunities
+- Investigates claims
+- Collects evidence
+- Verifies information
+- Generates reports
+- Publishes transparent research
+
+_(See [docs/v2/factline_2.0.md](docs/v2/factline_2.0.md) for current specifications.)_
+
+---
+
+## Core Workflow
+
 ```mermaid
 graph TD
-    A[Identify Core Claims] --> B{Search Streams}
-    B --> C[Official Media: Reuters/AP/BBC]
-    B --> D[Social Intel: Twitter/Reddit]
-    B --> E[Official Records: Gov/NGO]
-    
-    D --> D1[Scrape Top 5 Relevant Threads]
-    D1 --> D2[Extract Counter-Claims]
-    D2 --> D3[Calculate Crowd-Sentiment Entropy]
-    
-    C & D3 & E --> F[Grounding Matrix]
-    F --> G[Dynamic Confidence Score]
+    A[Discovery] --> B[Ranking]
+    B --> C[Investigation]
+    C --> D[Verification]
+    D --> E[Reporting]
+    E --> F[Publishing]
 ```
 
 ---
 
-## 📊 Forensic Scoring Matrix
-Claims are measured across multiple vectors to produce the final **Credibility Score**.
+## Key Features
 
-| Signal Category | Weight | Positive Indicators (Trust Signals) | Negative Indicators (Red Flags) |
-| :--- | :---: | :--- | :--- |
-| **Source Authority** | 30% | Whitelisted domain, HTTPS, Primary source. | Blacklisted domain, Suspicious TLD, No contact info. |
-| **Grounding Depth** | 40% | Official rebuttals, Peer-verified, Data-backed. | Isolated report, Contradicts official records. |
-| **Social Context** | 15% | Community-verified (Twitter Notes), Reddit context. | Highly polarized sentiment, Bot-like spread patterns. |
-| **Neural Integrity** | 15% | Consistent lighting, No GAN artifacts, Metadata valid. | Frequency inconsistencies, Metadata missing/stripped. |
-
----
-
-## ⚖️ Audit Verdict Tiers
-The final Forensic Verdict is categorized based on the confidence of the grounding matrix.
-
-| Verdict | Confidence Range | Meaning to User | UI Indicator |
-| :--- | :---: | :--- | :--- |
-| **VERIFIED** | 85% - 100% | Information is backed by multiple primary sources. | Blue Badge |
-| **VETTED** | 60% - 84% | Generally accepted but lacks multiple official streams. | Green Badge |
-| **UNCERTAIN** | 40% - 59% | **Emerging Intel**. Data is scarce or fast-moving. | Yellow Banner |
-| **CONTROVERSIAL** | 20% - 39% | Sources are in direct conflict. Verification stalled. | Orange Warning |
-| **REFUTED / FRAUD**| 0% - 19% | Narrative is factually incorrect or AI-manipulated. | Red Alert |
+- **Intelligence Discovery**: Autonomous scouting of emerging narratives.
+- **Recursive Investigations**: Multi-layered search and analysis.
+- **Evidence Graphs**: Visual representation of claims and grounding sources.
+- **Source Auditing**: Recursive validation of origin domains.
+- **Local AI Inference**: Secure and cost-effective processing using local models.
+- **Transparency Reports**: Full access to the evidence and reasoning behind verdicts.
+- **Analyst Dashboard**: A dedicated interface for human operators.
+- **Public Report Platform**: A portal for publishing verified findings.
+- **Knowledge Memory**: Persistent storage of past investigations and entities.
+- **Human-in-the-Loop Publishing**: Final review by human analysts before public release.
 
 ---
 
-## 👥 Integrated User Flow
+## Architecture
 
-### 1. Contextual Ingestion
-- **Input Types**: URL, Photo of a screen, or Raw Text.
-- **Narrative Binding**: Users can provide their own "suspicions" to help the AI focus on specific logical flaws.
+```mermaid
+graph TD
+    subgraph Autonomous Engine
+        Scraper[Web Scraper/Discovery]
+        Analyzer[Local AI Analyzer]
+        Memory[Vector Database]
+    end
 
-### 2. Live Investigative HUD
-- The UI glows with a "Forensic Scan" animation.
-- A vertical timeline lights up dynamically as the Kafka Workers process each layer of intelligence.
-- Users see specific claims appear in real-time before the final verdict is reached.
+    subgraph Human Interface
+        Dashboard[Local Analyst Dashboard]
+        Publisher[Transparency Platform]
+    end
 
-### 3. Deep Forensic Audit (The transparency layer)
-Users can dive beneath the summary into the **Forensic Report Screen**:
-- **Scraped Intel Hub**: Interactive cards for every source found (Twitter, Reddit, News).
-- **Evidence Chain**: A numbered logical breakdown of the audit.
-- **Raw Telemetry**: A terminal-style view of the raw algorithm output.
-
----
-
-## 🚀 Infrastructure Configuration
-
-### Kafka Topics
-- `news-forensics`: Primary processing queue.
-- `media-analysis`: Heavy-duty image processing offload.
-
-### Redis Channels
-- `forensic_updates_{id}`: Real-time worker-to-UI telemetry.
+    Scraper --> Analyzer
+    Analyzer <--> Memory
+    Analyzer --> Dashboard
+    Dashboard --> Publisher
+```
 
 ---
 
-## 🛠 Getting Started
+## Technology Stack
 
-1. **Environmental Configuration**: Set your `GOOGLE_API_KEY` and `TAVILY_API_KEY` in `.env`.
-2. **Infrastructure Launch**:
-   ```bash
-   docker compose up -d --build
-   ```
-3. **Mobile Launch**:
-   ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
-   flutter run
-   ```
+- **Backend**: FastAPI, Python
+- **Frontend**: Flutter (Dashboard), Web (Public Platform)
+- **Database**: PostgreSQL, Qdrant (Vector DB)
+- **AI Models**: Gemini 3.1, Local LLMs
+- **Infrastructure**: Docker, Nginx
+- **Browser Automation**: Playwright/Selenium
 
 ---
 
-## 🛡 License
-Proprietary Intelligence Core — Factline Forensic Hub# factline-code_wizards
+## Local Analyst Dashboard
+
+The Local Analyst Dashboard is the primary interface for human operators to monitor autonomous investigations, review evidence graphs, and authorize the publication of intelligence reports.
+
+_(Screenshots coming soon)_
+
+---
+
+## Public Transparency Platform
+
+The Public Transparency Platform is where verified reports are published for public consumption, featuring complete evidence chains and source auditing details.
+
+_(Screenshots coming soon)_
+
+---
+
+## Project Structure
+
+```text
+factline/
+├── assets/
+│   └── screenshots/       # V1 and UI Screenshots
+├── docs/
+│   ├── v1/                # Legacy documentation and architecture
+│   └── v2/                # Current specifications and architecture
+├── backend/               # Core intelligence engine and APIs
+├── lib/                   # Flutter application code
+├── web/                   # Web platform assets
+└── docker-compose.yml     # Infrastructure configuration
+```
+
+---
+
+## Getting Started
+
+### Installation
+
+1. Clone the repository.
+2. Ensure you have Docker and Flutter installed.
+3. Configure environment variables (e.g., API keys).
+
+### Configuration
+
+Set the required environment variables in a `.env` file at the root.
+
+### Running
+
+Start the backend infrastructure:
+
+```bash
+docker compose up -d --build
+```
+
+Start the application:
+
+```bash
+flutter run
+```
+
+---
+
+## Roadmap
+
+- **Factline V1**: Multi-modal verification, forensic scoring, mobile app launch. (Completed)
+- **Factline V2**: Autonomous discovery, local inference, public reporting platform. (In Progress)
+- **Future Plans**: Decentralized intelligence sharing, real-time video forensics.
+
+---
+
+## Design Principles
+
+- **Local First**: Prioritizing local inference for security and speed.
+- **Transparent**: Exposing the entire reasoning chain.
+- **Evidence Based**: Grounding all verdicts in auditable sources.
+- **Human Supervised**: Ensuring final publication rests with human analysts.
+- **Cost Efficient**: Optimizing API calls and utilizing local models.
+- **Open Architecture**: Building modular components for future expansion.
