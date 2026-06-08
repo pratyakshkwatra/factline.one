@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+typer
+sqlalchemy
+pydantic
+pydantic-settings
+redis
+qdrant-client
+playwright
+loguru
+rich
