@@ -1,0 +1,15 @@
+searches:
+  categories:
+    - Breaking News
+    - Geopolitics
+    - AI
+    - Cybersecurity
+    - Markets
+    - Science
+    - Government Releases
+    - Research Publications
+  providers:
+    - DuckDuckGo
+    - Bing
+    - Google
+  cadence_minutes: 60
