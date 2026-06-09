@@ -151,6 +151,7 @@ def fetch_reddit_subreddit(subreddit, category_weight):
             logger.error(f"Failed to fetch Reddit {url}: {e}")
     return items
 
+import os
 import concurrent.futures
 
 def run_discovery(db: Session):
@@ -158,7 +159,9 @@ def run_discovery(db: Session):
     new_items_count = 0
     all_items = []
     
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    # Dynamically scale threads based on available CPU cores (multiplier for I/O bound tasks)
+    optimal_workers = (os.cpu_count() or 4) * 4
+    with concurrent.futures.ThreadPoolExecutor(max_workers=optimal_workers) as executor:
         future_to_source = {}
         
         # Submit RSS Feeds
