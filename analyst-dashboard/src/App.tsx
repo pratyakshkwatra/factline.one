@@ -128,6 +128,7 @@ export const App = () => {
   const reports: Report[] = reportsData?.reports || [];
   const evidence: Evidence[] = evidenceData?.evidence || [];
   const investigations: Investigation[] = investigationsData?.investigations || [];
+  const inputs: Input[] = investigationsData?.inputs || [];
 
   const handlePublish = async (reportId: string) => {
     try {
@@ -192,6 +193,14 @@ export const App = () => {
         i.search_query.toLowerCase().includes(lowerQuery),
       ),
     [investigations, lowerQuery],
+  );
+  const filteredInputs = useMemo(
+    () =>
+      inputs.filter((i) =>
+        i.input_type.toLowerCase().includes(lowerQuery) ||
+        (i.notes && i.notes.toLowerCase().includes(lowerQuery)),
+      ),
+    [inputs, lowerQuery],
   );
 
   // --- UI Components ---
@@ -478,53 +487,119 @@ export const App = () => {
             <div className="max-w-6xl mx-auto space-y-8">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  Active Investigations
+                  Investigation Workspace
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Live autonomous agent research queries.
+                  Manage user-submitted investigations and live autonomous agent queries.
                 </p>
               </div>
 
-              <div className="bg-card border border-border rounded-xl overflow-hidden">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-secondary/50 text-muted-foreground text-xs uppercase font-medium">
-                    <tr>
-                      <th className="px-6 py-3">Status</th>
-                      <th className="px-6 py-3">Search Query</th>
-                      <th className="px-6 py-3 text-right">Query ID</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {filteredInvestigations.map((inv) => (
-                      <tr
-                        key={inv.id}
-                        className="hover:bg-secondary/20 transition-colors"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-secondary text-foreground border border-border">
-                            {inv.status === "Running" ? (
-                              <div className="w-1.5 h-1.5 rounded-full bg-status-verified animate-pulse" />
-                            ) : (
-                              <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
-                            )}
-                            {inv.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 font-mono text-xs">
-                          {inv.search_query}
-                        </td>
-                        <td className="px-6 py-4 text-right text-muted-foreground font-mono text-xs">
-                          {inv.id.substring(0, 8)}
-                        </td>
+              {/* User Submitted Investigations Queue */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium tracking-tight">Submitted Investigations</h3>
+                <div className="bg-card border border-border rounded-xl overflow-hidden">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-secondary/50 text-muted-foreground text-xs uppercase font-medium">
+                      <tr>
+                        <th className="px-6 py-3">Status</th>
+                        <th className="px-6 py-3">Input Type</th>
+                        <th className="px-6 py-3">Notes</th>
+                        <th className="px-6 py-3 text-right">Input ID</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {filteredInvestigations.length === 0 && (
-                  <div className="py-8 text-center text-muted-foreground">
-                    No active investigations.
-                  </div>
-                )}
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {filteredInputs.map((inv) => (
+                        <tr
+                          key={inv.id}
+                          className="hover:bg-muted/50 transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              {inv.status === "completed" ? (
+                                <CheckCircle2 className="w-4 h-4 text-status-verified" />
+                              ) : inv.status === "running" ? (
+                                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                              ) : inv.status === "failed" ? (
+                                <XCircle className="w-4 h-4 text-status-false" />
+                              ) : (
+                                <div className="w-4 h-4 rounded-full bg-muted border border-muted-foreground/30 animate-pulse" />
+                              )}
+                              <span className="capitalize">{inv.status}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 font-medium text-foreground uppercase tracking-wider text-xs">
+                            {inv.input_type}
+                          </td>
+                          <td className="px-6 py-4 text-muted-foreground truncate max-w-xs">
+                            {inv.notes || "-"}
+                          </td>
+                          <td className="px-6 py-4 text-right text-muted-foreground font-mono text-xs">
+                            {inv.id.substring(0, 8)}...
+                          </td>
+                        </tr>
+                      ))}
+                      {filteredInputs.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
+                            No investigations submitted yet.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Agent Queries Queue */}
+              <div className="space-y-4 pt-6">
+                <h3 className="text-lg font-medium tracking-tight">Active Agent Queries</h3>
+                <div className="bg-card border border-border rounded-xl overflow-hidden">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-secondary/50 text-muted-foreground text-xs uppercase font-medium">
+                      <tr>
+                        <th className="px-6 py-3">Status</th>
+                        <th className="px-6 py-3">Search Query</th>
+                        <th className="px-6 py-3 text-right">Query ID</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {filteredInvestigations.map((inv) => (
+                        <tr
+                          key={inv.id}
+                          className="hover:bg-muted/50 transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              {inv.status === "completed" ? (
+                                <CheckCircle2 className="w-4 h-4 text-status-verified" />
+                              ) : inv.status === "running" ? (
+                                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                              ) : inv.status === "failed" ? (
+                                <XCircle className="w-4 h-4 text-status-false" />
+                              ) : (
+                                <div className="w-4 h-4 rounded-full bg-muted border border-muted-foreground/30 animate-pulse" />
+                              )}
+                              <span className="capitalize">{inv.status}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 font-medium text-foreground">
+                            {inv.search_query}
+                          </td>
+                          <td className="px-6 py-4 text-right text-muted-foreground font-mono text-xs">
+                            {inv.id}
+                          </td>
+                        </tr>
+                      ))}
+                      {filteredInvestigations.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="px-6 py-8 text-center text-muted-foreground">
+                            No active agent queries.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

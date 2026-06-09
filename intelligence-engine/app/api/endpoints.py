@@ -62,7 +62,8 @@ def get_candidates(db: Session = Depends(get_db)):
 @router.get("/investigations")
 def get_investigations(db: Session = Depends(get_db)):
     tasks = db.query(InvestigationTask).order_by(InvestigationTask.id.desc()).limit(50).all()
-    return {"investigations": tasks}
+    inputs = db.query(InvestigationInput).order_by(InvestigationInput.created_at.desc()).limit(50).all()
+    return {"investigations": tasks, "inputs": inputs}
 
 class InvestigationSubmitRequest(BaseModel):
     url: Optional[str] = None
