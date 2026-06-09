@@ -1,10 +1,10 @@
 # Factline
 
-**Tagline:** Autonomous Intelligence Discovery, Investigation & Verification Platform
+**Tagline:** Human-Guided Intelligence Investigation Platform
 
-> _In an era where misinformation spreads faster than human analysts can track, the truth needs an autonomous defender. Enter Factline: an intelligence operating system that never sleeps. It scours the internet for emerging narratives, isolates factual claims from the noise, and deploys headless browser agents to cross-reference evidence against authoritative sources—synthesizing verifiable, transparency reports before a false narrative can take hold._
+> _In an era where misinformation spreads faster than human analysts can track, the truth needs an interactive defender. Enter Factline: a human-guided intelligence investigation platform. The human provides the starting signal, and Factline's autonomous engine takes over. It deploys headless browser agents to cross-reference evidence against authoritative sources, recursively investigate claims, and synthesize verifiable, transparent reports._
 
-Factline began as a multi-modal news verification platform focused on validating user-submitted content. The project has since evolved into a local-first intelligence operating system capable of discovering, investigating, verifying, and publishing evidence-backed reports autonomously.
+Factline began as a multi-modal news verification platform focused on validating user-submitted content. It then briefly evolved into an autonomous discovery engine. Today, Factline V2.1 stands as a powerful hybrid: an intelligence operating system that pairs human direction with autonomous recursive evidence collection, verification, and report generation.
 
 ---
 
@@ -20,19 +20,22 @@ _Factline V1 Interface - Verification Dashboard_
 ![Factline V1 Screenshot 2](assets/screenshots/2.jpeg)
 _Factline V1 Interface - Multi-Modal Analysis_
 
-The V1 source code has been preserved in the `legacy-v1/` directory.
 
 ### Factline V2 (Current)
 
 User-submitted verification has fundamental limitations in the modern information ecosystem due to information overload and the sheer velocity of misinformation.
 
-Factline V2 is an autonomous intelligence engine that operates proactively. It:
+Factline V2 is an autonomous intelligence engine that operated proactively, focusing on discovering content automatically.
 
-- Discovers discussions from global sources
-- Ranks opportunities based on velocity
-- Investigates claims using recursive search
+### Factline V2.1 (Current)
+
+The current architecture shifts the primary entrypoint from autonomous discovery to investigator-guided analysis. We recognized that the most effective investigations start with human intuition, while the heavy lifting of evidence collection is best left to AI. Discovery remains an optional module, but Factline is now built to optimize for: *"Investigate this"* rather than *"Find something to investigate"*.
+
+- Human operators initiate investigations via URL, text, or screenshots
+- Factline extracts claims and plans the investigation
+- Conducts recursive search using Playwright to visit sources, extract citations, and find referenced materials
 - Collects and archives verifiable evidence
-- Generates evidence-backed consensus reports
+- Generates evidence-backed consensus reports and concise comments
 - Publishes transparent research to a decentralized static dashboard
 
 ---
@@ -44,12 +47,12 @@ Factline V2 employs a highly modular, decoupled architecture:
 ### 1. Intelligence Engine (Backend)
 
 - **Stack**: FastAPI, Python, SQLAlchemy, PostgreSQL, Loguru
-- **Function**: The brain of the operation. It runs the automated pipeline (Discovery -> Ranking -> Extraction -> Investigation -> Report Generation) and exposes real-time WebSocket feeds and REST endpoints.
+- **Function**: The brain of the operation. It runs the automated pipeline (Claim Extraction -> Planning -> Playwright Evidence Gathering -> Verification -> Report Generation) and exposes REST endpoints for the Analyst Dashboard.
 
 ### 2. Analyst Dashboard (Frontend)
 
 - **Stack**: React, TypeScript, Vite, TailwindCSS
-- **Function**: The command center for human operators. It provides a real-time window into the intelligence engine's operation, allowing analysts to monitor the evidence graph, track running investigations, and formally publish final reports.
+- **Function**: The command center for human operators and the primary operating interface. Analysts can submit new investigations, monitor the evidence graph, view every source collected in the Source Explorer, and formally publish final reports.
 
 ### 3. Public Dashboard (Frontend)
 
@@ -62,12 +65,13 @@ Factline V2 employs a highly modular, decoupled architecture:
 
 ```mermaid
 graph TD
-    A[Discovery Feed] --> B[Velocity Ranking]
-    B --> C[Claim Extraction]
-    C --> D[Targeted Investigation & Search]
-    D --> E[Consensus Generation]
-    E --> F[Analyst Review & Publishing]
-    F --> G[Static Public Dashboard]
+    A[Human Input: URL/Text/Images] --> B[Claim Extraction & Planning]
+    B --> C[Query Generation]
+    C --> D[Web Discovery & Playwright Evidence Collection]
+    D --> E[Recursive Investigation]
+    E --> F[Verification & Report Generation]
+    F --> G[Analyst Review & Publishing]
+    G --> H[Static Public Dashboard]
 ```
 
 ---
@@ -79,7 +83,6 @@ factline/
 ├── intelligence-engine/   # Core Python FastAPI backend and pipeline logic
 ├── analyst-dashboard/     # React application for human operators
 ├── public-dashboard/      # React application for public static reporting
-├── legacy-v1/             # Preserved V1 Flutter mobile app and Docker configs
 ├── docs/                  # Architecture specifications
 └── factline               # Root CLI launcher script
 ```
@@ -145,7 +148,9 @@ python3 app/cli.py --help
 
 Commands include:
 
-- `python3 app/cli.py run`: Execute a full intelligence pipeline cycle.
+- `factline investigate`: Interactive workflow to paste content/URL and begin an investigation.
+- `factline investigate <url>`: Automatically fetch and investigate a specific URL.
+- `python3 app/cli.py run`: Execute the intelligence pipeline.
 - `python3 app/cli.py status`: Check database and API health.
 - `python3 app/cli.py sync`: Manually sync the static SQLite database.
 
