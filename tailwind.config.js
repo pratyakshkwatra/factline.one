@@ -11,7 +11,7 @@ export default {
       fontFamily: {
         sans:  ['Inter', 'system-ui', 'sans-serif'],
         mono:  ['Geist', 'ui-monospace', 'monospace'],
-        serif: ['Georgia', 'Cambria', 'serif'],
+        serif: ['Playfair Display', 'Merriweather', 'serif'],
         geist: ['Geist', 'Inter', 'sans-serif'],
       },
       colors: {
@@ -26,7 +26,7 @@ export default {
           DEFAULT:    "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        accent:   '#A259FF',
+        accent:   '#2563EB',
         verified: '#10b981',
         likely:   '#3b82f6',
         mixed:    '#f59e0b',

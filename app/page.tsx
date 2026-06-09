@@ -40,7 +40,7 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <main className="relative z-10 pt-[68px]">
+      <main className="relative z-10 pt-0">
         <LandingPage reports={reports} featuredReport={featuredReport} />
       </main>
     </>

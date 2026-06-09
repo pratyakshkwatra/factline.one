@@ -1,22 +1,24 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { Navbar } from '../../components/Navbar';
-import { ReportList } from '../../components/ReportList';
-import { Report } from '../../components/ReportCardView';
-import { Metadata } from 'next';
+import { promises as fs } from "fs";
+import path from "path";
+import { Navbar } from "../../components/Navbar";
+import { ReportList } from "../../components/ReportList";
+import { Report } from "../../components/ReportCardView";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Intelligence Archive | Factline',
-  description: 'Every investigation. Every claim. Every source. Permanently archived.',
+  title: "Intelligence Archive | Factline",
+  description:
+    "Every investigation. Every claim. Every source. Permanently archived.",
 };
 
 async function getReports(): Promise<Report[]> {
   try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'index.json');
-    const contents = await fs.readFile(filePath, 'utf8');
+    const filePath = path.join(process.cwd(), "public", "data", "index.json");
+    const contents = await fs.readFile(filePath, "utf8");
     const reports: Report[] = JSON.parse(contents);
     return reports.sort(
-      (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+      (a, b) =>
+        new Date(b.published_at).getTime() - new Date(a.published_at).getTime(),
     );
   } catch {
     return [];
@@ -36,7 +38,7 @@ export default async function ArchivePage() {
 
       <Navbar />
 
-      <main className="relative z-10 pt-[68px]">
+      <main className="relative z-10 pt-24">
         <ReportList initialReports={reports} />
       </main>
     </>

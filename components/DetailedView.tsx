@@ -1,18 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-  useInView,
-} from "framer-motion";
+import React, { useState } from "react";
+import Image from "next/image";
 import {
   ShieldCheck,
-  Zap,
-  ChevronLeft,
-  ChevronDown,
   CheckCircle2,
   AlertTriangle,
   XCircle,
@@ -21,10 +12,8 @@ import {
   Share2,
   Clock,
   BookOpen,
-  HelpCircle as QuestionIcon,
-  Link2,
+  FileText,
 } from "lucide-react";
-import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────
 // Verdict utilities
@@ -32,200 +21,39 @@ import Link from "next/link";
 const getVerdictConfig = (verdict: string) => {
   const v = (verdict || "").toLowerCase();
   if (v.includes("verifi") || v === "true")
-    return { color: "text-emerald-400", border: "border-emerald-500/30", bg: "bg-emerald-500/10", accent: "#10b981", label: verdict };
+    return {
+      color: "text-emerald-400",
+      border: "border-emerald-900/50",
+      bg: "bg-emerald-950/30",
+      icon: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
+    };
   if (v.includes("likely"))
-    return { color: "text-blue-400",   border: "border-blue-500/30",   bg: "bg-blue-500/10",   accent: "#3b82f6", label: verdict };
+    return {
+      color: "text-blue-400",
+      border: "border-blue-900/50",
+      bg: "bg-blue-950/30",
+      icon: <CheckCircle2 className="w-5 h-5 text-blue-500" />,
+    };
   if (v.includes("mixed") || v.includes("disputed"))
-    return { color: "text-amber-400",  border: "border-amber-500/30",  bg: "bg-amber-500/10",  accent: "#f59e0b", label: verdict };
+    return {
+      color: "text-amber-400",
+      border: "border-amber-900/50",
+      bg: "bg-amber-950/30",
+      icon: <AlertTriangle className="w-5 h-5 text-amber-500" />,
+    };
   if (v.includes("false"))
-    return { color: "text-rose-400",   border: "border-rose-500/30",   bg: "bg-rose-500/10",   accent: "#ef4444", label: verdict };
-  return   { color: "text-slate-400",  border: "border-slate-500/30",  bg: "bg-slate-500/10",  accent: "#64748b", label: verdict || "Under Review" };
-};
-
-const getVerdictIcon = (verdict: string, size = "w-5 h-5") => {
-  const v = (verdict || "").toLowerCase();
-  if (v.includes("verifi") || v === "true") return <CheckCircle2 className={`${size} text-emerald-400`} />;
-  if (v.includes("likely"))                 return <CheckCircle2 className={`${size} text-blue-400`} />;
-  if (v.includes("mixed"))                  return <AlertTriangle className={`${size} text-amber-400`} />;
-  if (v.includes("false"))                  return <XCircle       className={`${size} text-rose-400`} />;
-  return                                           <HelpCircle     className={`${size} text-slate-400`} />;
-};
-
-// ─────────────────────────────────────────────────────────────
-// Animated confidence bar
-// ─────────────────────────────────────────────────────────────
-const ConfidenceBar = ({ score, label }: { score: number; label: string }) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  const barColor = score >= 90 ? "bg-emerald-500" : score >= 70 ? "bg-amber-500" : "bg-rose-500";
-  const glow     = score >= 90
-    ? "shadow-[0_0_8px_rgba(16,185,129,0.6)]"
-    : score >= 70
-      ? "shadow-[0_0_8px_rgba(245,158,11,0.6)]"
-      : "shadow-[0_0_8px_rgba(239,68,68,0.6)]";
-
-  return (
-    <div ref={ref} className="w-full max-w-[130px]">
-      <div className="flex justify-between items-center mb-1.5 text-[10px] font-bold tracking-widest uppercase text-white/40">
-        <span>{label}</span>
-        <span className="text-white/80">{score}%</span>
-      </div>
-      <div className="w-full h-1 bg-white/8 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: inView ? `${score}%` : 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className={`h-full rounded-full ${barColor} ${glow}`}
-        />
-      </div>
-    </div>
-  );
-};
-
-// ─────────────────────────────────────────────────────────────
-// Animated confidence ring (SVG arc)
-// ─────────────────────────────────────────────────────────────
-const ConfidenceRing = ({ score, color }: { score: number; color: string }) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const r = 36;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (score / 100) * circ;
-
-  return (
-    <div ref={ref} className="relative w-24 h-24 flex-shrink-0">
-      <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-        <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
-        <motion.circle
-          cx="50" cy="50" r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={circ}
-          initial={{ strokeDashoffset: circ }}
-          animate={{ strokeDashoffset: inView ? offset : circ }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-xl font-black text-white font-geist">{score}</span>
-        <span className="text-[9px] text-white/40 font-mono tracking-wider uppercase">conf.</span>
-      </div>
-    </div>
-  );
-};
-
-// ─────────────────────────────────────────────────────────────
-// Section header
-// ─────────────────────────────────────────────────────────────
-const SectionHeader = ({ label, count }: { label: string; count?: number }) => (
-  <div className="flex items-center gap-5 mb-10">
-    <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tighter font-geist">
-      {label}
-    </h3>
-    {count !== undefined && (
-      <span className="text-white/25 font-mono text-sm">({count})</span>
-    )}
-    <div className="h-px bg-gradient-to-r from-white/10 to-transparent flex-grow" />
-  </div>
-);
-
-// ─────────────────────────────────────────────────────────────
-// Evidence card
-// ─────────────────────────────────────────────────────────────
-const EvidenceCard = ({
-  ev,
-  variant,
-}: {
-  ev: any;
-  variant: "supporting" | "contradicting";
-}) => {
-  const isSupport = variant === "supporting";
-  const accentColor = isSupport ? "#10b981" : "#ef4444";
-  const borderColor = isSupport ? "border-emerald-500/20" : "border-rose-500/20";
-  const bgColor     = isSupport ? "bg-emerald-500/5"      : "bg-rose-500/5";
-  const textColor   = isSupport ? "text-emerald-400"      : "text-rose-400";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: isSupport ? -12 : 12 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative rounded-xl border ${borderColor} ${bgColor} p-5 overflow-hidden`}
-    >
-      {/* Left accent line */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl"
-        style={{ backgroundColor: accentColor }}
-      />
-
-      {/* Source type badge */}
-      <div className="flex items-center justify-between mb-3">
-        <span className={`text-[10px] font-bold tracking-widest uppercase ${textColor} opacity-80`}>
-          {ev.source_type || "Source"}
-        </span>
-        {ev.source_score != null && (
-          <span className="text-[10px] font-mono text-white/30">
-            AUTH {ev.source_score}/100
-          </span>
-        )}
-      </div>
-
-      {/* Quote */}
-      <p className="text-white/75 text-sm leading-relaxed mb-4 pl-1 border-l-2 border-white/10 italic">
-        &ldquo;{ev.extracted_text}&rdquo;
-      </p>
-
-      {/* Screenshot */}
-      {ev.screenshot_path && (
-        <div className="mb-4 rounded-lg overflow-hidden border border-white/10 relative group/img">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={ev.screenshot_path}
-            alt="Evidence screenshot"
-            className="w-full object-cover grayscale-[20%] group-hover/img:grayscale-0 transition-all duration-500 opacity-85 group-hover/img:opacity-100"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-        </div>
-      )}
-
-      {/* Source link */}
-      {ev.url && (
-        <a
-          href={ev.url}
-          target="_blank"
-          rel="noreferrer"
-          className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide ${textColor} opacity-70 hover:opacity-100 transition-opacity`}
-        >
-          <ExternalLink className="w-3 h-3" />
-          {(() => {
-            try { return new URL(ev.url).hostname.replace("www.", ""); } catch { return "Source"; }
-          })()}
-        </a>
-      )}
-    </motion.div>
-  );
-};
-
-// ─────────────────────────────────────────────────────────────
-// Context icons map
-// ─────────────────────────────────────────────────────────────
-const CONTEXT_ICONS: Record<string, string> = {
-  historical: "🏛️",
-  industry:   "🏭",
-  geopolit:   "🌍",
-  technolog:  "💡",
-  social:     "👥",
-  economic:   "📈",
-  legal:      "⚖️",
-};
-const getContextIcon = (key: string) => {
-  const lower = key.toLowerCase();
-  for (const [k, icon] of Object.entries(CONTEXT_ICONS)) {
-    if (lower.includes(k)) return icon;
-  }
-  return "🔍";
+    return {
+      color: "text-rose-400",
+      border: "border-rose-900/50",
+      bg: "bg-rose-950/30",
+      icon: <XCircle className="w-5 h-5 text-rose-500" />,
+    };
+  return {
+    color: "text-zinc-400",
+    border: "border-zinc-800",
+    bg: "bg-zinc-900",
+    icon: <HelpCircle className="w-5 h-5 text-zinc-500" />,
+  };
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -242,16 +70,16 @@ const ShareButton = () => {
   return (
     <button
       onClick={handleShare}
-      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-white/25 hover:bg-white/10 text-white/60 hover:text-white text-sm font-semibold transition-all duration-200"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 hover:bg-zinc-900 text-zinc-400 text-xs font-medium transition-colors"
     >
       {copied ? (
         <>
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span className="text-emerald-400">Copied!</span>
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+          <span className="text-emerald-500">Copied</span>
         </>
       ) : (
         <>
-          <Share2 className="w-4 h-4" />
+          <Share2 className="w-3.5 h-3.5" />
           Share
         </>
       )}
@@ -264,647 +92,464 @@ const ShareButton = () => {
 // ─────────────────────────────────────────────────────────────
 export function DetailedView({ report }: { report: any }) {
   const { dashboard, metadata, public: pub, claims, candidate } = report;
-  const { scrollYProgress } = useScroll();
-  const yParallax      = useTransform(scrollYProgress, [0, 0.5], [0, 120]);
-  const opacityParallax = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-
-  const [expandedClaim, setExpandedClaim] = useState<number | null>(0);
-
   const verdictCfg = getVerdictConfig(pub.verdict);
 
-  // Estimated read time
   const wordCount = JSON.stringify(report).split(/\s+/).length;
-  const readTime  = Math.max(3, Math.round(wordCount / 200));
+  const readTime = Math.max(3, Math.round(wordCount / 200));
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-      className="relative w-full pb-40 bg-[#020202]"
-    >
-      {/* ── Ambient glows ── */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-[-10%] w-[60%] h-[50%] bg-[#A259FF]/6 rounded-full blur-[200px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/4 rounded-full blur-[200px]" />
-      </div>
-
-      {/* ── Back button ── */}
-      <Link href="/">
-        <motion.button
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed top-[86px] left-4 lg:left-8 z-40 flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#0a0a0a]/90 hover:bg-[#111]/90 border border-white/10 hover:border-white/20 text-sm font-semibold text-white/60 hover:text-white backdrop-blur-xl transition-all duration-200 group shadow-[0_4px_24px_rgba(0,0,0,0.5)]"
-        >
-          <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-          <span className="hidden sm:inline">Archive</span>
-        </motion.button>
-      </Link>
-
+    <article className="min-h-screen bg-zinc-950 pb-32">
       {/* ══════════════════════════════════════════════════════
-          HERO
+          HERO HEADER
       ══════════════════════════════════════════════════════ */}
-      <div className="relative w-full h-[80vh] min-h-[620px] flex flex-col justify-end pb-16 overflow-hidden">
-
-        {/* Cover image with parallax */}
-        <motion.div
-          style={{ y: yParallax, opacity: opacityParallax }}
-          className="absolute inset-0 z-0"
-        >
-          {metadata?.cover_image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+      <header className="relative w-full">
+        {metadata?.cover_image && (
+          <div className="w-full h-[50vh] sm:h-[60vh] relative">
+            <Image
               src={metadata.cover_image}
-              className="w-full h-full object-cover opacity-35 grayscale-[40%] scale-110"
-              alt="Investigation cover"
+              alt="Cover Image"
+              fill
+              priority
+              className="object-cover grayscale-[20%] opacity-80"
             />
-          )}
-          {/* Multi-layer gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/85 to-[#020202]/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020202]/60 to-transparent" />
-
-          {/* Subtle scan line */}
-          <div className="absolute inset-0 scan-line pointer-events-none opacity-30" />
-        </motion.div>
-
-        {/* Hero content */}
-        <div className="relative z-10 max-w-5xl w-full px-6 lg:px-12 mx-auto">
-          <motion.div
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.25, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center gap-3 mb-7"
-          >
-            {/* Verdict badge */}
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm border backdrop-blur-xl tracking-widest uppercase ${verdictCfg.color} ${verdictCfg.border} ${verdictCfg.bg}`}>
-              {getVerdictIcon(pub.verdict)}
-              <span>Verdict: {pub.verdict}</span>
-            </div>
-
-            {/* Tags */}
-            {metadata?.tags?.map((t: string) => (
-              <span
-                key={t}
-                className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/50 font-medium tracking-widest text-xs uppercase hover:bg-white/8 hover:text-white/70 transition-colors cursor-pointer"
-              >
-                {t}
-              </span>
-            ))}
-          </motion.div>
-
-          {/* Title */}
-          <motion.h1
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.35, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-[1.02] mb-7 font-geist"
-          >
-            {dashboard?.hero_title || pub.title}
-          </motion.h1>
-
-          {/* Summary */}
-          <motion.p
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.45, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg sm:text-xl text-white/60 max-w-3xl leading-relaxed font-medium mb-8"
-          >
-            {dashboard?.hero_summary || pub.summary}
-          </motion.p>
-
-          {/* Meta strip */}
-          <motion.div
-            initial={{ y: 16, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.55, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-white/35 tracking-wider uppercase"
-          >
-            {metadata?.author && (
-              <span className="flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5" />
-                {metadata.author}
-              </span>
-            )}
-            {pub.published_at && (
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" />
-                {new Date(pub.published_at).toLocaleDateString("en-US", {
-                  month: "long", day: "numeric", year: "numeric",
-                })}
-              </span>
-            )}
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
-              ~{readTime} min read
-            </span>
-            <ShareButton />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════
-          BODY
-      ══════════════════════════════════════════════════════ */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12 mt-16 space-y-28">
-
-        {/* ── QUICK VERDICT ── */}
-        <motion.section
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div
-            className="rounded-2xl overflow-hidden border"
-            style={{
-              borderColor: `${verdictCfg.accent}30`,
-              background: `linear-gradient(135deg, ${verdictCfg.accent}08 0%, rgba(0,0,0,0.4) 100%)`,
-            }}
-          >
-            <div className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-              {/* Ring */}
-              <ConfidenceRing
-                score={
-                  claims?.[0]?.confidence_score ??
-                  (pub.verdict?.toLowerCase().includes("verifi") ? 95 : 75)
-                }
-                color={verdictCfg.accent}
-              />
-
-              <div className="flex-1 space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] font-bold tracking-widest uppercase text-white/35 font-mono">
-                    Quick Verdict
-                  </span>
-                  <div className="h-px bg-white/10 flex-grow" />
-                </div>
-
-                <div className={`text-3xl sm:text-4xl font-black tracking-tight font-geist ${verdictCfg.color}`}>
-                  {getVerdictIcon(pub.verdict, "w-8 h-8")}
-                </div>
-
-                <h2 className={`text-2xl sm:text-3xl font-black tracking-tight font-geist ${verdictCfg.color}`}>
-                  {pub.verdict}
-                </h2>
-
-                <p className="text-white/65 text-base leading-relaxed max-w-2xl">
-                  {dashboard?.hero_summary?.split(".")[0] + "." || pub.summary}
-                </p>
-              </div>
-            </div>
-
-            {/* Key takeaways */}
-            {dashboard?.key_takeaways?.length > 0 && (
-              <div className="border-t border-white/[0.06] px-8 md:px-10 py-6 space-y-3">
-                <p className="text-[10px] font-bold tracking-widest uppercase text-white/30 font-mono mb-4">Key Takeaways</p>
-                {dashboard.key_takeaways.map((item: string, i: number) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -12 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex items-start gap-3"
-                  >
-                    <span
-                      className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-black font-geist"
-                      style={{ backgroundColor: `${verdictCfg.accent}20`, color: verdictCfg.accent }}
-                    >
-                      {i + 1}
-                    </span>
-                    <p className="text-white/70 text-sm leading-relaxed">{item}</p>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent pointer-events-none" />
           </div>
-        </motion.section>
-
-        {/* ── ORIGIN OF INVESTIGATION ── */}
-        {candidate && (
-          <motion.section
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="p-[1px] rounded-2xl" style={{ background: `linear-gradient(135deg, ${verdictCfg.accent}40, rgba(255,255,255,0.06))` }}>
-              <div className="bg-[#080808] rounded-[calc(1rem-1px)] p-8 md:p-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-[0.04] select-none pointer-events-none">
-                  <Link2 className="w-32 h-32" style={{ color: verdictCfg.accent }} />
-                </div>
-
-                <p className="text-[10px] font-bold tracking-widest uppercase font-mono mb-5 flex items-center gap-2" style={{ color: verdictCfg.accent }}>
-                  <span className="w-1.5 h-1.5 rounded-full animate-live-pulse" style={{ backgroundColor: verdictCfg.accent }} />
-                  Origin of Investigation
-                </p>
-
-                <div className="flex flex-col md:flex-row gap-8 items-start">
-                  <div className="flex-1 space-y-4">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight font-geist">
-                      {candidate.title}
-                    </h3>
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <span className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/55 text-sm font-medium">
-                        {candidate.source_name}
-                      </span>
-                      <a
-                        href={candidate.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-1.5 text-sm font-bold transition-colors hover:text-white"
-                        style={{ color: verdictCfg.accent }}
-                      >
-                        View Source <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {candidate.screenshot_path && (
-                    <div className="w-full md:w-2/5 shrink-0 rounded-xl overflow-hidden border border-white/10 shadow-2xl relative group/ss">
-                      <div className="absolute inset-0 z-10 mix-blend-overlay opacity-0 group-hover/ss:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ backgroundColor: `${verdictCfg.accent}25` }} />
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={candidate.screenshot_path}
-                        alt="Origin source"
-                        className="w-full object-cover grayscale-[20%] group-hover/ss:grayscale-0 transition-all duration-500"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.section>
         )}
 
-        {/* ── THE CLAIM vs THE REALITY ── */}
-        {dashboard && (dashboard.why_people_care || dashboard.what_we_found) && (
-          <motion.section
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <SectionHeader label="Claim vs Reality" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-              {/* The Claim */}
-              <div className="group relative bg-[#0d0808] border border-rose-500/15 hover:border-rose-500/30 p-8 rounded-2xl transition-all duration-300 overflow-hidden">
-                <div className="absolute top-0 left-0 w-[3px] h-full bg-rose-500/60 group-hover:bg-rose-500 transition-colors duration-300" />
-                <div className="absolute top-4 right-6 text-[80px] leading-none text-rose-500/5 font-black select-none font-geist pointer-events-none">&ldquo;</div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 bg-rose-500/10 text-rose-400 rounded-xl">
-                    <Zap className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-lg font-black text-white tracking-tight uppercase font-geist">The Claim</h3>
-                </div>
-                <p className="text-white/65 text-base leading-relaxed">
-                  {dashboard.why_people_care}
-                </p>
+        <div className="max-w-4xl mx-auto px-6 -mt-32 relative z-10">
+          <div className="bg-zinc-950 p-8 sm:p-12 border border-zinc-800 rounded-lg shadow-2xl">
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <div
+                className={`flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest ${verdictCfg.bg} ${verdictCfg.color} border ${verdictCfg.border}`}
+              >
+                {verdictCfg.icon}
+                {pub.verdict}
               </div>
+              {metadata?.tags?.map((t: string) => (
+                <span
+                  key={t}
+                  className="px-3 py-1 rounded-full border border-zinc-800 text-zinc-400 text-[10px] uppercase tracking-widest font-semibold"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
 
-              {/* The Reality */}
-              <div className="group relative bg-[#080d08] border border-emerald-500/15 hover:border-emerald-500/30 p-8 rounded-2xl transition-all duration-300 overflow-hidden">
-                <div className="absolute top-0 left-0 w-[3px] h-full bg-emerald-500/60 group-hover:bg-emerald-500 transition-colors duration-300" />
-                <div className="absolute top-4 right-6 text-[80px] leading-none text-emerald-500/5 font-black select-none font-geist pointer-events-none">✓</div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <h3 className="text-lg font-black text-white tracking-tight uppercase font-geist">The Reality</h3>
-                </div>
-                <p className="text-white/70 text-base leading-relaxed">
-                  {dashboard.what_we_found}
-                </p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-100 leading-[1.1] mb-6">
+              {dashboard?.hero_title || pub.title}
+            </h1>
+
+            <p className="text-xl sm:text-2xl text-zinc-400 font-serif leading-relaxed mb-8 italic">
+              {dashboard?.hero_summary || pub.summary}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-zinc-500 border-t border-zinc-800/50 pt-6">
+              {pub.published_at && (
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Clock className="w-4 h-4" />
+                  {new Date(pub.published_at).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+              )}
+              <span className="flex items-center gap-1.5 font-medium">
+                <BookOpen className="w-4 h-4" />
+                {readTime} min read
+              </span>
+              <div className="ml-auto">
+                <ShareButton />
               </div>
             </div>
-          </motion.section>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-6 mt-16 space-y-20">
+        {/* ══════════════════════════════════════════════════════
+            ORIGIN & CANDIDATE
+        ══════════════════════════════════════════════════════ */}
+        {candidate && (
+          <section className="bg-zinc-900/50 border-l-4 border-zinc-500 p-6 rounded-r-lg">
+            <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-2">
+              Origin of Investigation
+            </h3>
+            <p className="text-lg font-semibold text-zinc-100 mb-3">
+              {candidate.title}
+            </p>
+            <div className="flex items-center gap-4">
+              <span className="px-3 py-1 bg-zinc-800 rounded-md text-xs font-semibold text-zinc-300 uppercase tracking-widest">
+                {candidate.source_name}
+              </span>
+              <a
+                href={candidate.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                View Original Source <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </section>
+        )}
+
+        {/* ══════════════════════════════════════════════════════
+            CLAIM VS REALITY (Context & What We Found)
+        ══════════════════════════════════════════════════════ */}
+        {dashboard &&
+          (dashboard.why_people_care || dashboard.what_we_found) && (
+            <section className="grid sm:grid-cols-2 gap-8">
+              {dashboard.why_people_care && (
+                <div>
+                  <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-4 border-b border-zinc-800 pb-2">
+                    The Context
+                  </h2>
+                  <p className="text-lg text-zinc-300 leading-relaxed font-serif">
+                    {dashboard.why_people_care}
+                  </p>
+                </div>
+              )}
+              {dashboard.what_we_found && (
+                <div className="bg-emerald-950/20 border border-emerald-900/50 p-8 rounded-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 opacity-5 p-4 pointer-events-none">
+                    <ShieldCheck className="w-32 h-32 text-emerald-500" />
+                  </div>
+                  <h2 className="font-serif text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-3 relative z-10">
+                    <ShieldCheck className="w-6 h-6 text-emerald-500" />
+                    What We Found
+                  </h2>
+                  <p className="text-lg text-emerald-100/90 leading-relaxed font-serif relative z-10">
+                    {dashboard.what_we_found}
+                  </p>
+                </div>
+              )}
+            </section>
+          )}
+
+        {/* ══════════════════════════════════════════════════════
+            KEY TAKEAWAYS
+        ══════════════════════════════════════════════════════ */}
+        {dashboard?.key_takeaways?.length > 0 && (
+          <section>
+            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-6 border-b border-zinc-800 pb-2">
+              Key Takeaways
+            </h2>
+            <div className="grid gap-4">
+              {dashboard.key_takeaways.map((item: string, i: number) => (
+                <div
+                  key={i}
+                  className="flex gap-4 p-4 bg-zinc-900/30 border border-zinc-800/50 rounded-lg"
+                >
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center text-sm font-bold border border-zinc-700">
+                    {i + 1}
+                  </span>
+                  <p className="text-lg text-zinc-300 leading-relaxed font-serif pt-0.5">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* ══════════════════════════════════════════════════════
             EVIDENCE DOSSIER
         ══════════════════════════════════════════════════════ */}
         {claims && claims.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <SectionHeader label="Evidence Dossier" count={claims.length} />
+          <section>
+            <div className="flex items-center gap-4 mb-8">
+              <h2 className="font-serif text-3xl font-bold text-zinc-100">
+                Evidence Dossier
+              </h2>
+              <div className="h-px bg-zinc-800 flex-grow" />
+              <span className="text-zinc-500 font-mono text-sm uppercase tracking-widest">
+                {claims.length} Claims Investigated
+              </span>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-8">
               {claims.map((claim: any, idx: number) => {
-                const isExpanded  = expandedClaim === idx;
-                const claimCfg    = getVerdictConfig(claim.claim_status);
-
+                const claimCfg = getVerdictConfig(claim.claim_status);
                 return (
                   <div
                     key={idx}
-                    className="rounded-2xl overflow-hidden transition-all duration-400"
-                    style={{
-                      border: `1px solid ${isExpanded ? claimCfg.accent + '35' : 'rgba(255,255,255,0.07)'}`,
-                      background: isExpanded ? `linear-gradient(135deg, ${claimCfg.accent}06, #080808)` : '#0a0a0a',
-                    }}
+                    className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-900/20 shadow-sm"
                   >
-                    {/* Claim header */}
-                    <button
-                      id={`claim-${idx}`}
-                      onClick={() => setExpandedClaim(isExpanded ? null : idx)}
-                      className="w-full text-left p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative"
+                    <div
+                      className={`border-b ${claimCfg.border} ${claimCfg.bg} p-6 sm:p-8`}
                     >
-                      {/* Big claim number — decorative */}
-                      <span
-                        className="absolute right-24 top-1/2 -translate-y-1/2 text-[80px] font-black font-geist leading-none opacity-[0.04] pointer-events-none select-none hidden sm:block"
-                      >
-                        {String(idx + 1).padStart(2, "0")}
-                      </span>
-
-                      <div className="flex-1 space-y-3">
-                        <div className="flex flex-wrap items-center gap-2.5">
-                          <span
-                            className={`flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest border ${claimCfg.color} ${claimCfg.border} ${claimCfg.bg}`}
-                          >
-                            {getVerdictIcon(claim.claim_status, "w-3 h-3")}
-                            {claim.claim_status}
+                      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <span
+                          className={`text-xs font-bold uppercase tracking-widest ${claimCfg.color} flex items-center gap-1.5`}
+                        >
+                          {claimCfg.icon} {claim.claim_status}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-zinc-500 text-xs font-mono font-medium uppercase tracking-widest">
+                            Confidence
                           </span>
-                          <span className="text-white/25 text-[10px] font-mono font-bold tracking-widest">
-                            CLAIM {String(idx + 1).padStart(2, "0")}
+                          <span className="text-zinc-300 font-mono font-bold">
+                            {claim.confidence_score}%
                           </span>
                         </div>
-                        <h4 className="text-lg sm:text-xl font-bold text-white leading-snug font-geist">
-                          {claim.claim_text}
-                        </h4>
                       </div>
+                      <h3 className="font-serif text-2xl font-bold text-zinc-100 leading-snug">
+                        {claim.claim_text}
+                      </h3>
+                    </div>
 
-                      <div className="flex items-center gap-5 shrink-0">
-                        <ConfidenceBar score={claim.confidence_score} label="Confidence" />
-                        <motion.div
-                          animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                          className="p-2 rounded-full bg-white/5 text-white/40 flex-shrink-0"
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </motion.div>
-                      </div>
-                    </button>
-
-                    {/* Expandable evidence */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="p-6 sm:p-8 pt-0 border-t border-white/[0.06]">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-7">
-
-                              {/* Supporting */}
-                              <div className="space-y-4">
-                                <h5 className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-5">
-                                  <CheckCircle2 className="w-3.5 h-3.5" />
-                                  Supporting ({claim.evidence?.length || 0})
-                                </h5>
-                                {claim.evidence?.length === 0 && (
-                                  <p className="text-white/25 text-sm italic">No supporting evidence found.</p>
+                    <div className="p-6 sm:p-8 grid md:grid-cols-2 gap-8">
+                      {claim.evidence?.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-emerald-900/30 pb-2">
+                            <CheckCircle2 className="w-4 h-4" /> Supporting
+                            Evidence
+                          </h4>
+                          <div className="space-y-6">
+                            {claim.evidence.map((ev: any, i: number) => (
+                              <div
+                                key={i}
+                                className="pl-4 border-l-2 border-emerald-800/50"
+                              >
+                                <p className="text-zinc-300 font-serif italic mb-3 leading-relaxed">
+                                  &quot;{ev.extracted_text}&quot;
+                                </p>
+                                <div className="flex items-center justify-between mb-4">
+                                  <a
+                                    href={ev.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-xs font-bold text-zinc-500 hover:text-zinc-300 flex items-center gap-1 transition-colors"
+                                  >
+                                    <ExternalLink className="w-3 h-3" />{" "}
+                                    {ev.source_type}
+                                  </a>
+                                  {ev.source_score && (
+                                    <span className="text-[10px] text-emerald-600/70 font-mono">
+                                      AUTH: {ev.source_score}/100
+                                    </span>
+                                  )}
+                                </div>
+                                {ev.screenshot_path && (
+                                  <Image
+                                    src={ev.screenshot_path}
+                                    alt="Evidence Screenshot"
+                                    width={800}
+                                    height={450}
+                                    className="w-full h-auto rounded-md border border-zinc-800 mb-4 opacity-80 grayscale-[30%] hover:grayscale-0 hover:opacity-100 transition-all"
+                                  />
                                 )}
-                                {claim.evidence?.map((ev: any, i: number) => (
-                                  <EvidenceCard key={i} ev={ev} variant="supporting" />
-                                ))}
                               </div>
-
-                              {/* Contradicting */}
-                              <div className="space-y-4">
-                                <h5 className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-widest mb-5">
-                                  <XCircle className="w-3.5 h-3.5" />
-                                  Contradicting ({claim.contradicting_evidence?.length || 0})
-                                </h5>
-                                {claim.contradicting_evidence?.length === 0 && (
-                                  <p className="text-white/25 text-sm italic">No contradicting evidence found.</p>
-                                )}
-                                {claim.contradicting_evidence?.map((ev: any, i: number) => (
-                                  <EvidenceCard key={i} ev={ev} variant="contradicting" />
-                                ))}
-                              </div>
-                            </div>
+                            ))}
                           </div>
-                        </motion.div>
+                        </div>
                       )}
-                    </AnimatePresence>
+
+                      {claim.contradicting_evidence?.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-bold text-rose-500 uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-rose-900/30 pb-2">
+                            <XCircle className="w-4 h-4" /> Contradicting
+                            Evidence
+                          </h4>
+                          <div className="space-y-6">
+                            {claim.contradicting_evidence.map(
+                              (ev: any, i: number) => (
+                                <div
+                                  key={i}
+                                  className="pl-4 border-l-2 border-rose-800/50"
+                                >
+                                  <p className="text-zinc-300 font-serif italic mb-3 leading-relaxed">
+                                    &quot;{ev.extracted_text}&quot;
+                                  </p>
+                                  <div className="flex items-center justify-between mb-4">
+                                    {ev.url ? (
+                                      <a
+                                        href={ev.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-xs font-bold text-zinc-500 hover:text-zinc-300 flex items-center gap-1 transition-colors"
+                                      >
+                                        <ExternalLink className="w-3 h-3" />{" "}
+                                        {ev.source_type}
+                                      </a>
+                                    ) : (
+                                      <span className="text-xs font-bold text-zinc-600 flex items-center gap-1">
+                                        <FileText className="w-3 h-3" />{" "}
+                                        {ev.source_type}
+                                      </span>
+                                    )}
+                                    {ev.source_score ? (
+                                      <span className="text-[10px] text-rose-600/70 font-mono">
+                                        AUTH: {ev.source_score}/100
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  {ev.screenshot_path && (
+                                    <Image
+                                      src={ev.screenshot_path}
+                                      alt="Evidence Screenshot"
+                                      width={800}
+                                      height={450}
+                                      className="w-full h-auto rounded-md border border-zinc-800 mb-4 opacity-80 grayscale-[30%] hover:grayscale-0 hover:opacity-100 transition-all"
+                                    />
+                                  )}
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
             </div>
-          </motion.section>
+          </section>
         )}
 
         {/* ══════════════════════════════════════════════════════
-            TIMELINE + CONTEXT
+            TIMELINE & CONTEXT
         ══════════════════════════════════════════════════════ */}
         {(dashboard?.timeline || dashboard?.context) && (
-          <section className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 pt-12 border-t border-white/[0.06]">
-
+          <section className="grid md:grid-cols-5 gap-12 pt-10 border-t border-zinc-800">
             {/* Context */}
-            {dashboard?.context && (
-              <div className="lg:col-span-3 space-y-10">
-                <h3 className="text-3xl font-black text-white tracking-tighter font-geist">
+            {dashboard.context && (
+              <div className="md:col-span-3">
+                <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8">
                   Investigation Context
-                </h3>
-                <div className="space-y-4">
-                  {Object.entries(dashboard.context).map(([key, val], i) => (
-                    <motion.div
+                </h2>
+                <div className="grid gap-6">
+                  {Object.entries(dashboard.context).map(([key, val]) => (
+                    <div
                       key={key}
-                      initial={{ opacity: 0, x: -16 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                      className="bg-[#0a0a0a] border border-white/[0.06] hover:border-white/[0.12] p-6 rounded-2xl transition-all duration-300 group"
+                      className="bg-zinc-900/30 p-6 rounded-lg border border-zinc-800/50"
                     >
-                      <h4 className="text-[11px] font-bold mb-3 uppercase tracking-widest flex items-center gap-2 text-white/40 group-hover:text-white/60 transition-colors">
-                        <span className="text-base">{getContextIcon(key)}</span>
+                      <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-zinc-600" />
                         {key.replace(/_/g, " ")}
                       </h4>
-                      <p className="text-white/65 leading-relaxed text-sm">
+                      <p className="text-zinc-300 font-serif leading-relaxed text-lg">
                         {val as string}
                       </p>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
 
             {/* Timeline */}
-            {dashboard?.timeline && (
-              <div className="lg:col-span-2">
-                <h3 className="text-3xl font-black text-white tracking-tighter font-geist mb-10">
+            {dashboard.timeline && (
+              <div className="md:col-span-2">
+                <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8">
                   Timeline
-                </h3>
-                <div className="relative">
-                  {/* Animated vertical line */}
-                  <motion.div
-                    className="absolute left-[7px] top-2 bottom-0 w-[1px]"
-                    style={{
-                      background: `linear-gradient(to bottom, ${verdictCfg.accent}, rgba(162,89,255,0.1))`,
-                    }}
-                    initial={{ scaleY: 0, originY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                  />
-
-                  <div className="space-y-8 pl-8">
-                    {dashboard.timeline.map((item: any, idx: number) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, x: 16 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative group"
-                      >
-                        {/* Node */}
-                        <div
-                          className="absolute -left-[25px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-[#020202] flex-shrink-0 transition-transform duration-200 group-hover:scale-125"
-                          style={{ backgroundColor: verdictCfg.accent, boxShadow: `0 0 10px ${verdictCfg.accent}60` }}
-                        />
-
-                        <div className="space-y-1.5">
-                          <span className="text-[10px] font-bold font-mono tracking-widest uppercase" style={{ color: verdictCfg.accent }}>
-                            {item.date}
-                          </span>
-                          <p className="text-white/80 text-sm leading-relaxed font-medium">
-                            {item.event}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                </h2>
+                <div className="relative border-l border-zinc-800 ml-3 space-y-8 pb-4">
+                  {dashboard.timeline.map((item: any, idx: number) => (
+                    <div key={idx} className="relative pl-6">
+                      <div className="absolute -left-1.5 top-1.5 w-3 h-3 bg-blue-500 rounded-full ring-4 ring-zinc-950" />
+                      <div className="text-xs font-bold font-mono text-blue-400 mb-1.5 tracking-widest uppercase">
+                        {item.date}
+                      </div>
+                      <p className="text-zinc-300 font-serif leading-relaxed">
+                        {item.event}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
           </section>
         )}
 
-        {/* ── OPEN QUESTIONS ── */}
+        {/* ══════════════════════════════════════════════════════
+            OPEN QUESTIONS
+        ══════════════════════════════════════════════════════ */}
         {dashboard?.open_questions?.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-            className="pt-12 border-t border-white/[0.06]"
-          >
-            <SectionHeader label="Open Questions" count={dashboard.open_questions.length} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <section className="pt-10 border-t border-zinc-800">
+            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-6">
+              Open Questions
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
               {dashboard.open_questions.map((q: string, i: number) => (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-start gap-4 p-6 rounded-2xl bg-[#0a0a0a] border border-white/[0.06] hover:border-[#A259FF]/20 hover:bg-[#0d0a14] transition-all duration-300 group"
+                  className="flex items-start gap-3 p-6 bg-zinc-900/40 border border-zinc-800 rounded-lg"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#A259FF]/10 border border-[#A259FF]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#A259FF]/15 transition-colors">
-                    <QuestionIcon className="w-4 h-4 text-[#A259FF]" />
-                  </div>
-                  <p className="text-white/65 text-sm leading-relaxed">{q}</p>
-                </motion.div>
+                  <HelpCircle className="w-5 h-5 text-zinc-500 flex-shrink-0 mt-0.5" />
+                  <p className="text-zinc-300 font-serif text-lg leading-relaxed">
+                    {q}
+                  </p>
+                </div>
               ))}
             </div>
-          </motion.section>
+          </section>
         )}
 
-        {/* ── SOURCES & TRANSPARENCY ── */}
+        {/* ══════════════════════════════════════════════════════
+            SOURCES
+        ══════════════════════════════════════════════════════ */}
         {dashboard?.sources?.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-            className="pt-12 border-t border-white/[0.06]"
-          >
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-black text-white tracking-tighter font-geist mb-3">
-                Sources & Transparency
-              </h3>
-              <p className="text-white/35 text-sm max-w-xl mx-auto leading-relaxed">
-                Every investigation relies on transparent, verifiable sources. Authority scores reflect historical accuracy and editorial credibility.
-              </p>
-            </div>
+          <section className="pt-12 border-t border-zinc-800">
+            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8 flex items-center gap-3">
+              <FileText className="w-6 h-6 text-zinc-600" />
+              Sources & Citations
+            </h2>
+            <div className="space-y-4">
+              {dashboard.sources.map((src: any, i: number) => {
+                let domain = "";
+                try {
+                  domain = new URL(src.url).hostname.replace("www.", "");
+                } catch (e) {}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {dashboard.sources.map((src: any, idx: number) => (
-                <motion.a
-                  key={idx}
-                  href={src.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                  className="block group"
-                >
-                  <div className="h-full p-5 bg-[#0a0a0a] border border-white/[0.06] group-hover:border-white/[0.15] rounded-2xl transition-all duration-200 relative overflow-hidden">
-                    {/* Authority bar at top */}
-                    <div
-                      className="absolute top-0 left-0 h-[2px] transition-all duration-500 group-hover:opacity-100 opacity-60"
-                      style={{
-                        width: `${src.authority_score}%`,
-                        backgroundColor: src.authority_score >= 90 ? '#10b981' : src.authority_score >= 75 ? '#3b82f6' : '#f59e0b',
-                      }}
-                    />
-
-                    <div className="flex justify-between items-start mb-3 mt-1">
-                      <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-mono text-white/40 uppercase tracking-wider">
-                        {src.source_type}
-                      </span>
-                      <div className="text-right">
-                        <span className="text-[11px] font-black font-mono" style={{
-                          color: src.authority_score >= 90 ? '#10b981' : src.authority_score >= 75 ? '#3b82f6' : '#f59e0b'
-                        }}>
-                          {src.authority_score}
-                        </span>
-                        <span className="text-white/25 text-[9px] font-mono">/100</span>
+                return (
+                  <a
+                    key={i}
+                    href={src.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-5 bg-zinc-900/20 border border-zinc-800/50 hover:bg-zinc-900/60 hover:border-zinc-700 transition-all rounded-lg"
+                  >
+                    <div className="flex items-start gap-5 flex-1">
+                      <div className="flex-shrink-0 w-8 h-8 rounded bg-zinc-800 flex items-center justify-center font-mono text-xs font-bold text-zinc-400 group-hover:text-blue-400 group-hover:bg-blue-900/20 transition-colors mt-0.5">
+                        {i + 1}
+                      </div>
+                      <div>
+                        <h4 className="font-serif text-zinc-200 font-bold leading-snug group-hover:text-blue-400 transition-colors mb-2">
+                          {src.title}
+                        </h4>
+                        <div className="flex items-center flex-wrap gap-3 text-xs font-mono text-zinc-500">
+                          {domain && (
+                            <span className="flex items-center gap-1.5 text-zinc-400">
+                              <ExternalLink className="w-3 h-3" />
+                              {domain}
+                            </span>
+                          )}
+                          <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-zinc-700" />
+                          <span className="uppercase tracking-widest text-zinc-500 bg-zinc-800/50 px-2 py-0.5 rounded">
+                            {src.source_type}
+                          </span>
+                        </div>
                       </div>
                     </div>
-
-                    <h4 className="text-white/75 group-hover:text-white font-semibold text-sm leading-snug mb-4 transition-colors">
-                      {src.title}
-                    </h4>
-
-                    <span className="text-white/25 group-hover:text-white/50 text-[11px] font-bold uppercase flex items-center gap-1.5 transition-colors">
-                      <ExternalLink className="w-3 h-3" />
-                      {(() => { try { return new URL(src.url).hostname.replace("www.", ""); } catch { return "Verify"; } })()}
-                    </span>
-                  </div>
-                </motion.a>
-              ))}
+                    {src.authority_score && (
+                      <div className="flex flex-col sm:items-end sm:pl-6 sm:border-l border-zinc-800/50 flex-shrink-0 mt-4 sm:mt-0">
+                        <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-1">
+                          Authority
+                        </span>
+                        <span className="text-2xl font-serif italic text-emerald-400/90 font-bold">
+                          {src.authority_score}
+                          <span className="text-sm text-zinc-600">/100</span>
+                        </span>
+                      </div>
+                    )}
+                  </a>
+                );
+              })}
             </div>
-
-            {/* Transparency note */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="mt-8 p-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/15 flex items-center gap-4"
-            >
-              <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-              <p className="text-white/55 text-sm">
-                <strong className="text-white/80">100% Human Verified.</strong>{" "}
-                Every investigation, timeline, and verdict is audited and approved by a human investigator before publication.
-              </p>
-            </motion.div>
-          </motion.section>
+          </section>
         )}
-      </div>
-    </motion.div>
+      </main>
+    </article>
   );
 }

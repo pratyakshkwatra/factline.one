@@ -70,7 +70,7 @@ export default async function ReportPage({ params }: Props) {
 
       <Navbar />
 
-      <main className="relative z-10 pt-20">
+      <main className="relative z-10 pt-0">
         <DetailedView report={report} />
       </main>
     </>
