@@ -79,6 +79,12 @@ export const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
 
+  // New Investigation Form State
+  const [newInvUrl, setNewInvUrl] = useState("");
+  const [newInvContent, setNewInvContent] = useState("");
+  const [newInvComments, setNewInvComments] = useState("");
+  const [newInvNotes, setNewInvNotes] = useState("");
+
   // Connect to websocket to automatically trigger invalidations
   useWebSocket("ws://localhost:8000/api/v1/ws");
 
@@ -132,6 +138,31 @@ export const App = () => {
       if (res.ok) refetchReports();
     } catch (e) {
       console.error("Publish error:", e);
+    }
+  };
+
+  const handleInvestigationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/investigations/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: newInvUrl,
+          post_content: newInvContent,
+          comments: newInvComments,
+          notes: newInvNotes,
+        }),
+      });
+      if (res.ok) {
+        setNewInvUrl("");
+        setNewInvContent("");
+        setNewInvComments("");
+        setNewInvNotes("");
+        setActiveTab("investigations");
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
     }
   };
 
@@ -281,23 +312,23 @@ export const App = () => {
                 </p>
               </div>
 
-              <form className="space-y-6 bg-card border border-border rounded-xl p-6 shadow-sm" onSubmit={(e) => { e.preventDefault(); setActiveTab('investigations'); }}>
+              <form className="space-y-6 bg-card border border-border rounded-xl p-6 shadow-sm" onSubmit={handleInvestigationSubmit}>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Primary URL (Optional)</label>
-                    <input type="text" placeholder="https://..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+                    <input type="text" value={newInvUrl} onChange={e => setNewInvUrl(e.target.value)} placeholder="https://..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Post Content or Claim</label>
-                    <textarea rows={4} placeholder="Paste the claim or original post text here..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <textarea rows={4} value={newInvContent} onChange={e => setNewInvContent(e.target.value)} placeholder="Paste the claim or original post text here..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Original Comments or Discussion Context</label>
-                    <textarea rows={3} placeholder="Paste relevant comments or context..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <textarea rows={3} value={newInvComments} onChange={e => setNewInvComments(e.target.value)} placeholder="Paste relevant comments or context..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Investigation Notes</label>
-                    <textarea rows={2} placeholder="What should the agents focus on?" className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <textarea rows={2} value={newInvNotes} onChange={e => setNewInvNotes(e.target.value)} placeholder="What should the agents focus on?" className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
                   </div>
                 </div>
 

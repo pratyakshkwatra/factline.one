@@ -2,9 +2,10 @@ import sqlite3
 import os
 import uuid
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
-from typing import List
+from typing import List, Optional
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from app.models.database import SessionLocal, CandidateItem
+from app.models.database import SessionLocal, CandidateItem, InvestigationInput, SubmittedUrl, OriginalPost
 from app.services.report import Report
 from app.services.investigation import InvestigationTask, Evidence
 from app.core.config import settings
@@ -62,6 +63,44 @@ def get_candidates(db: Session = Depends(get_db)):
 def get_investigations(db: Session = Depends(get_db)):
     tasks = db.query(InvestigationTask).order_by(InvestigationTask.id.desc()).limit(50).all()
     return {"investigations": tasks}
+
+class InvestigationSubmitRequest(BaseModel):
+    url: Optional[str] = None
+    post_content: Optional[str] = None
+    comments: Optional[str] = None
+    notes: Optional[str] = None
+
+@router.post("/investigations/submit")
+def submit_investigation(request: InvestigationSubmitRequest, db: Session = Depends(get_db)):
+    from datetime import datetime
+    new_input_id = str(uuid.uuid4())
+    input_type = "url" if request.url and not request.post_content else "mixed"
+    
+    new_input = InvestigationInput(
+        id=new_input_id,
+        input_type=input_type,
+        status="pending",
+        notes=request.notes,
+        created_at=datetime.utcnow()
+    )
+    db.add(new_input)
+    
+    if request.url:
+        db.add(SubmittedUrl(id=str(uuid.uuid4()), input_id=new_input_id, url=request.url))
+        
+    content = ""
+    if request.post_content:
+        content += request.post_content + "\n"
+    if request.comments:
+        content += "Comments:\n" + request.comments
+        
+    if content.strip():
+        db.add(OriginalPost(id=str(uuid.uuid4()), input_id=new_input_id, content=content.strip()))
+        
+    db.commit()
+    import json
+    # Use async event loop or simple sync call to broadcast if possible, or just skip
+    return {"status": "submitted", "id": new_input_id}
 
 @router.get("/evidence")
 def get_evidence(db: Session = Depends(get_db)):
