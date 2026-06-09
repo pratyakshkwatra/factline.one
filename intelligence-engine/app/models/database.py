@@ -102,7 +102,17 @@ def init_db():
     # Safely apply schema upgrades to existing database
     try:
         with engine.begin() as conn:
-            conn.execute(text("ALTER TABLE candidate_items ADD COLUMN source_id VARCHAR"))
-            conn.execute(text("ALTER TABLE candidate_items ADD COLUMN screenshot_path VARCHAR"))
+            try:
+                conn.execute(text("ALTER TABLE candidate_items ADD COLUMN IF NOT EXISTS source_id VARCHAR"))
+            except Exception:
+                pass
+            try:
+                conn.execute(text("ALTER TABLE claims ADD COLUMN IF NOT EXISTS input_id VARCHAR"))
+            except Exception:
+                pass
+            try:
+                conn.execute(text("ALTER TABLE candidate_items ADD COLUMN IF NOT EXISTS screenshot_path VARCHAR"))
+            except Exception:
+                pass
     except Exception as e:
         pass # Columns already exist
