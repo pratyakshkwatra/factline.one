@@ -22,7 +22,7 @@ if [ "$COMMAND" = "serve" ]; then
     echo "🟢 Analyst Dashboard running on http://localhost:5173"
 
     # Start Public Dashboard
-    cd "$DIR/public-dashboard"
+    cd "$DIR/../factline.one"
     npm run dev -- --port 5174 &
     PUBLIC_PID=$!
     echo "🟢 Public Dashboard running on http://localhost:5174"

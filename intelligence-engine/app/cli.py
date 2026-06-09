@@ -152,49 +152,93 @@ def serve():
 
 @app.command()
 def sync():
-    """Exports approved reports to the public database."""
-    console.print("[bold blue]Syncing reports to public database...[/bold blue]")
+    """Exports approved reports to the public dashboard data directory as JSON."""
+    console.print("[bold blue]Syncing reports to public dashboard JSON...[/bold blue]")
     try:
-        from app.models.database import SessionLocal
+        from app.models.database import SessionLocal, CandidateItem
         from app.services.report import Report
-        import sqlite3
+        from app.services.extraction import Claim
+        from app.services.investigation import Evidence
         import os
+        import json
 
         db = SessionLocal()
         reports = db.query(Report).filter(Report.public_url.isnot(None)).all()
         
-        db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "..", "public-dashboard", "public", "public_reports.db")
-        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "..", "factline.one", "public", "data")
+        os.makedirs(data_dir, exist_ok=True)
         
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS public_reports (
-                id TEXT PRIMARY KEY,
-                slug TEXT UNIQUE,
-                title TEXT,
-                summary TEXT,
-                verdict TEXT,
-                public_url TEXT
-            )
-        ''')
-        
+        index_data = []
         synced = 0
+        
         for r in reports:
             slug = r.public_url.split("/r/")[-1] if r.public_url and "/r/" in r.public_url else r.id
-            try:
-                cursor.execute('''
-                    INSERT INTO public_reports (id, slug, title, summary, verdict, public_url)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ''', (r.id, slug, r.title, r.summary, r.verdict, r.public_url))
-                synced += 1
-            except sqlite3.IntegrityError:
-                pass # Already exists
+            
+            # Formatting published_at properly if needed
+            published_at = r.created_at.isoformat() if hasattr(r, 'created_at') and r.created_at else ""
+            
+            public_payload = {
+                "id": r.id,
+                "slug": slug,
+                "title": r.title,
+                "summary": r.summary,
+                "verdict": r.verdict,
+                "published_at": published_at,
+                "public_url": r.public_url
+            }
+            
+            # Fetch Candidate
+            candidate = db.query(CandidateItem).filter(CandidateItem.id == r.candidate_id).first()
+            candidate_payload = {}
+            if candidate:
+                candidate_payload = {
+                    "url": candidate.url,
+                    "title": candidate.title,
+                    "source_name": candidate.source_name,
+                    "screenshot_path": candidate.screenshot_path
+                }
                 
-        conn.commit()
-        conn.close()
+            # Fetch Claims & Evidence
+            claims = db.query(Claim).filter(Claim.candidate_id == r.candidate_id).all()
+            claims_payload = []
+            for c in claims:
+                evidence_list = db.query(Evidence).filter(Evidence.claim_id == c.id).all()
+                evidence_payload = []
+                for ev in evidence_list:
+                    evidence_payload.append({
+                        "url": ev.url,
+                        "extracted_text": ev.extracted_text,
+                        "source_score": ev.source_score,
+                        "screenshot_path": ev.screenshot_path
+                    })
+                claims_payload.append({
+                    "claim_text": c.claim_text,
+                    "evidence": evidence_payload
+                })
+            
+            # The full JSON file format
+            full_payload = {
+                "internal_id": r.id,
+                "public": public_payload,
+                "candidate": candidate_payload,
+                "claims": claims_payload
+            }
+            
+            # Write individual slug JSON
+            slug_path = os.path.join(data_dir, f"{slug}.json")
+            with open(slug_path, "w", encoding="utf-8") as f:
+                json.dump(full_payload, f, indent=2)
+                
+            index_data.append(public_payload)
+            synced += 1
+            
+        # Write index.json containing all reports
+        index_path = os.path.join(data_dir, "index.json")
+        with open(index_path, "w", encoding="utf-8") as f:
+            json.dump(index_data, f, indent=2)
+            
         db.close()
-        console.print(f"[green]✓ Successfully synced {synced} new reports to the public dashboard.[/green]")
+        console.print(f"[green]✓ Successfully synced {synced} reports to JSON in public/data.[/green]")
     except Exception as e:
         console.print(f"[red]Failed to sync: {e}[/red]")
 
