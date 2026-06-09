@@ -6,7 +6,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from loguru import logger
 from sqlalchemy import Column, String, ForeignKey, DateTime, Float
-from app.models.database import Base, engine, CandidateItem
+from app.models.database import Base, engine, CandidateItem, InvestigationInput, SubmittedUrl
 from app.services.extraction import Claim
 from app.core.llm import query_llm
 from app.services.browser import collect_evidence_from_url
@@ -104,27 +104,22 @@ def parse_reddit_comments(url: str, claim_id: str, db: Session):
     except Exception as e:
         logger.error(f"Failed to fetch Reddit comments: {e}")
 
-def run_investigation(db: Session):
-    logger.info("Starting investigation planning and evidence collection...")
-    claims = db.query(Claim).limit(5).all()
+def run_investigation(db: Session, depth_limit: int = 3):
+    logger.info(f"Starting Recursive Investigation (Depth Limit: {depth_limit})...")
+    claims = db.query(Claim).filter(Claim.status == "selected").limit(5).all()
     
     investigated = 0
+    discovered_urls = []
+    
     for claim in claims:
-        # Check if candidate is from Reddit for recursive comment parsing
-        candidate = db.query(CandidateItem).filter(CandidateItem.id == claim.candidate_id).first()
-        if candidate and candidate.source_type == "reddit":
-            parse_reddit_comments(candidate.url, claim.id, db)
-            
         # 1. Investigation Planning
-        prompt = f"Given this claim: '{claim.claim_text}', generate 3 to 5 targeted search queries to find evidence verifying or refuting it. Return ONLY a valid JSON object with key 'queries' containing a list of strings."
+        prompt = f"Given this claim: '{claim.claim_text}', generate 3 to 5 targeted search queries to find evidence. Return ONLY a JSON object with 'queries' (list of strings)."
         response = query_llm(prompt, system_prompt="You generate targeted search queries. Output JSON only.")
         queries = [claim.claim_text] # fallback
         try:
             if response:
                 result = json.loads(response)
                 queries = result.get("queries", [claim.claim_text])
-                if not isinstance(queries, list):
-                    queries = [claim.claim_text]
         except Exception as e:
             logger.warning(f"Failed to parse investigation queries LLM JSON: {e}")
             
@@ -153,10 +148,54 @@ def run_investigation(db: Session):
                 db.add(evidence)
                 task.status = "completed"
                 investigated += 1
+                
+                # LAYER 6: RECURSIVE DISCOVERY
+                # Extract URLs from the evidence text
+                ext_prompt = f"Extract all cited URLs or referenced sources from this text. Return ONLY a JSON object with 'urls' (list of absolute url strings).\nText: {text[:2000]}"
+                url_resp = query_llm(ext_prompt, system_prompt="You extract URLs. Output JSON only.")
+                try:
+                    if url_resp:
+                        url_res = json.loads(url_resp)
+                        for new_url in url_res.get("urls", []):
+                            if new_url.startswith("http"):
+                                discovered_urls.append(new_url)
+                except Exception:
+                    pass
             else:
                 task.status = "failed"
                 
             db.commit()
+            
+        claim.status = "investigated"
+        db.commit()
         
-    logger.info(f"Investigation phase complete. Collected evidence for {investigated} search queries.")
+    # Process Recursive Discovery
+    new_candidates = 0
+    for url in set(discovered_urls):
+        # Check if already processed in SubmittedUrl
+        exists = db.query(SubmittedUrl).filter(SubmittedUrl.url == url).first()
+        if not exists:
+            # Create new InvestigationInput for the recursive link
+            new_input_id = str(uuid.uuid4())
+            new_input = InvestigationInput(
+                id=new_input_id,
+                input_type="url",
+                status="pending",
+                notes=f"Recursively discovered from depth {depth_limit}",
+                created_at=datetime.utcnow()
+            )
+            db.add(new_input)
+            
+            # Attach the URL
+            submitted_url = SubmittedUrl(
+                id=str(uuid.uuid4()),
+                input_id=new_input_id,
+                url=url
+            )
+            db.add(submitted_url)
+            new_candidates += 1
+            
+    db.commit()
+    logger.info(f"Investigation complete. Collected {investigated} pieces of evidence.")
+    logger.info(f"Layer 6 Recursive Discovery generated {new_candidates} new investigation inputs.")
     return investigated
