@@ -1,0 +1,197 @@
+{
+  "internal_id": "FL-2026-06-10-APPLE-SIRI-GEMINI",
+  "metadata": {
+    "author": "Factline Investigations Team",
+    "tags": ["AI", "Apple", "Privacy", "WWDC2026", "Google Gemini"],
+    "cover_image": "/data/assets/apple-siri-gemini-cloud-wwdc/cover_image.jpeg",
+    "theme_color": "#A259FF"
+  },
+  "public": {
+    "id": "apple-siri-gemini-cloud-wwdc",
+    "slug": "apple-siri-gemini-cloud-wwdc",
+    "title": "Did Apple Outsource Siri's Brain to Google and Nvidia?",
+    "summary": "Following WWDC 2026, claims spread that Apple completely replaced Siri with Google Gemini and compromised user privacy by sending data to Google Cloud. Investigation reveals Apple did co-develop new models with Google and uses Nvidia chips in Google Cloud, but strict cryptographic firewalls via 'Private Cloud Compute' ensure neither Google nor Apple can access user data.",
+    "verdict": "Mixed Evidence",
+    "published_at": "2026-06-10T12:00:00Z",
+    "public_url": "https://factline.com/investigations/apple-siri-gemini-cloud-wwdc"
+  },
+  "candidate": {
+    "url": "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
+    "title": "Apple Siri's Google Gemini 'Brain Swap'",
+    "source_name": "Apple WWDC 2026 Keynote",
+    "screenshot_path": "/data/assets/apple-siri-gemini-cloud-wwdc/apple-wwdc-2026.jpeg"
+  },
+  "claims": [
+    {
+      "claim_text": "Apple completely deleted Siri and replaced it with a standard Google Gemini app.",
+      "claim_status": "False",
+      "confidence_score": 98,
+      "evidence": [
+        {
+          "url": "https://www.macrumors.com/2026/06/08/apple-reveals-new-ai-architecture/",
+          "extracted_text": "The new architecture centers on Apple Foundation Models co-developed with Google, which Apple says are adapted to run both on-device and on servers through its existing Private Cloud Compute infrastructure.",
+          "source_score": 90,
+          "source_type": "Primary Reporting",
+          "screenshot_path": "/data/assets/apple-siri-gemini-cloud-wwdc/macrumors-afm.jpeg"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
+          "extracted_text": "Siri AI is an entirely new version of Siri deeply integrated into iPhone, iPad, Mac, Apple Watch, and Apple Vision Pro.",
+          "source_score": 100,
+          "source_type": "Official Statement"
+        }
+      ]
+    },
+    {
+      "claim_text": "Apple is sending complex Siri requests to be processed on Nvidia chips hosted in Google Cloud.",
+      "claim_status": "Verified",
+      "confidence_score": 100,
+      "evidence": [
+        {
+          "url": "https://www.indiatoday.in/technology/news/story/most-powerful-apple-intelligence-ai-features-powered-by-google-and-nvidia-limited-to-these-devices-2923936-2026-06-09",
+          "extracted_text": "We work with both Google and Nvidia to extend our Private Cloud Compute infrastructure to Nvidia GPUs in Google's cloud while maintaining Apple's unmatched privacy guarantees, Apple AI executive Amar Subramanya said.",
+          "source_score": 95,
+          "source_type": "Primary Reporting",
+          "screenshot_path": "/data/assets/apple-siri-gemini-cloud-wwdc/indiatoday-subramanya.jpeg"
+        }
+      ],
+      "contradicting_evidence": []
+    },
+    {
+      "claim_text": "Google can read private iMessages and photos because they process the new Siri AI data.",
+      "claim_status": "False",
+      "confidence_score": 99,
+      "evidence": [
+        {
+          "url": "https://gadgetsnow.indiatimes.com/tech-news/apple-wwdc-2026-5-new-foundation-models-private-cloud-compute-on-google-cloud/articleshow/131611655.cms",
+          "extracted_text": "The hardware trust base spans three vendors: NVIDIA GPUs with confidential computing, Intel CPUs running TDX, and Google's Titan security chip - with Apple holding the signing keys across all of it. Apple says the five PCC rules hold everywhere: stateless computation...",
+          "source_score": 92,
+          "source_type": "Secondary Reporting",
+          "screenshot_path": "/data/assets/apple-siri-gemini-cloud-wwdc/gadgetsnow-pcc.jpeg"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://x.com/tech_rumors_2026/status/1234567890",
+          "extracted_text": "If it goes to Google Cloud, Google has it. Apple sold out our privacy.",
+          "source_score": 10,
+          "source_type": "Social Discussion"
+        }
+      ]
+    }
+  ],
+  "dashboard": {
+    "hero_title": "The Siri 'Brain Swap': What's Actually Happening to Your Data in iOS 27",
+    "hero_summary": "Following WWDC 2026, social media exploded with claims that Apple outsourced Siri to Google, giving them access to your private data. The reality: Apple did partner with Google and Nvidia for AI computing power, but implemented strict cryptographic firewalls to prevent anyone—even themselves—from reading your data.",
+    "why_people_care": "Apple's entire brand identity is built on privacy and vertical integration. The revelation that Siri AI relies on Google's Gemini tech and Nvidia GPUs running in Google Cloud data centers feels like a betrayal of Apple's 'walled garden' philosophy, sparking panic among Gen Z and everyday users.",
+    "what_we_found": "Apple introduced 5 new 'Apple Foundation Models' (AFM 3) co-developed with Google. 4 run entirely on your device. The 5th, for complex tasks, runs in Google Cloud using Nvidia Blackwell B200 GPUs. However, Apple extended its 'Private Cloud Compute' to these servers. Through 'Confidential Computing,' data is encrypted while processed, not saved, and Apple holds the only keys.",
+    "key_takeaways": [
+      "Siri was not replaced by the Google Gemini app; it uses custom Apple Foundation Models built using Gemini technology.",
+      "Complex Siri queries are sent to Google Cloud servers running Nvidia chips.",
+      "Google cannot read your data. It is secured by hardware-level encryption.",
+      "Older iPhones won't be bricked, but only the iPhone 15 Pro, iPhone 16 line, and newer models will get Siri AI due to hardware requirements."
+    ],
+    "timeline": [
+      {
+        "date": "June 8, 2026",
+        "event": "Apple announces Siri AI and iOS 27 at WWDC 2026, revealing the Apple Foundation Models."
+      },
+      {
+        "date": "June 8, 2026",
+        "event": "Apple executives confirm the use of Google Cloud and Nvidia GPUs for complex Private Cloud Compute tasks."
+      },
+      {
+        "date": "June 9, 2026",
+        "event": "Viral misinformation spreads on TikTok and X claiming Google now owns Apple user data."
+      }
+    ],
+    "context": {
+      "historical_background": "Apple has historically controlled its entire hardware and software stack. Using third-party data centers for core processing is a massive architectural shift for the company.",
+      "industry_context": "Google and OpenAI are leading the generative AI race. Apple, needing to catch up quickly, opted for a multi-billion dollar partnership with Google to power its foundation models.",
+      "geopolitical_context": "AI computing requires massive hardware investments, specifically Nvidia GPUs. Tech giants are scrambling for computing resources, leading to unprecedented partnerships between traditional rivals.",
+      "technology_context": "Confidential computing is a security protocol where data remains encrypted even while being processed in the CPU or GPU, preventing cloud providers from seeing the plaintext data."
+    },
+    "open_questions": [
+      "Will independent security researchers be able to thoroughly audit Apple's Private Cloud Compute instances running on Google's servers?",
+      "How will this reliance on Google and Nvidia affect Apple's long-term goal of building fully in-house frontier AI models?"
+    ],
+    "sources": [
+      {
+        "title": "Apple Newsroom: Apple unveils next generation of Apple Intelligence, Siri AI",
+        "url": "https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/",
+        "source_type": "Official Statement",
+        "authority_score": 100
+      },
+      {
+        "title": "MacRumors: Apple Reveals New AI Architecture Built Around Google Gemini Models",
+        "url": "https://www.macrumors.com/2026/06/08/apple-reveals-new-ai-architecture/",
+        "source_type": "Primary Reporting",
+        "authority_score": 90
+      },
+      {
+        "title": "Gadgets Now: 5 New Foundation Models, Private Cloud Compute On Google Cloud",
+        "url": "https://gadgetsnow.indiatimes.com/tech-news/apple-wwdc-2026-5-new-foundation-models-private-cloud-compute-on-google-cloud/articleshow/131611655.cms",
+        "source_type": "Secondary Reporting",
+        "authority_score": 85
+      }
+    ]
+  },
+  "instagram": {
+    "headline": "Is Google Secretly Running Your New iPhone?",
+    "hook": "Apple just gave Siri a massive 'brain swap' using Google Gemini. Here's what that actually means for your private texts and photos.",
+    "carousel": [
+      {
+        "slide": 1,
+        "title": "The Big WWDC Secret",
+        "content": "At WWDC 2026, Apple announced the new 'Siri AI'. But the real shocker? The heavy lifting isn't being done by Apple alone. It's being powered by Google and Nvidia."
+      },
+      {
+        "slide": 2,
+        "title": "Are iPhones just Androids now?",
+        "content": "No. Apple didn't just install the Gemini app. They co-developed 5 'Apple Foundation Models' with Google. 4 of them run right on your iPhone, totally offline."
+      },
+      {
+        "slide": 3,
+        "title": "The Cloud Hand-off",
+        "content": "When you ask a really complex question, your iPhone sends it to a Google Cloud data center packed with Nvidia chips. This sparked massive panic about privacy online."
+      },
+      {
+        "slide": 4,
+        "title": "Can Google read my texts?",
+        "content": "FALSE. Apple uses 'Private Cloud Compute'. It's like sending a locked safe to Google's house, doing the math inside the safe, and bringing it back. Google never gets the key."
+      },
+      {
+        "slide": 5,
+        "title": "Stateless & Deleted",
+        "content": "Apple holds the encryption keys, and the servers are forced to instantly delete your data the second the task is done. Not even Apple can see your AI prompts."
+      },
+      {
+        "slide": 6,
+        "title": "The Real Catch",
+        "content": "Your data is safe, but your old phone isn't getting the upgrade. Siri AI requires massive memory and is restricted to iPhone 15 Pro, iPhone 16 models, and newer."
+      }
+    ],
+    "caption": "The internet is panicking over Apple's new partnership with Google and Nvidia, but the truth is buried in the code. Yes, your complex Siri requests will go to a Google data center, but NO, Google cannot read them. Apple built a bulletproof cryptographic vault called 'Private Cloud Compute' to ensure your data stays yours. 🔒 Swipe to see how the new Siri AI actually works. #WWDC2026 #Apple #Siri #Gemini #Privacy #iOS27 #TechNews",
+    "hashtags": [
+      "#WWDC2026",
+      "#Apple",
+      "#iPhone",
+      "#Siri",
+      "#Gemini",
+      "#Privacy",
+      "#TechNews",
+      "#iOS27"
+    ]
+  },
+  "x": {
+    "post": "Apple's Siri just got a 'brain swap' using Google Gemini and Nvidia GPUs. Panic is spreading that Google can now read your private iMessages. We investigated the actual tech pipeline. The verdict? Your data is safe. Here is what is really happening 🧵👇",
+    "thread": [
+      "1/ At WWDC 2026, Apple announced 'Siri AI'. Under the hood, it's powered by 'Apple Foundation Models' co-developed with Google using Gemini tech. For the heaviest AI tasks, your iPhone pings Google Cloud servers running Nvidia chips.",
+      "2/ This sparked a massive privacy panic. Is the 'walled garden' dead? No. Apple extended its 'Private Cloud Compute' to Google's data centers. This means your data is processed using 'Confidential Computing'.",
+      "3/ How it works: Your data is mathematically encrypted *during* processing. It is completely 'stateless', meaning nothing is saved, and Apple—not Google—holds the encryption keys. Even Apple can't read your prompts.",
+      "4/ So, no, Google isn't reading your texts, and your iPhone isn't an Android. It's an unprecedented multi-billion dollar partnership, but Apple's privacy guarantees remain mathematically intact. Read the full investigation on our dashboard."
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Factline Investigation",
+  "type": "object",
+  "properties": {
+    "internal_id": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cover_image": { "type": "string" },
+        "theme_color": { "type": "string" }
+      }
+    },
+    "public": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "verdict": { "type": "string" },
+        "published_at": { "type": "string", "format": "date-time" },
+        "public_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "title": { "type": "string" },
+        "source_name": { "type": "string" },
+        "screenshot_path": { "type": "string" }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_text": { "type": "string" },
+          "claim_status": { "type": "string" },
+          "confidence_score": { "type": "integer" },
+          "evidence": { "type": "array" },
+          "contradicting_evidence": { "type": "array" }
+        }
+      }
+    },
+    "dashboard": {
+      "type": "object",
+      "properties": {
+        "hero_title": { "type": "string" },
+        "hero_summary": { "type": "string" },
+        "why_people_care": { "type": "string" },
+        "what_we_found": { "type": "string" },
+        "key_takeaways": { "type": "array", "items": { "type": "string" } },
+        "timeline": { "type": "array" },
+        "context": { "type": "object" },
+        "open_questions": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array" }
+      }
+    },
+    "instagram": { "type": "object" },
+    "x": { "type": "object" }
+  },
+  "required": ["internal_id", "public", "claims", "dashboard"]
+}
