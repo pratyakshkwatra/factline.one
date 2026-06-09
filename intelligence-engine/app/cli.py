@@ -1,56 +1,157 @@
 import typer
-import time
+import requests
 from rich.console import Console
-from rich.progress import track
 from loguru import logger
+from sqlalchemy.exc import OperationalError
+
+from app.models.database import SessionLocal, init_db
+from app.services.discovery import run_discovery
+from app.services.ranking import rank_candidates
+from app.services.extraction import extract_claims
+from app.services.investigation import run_investigation
+from app.services.report import generate_reports
 
 app = typer.Typer(help="Factline Intelligence Engine (FIE) CLI")
 console = Console()
 
+def notify_ui():
+    try:
+        requests.post("http://localhost:8000/api/v1/notify", timeout=1)
+    except Exception:
+        pass # Ignore if API isn't running
+
 @app.command()
 def run():
     """
-    Executes the entire Factline pipeline: Discovery -> Ranking -> Investigation -> Report Generation.
+    Executes the entire Factline pipeline: Discovery -> Ranking -> Extraction -> Investigation -> Report Generation.
     """
     console.print("[bold blue]Starting Factline Intelligence Pipeline...[/bold blue]")
     
-    logger.info("Initializing Discovery Phase...")
-    time.sleep(1)
-    console.print("[green]✓ Discovery complete. Found 5000+ items.[/green]")
+    try:
+        init_db()
+    except OperationalError as e:
+        console.print("[red]Database connection failed. Is PostgreSQL running?[/red]")
+        logger.error(e)
+        return
 
-    logger.info("Initializing Ranking Phase...")
-    time.sleep(1)
-    console.print("[green]✓ Ranking complete. Selected top 20 opportunities.[/green]")
+    db = SessionLocal()
+    try:
+        # Phase 1: Discovery
+        console.print("[bold cyan]1. Discovery Phase[/bold cyan]")
+        new_items = run_discovery(db)
+        console.print(f"[green]✓ Discovery complete. Found {new_items} new items.[/green]")
+        notify_ui()
 
-    logger.info("Initializing Investigation Phase...")
-    time.sleep(1)
-    console.print("[green]✓ Investigation complete. Evidence graphs generated.[/green]")
+        # Phase 2: Ranking
+        console.print("\n[bold cyan]2. Ranking Phase[/bold cyan]")
+        ranked_items = rank_candidates(db)
+        console.print(f"[green]✓ Ranking complete. Scored {ranked_items} opportunities.[/green]")
+        notify_ui()
 
-    logger.info("Generating Reports...")
-    time.sleep(1)
-    console.print("[green]✓ Reports generated successfully.[/green]")
-    
-    console.print("[bold blue]Pipeline completed successfully![/bold blue]")
+        # Phase 3: Extraction
+        console.print("\n[bold cyan]3. Claim Extraction Phase[/bold cyan]")
+        extracted_claims = extract_claims(db)
+        console.print(f"[green]✓ Extraction complete. Found {extracted_claims} claims.[/green]")
+        notify_ui()
+
+        # Phase 4: Investigation & Evidence Collection
+        console.print("\n[bold cyan]4. Investigation & Evidence Collection[/bold cyan]")
+        investigated = run_investigation(db)
+        console.print(f"[green]✓ Investigation complete. Collected evidence for {investigated} claims.[/green]")
+        notify_ui()
+
+        # Phase 5: Report Generation
+        console.print("\n[bold cyan]5. Report Generation Phase[/bold cyan]")
+        reports = generate_reports(db)
+        console.print(f"[green]✓ Report generation complete. Created {reports} transparency reports.[/green]")
+        notify_ui()
+
+    finally:
+        db.close()
+        
+    console.print("\n[bold blue]Pipeline execution cycle complete![/bold blue]")
 
 @app.command()
 def dashboard():
     """Launches the local dashboard analyst workstation."""
-    console.print("Launching local dashboard...")
+    console.print("[yellow]Please use the root launcher: ./factline serve[/yellow]")
 
 @app.command()
 def serve():
     """Launches both backend and dashboard services."""
-    console.print("Starting Factline services...")
+    console.print("[yellow]Please use the root launcher: ./factline serve[/yellow]")
 
 @app.command()
 def sync():
     """Exports approved reports to the public database."""
-    console.print("Syncing reports to public database...")
+    console.print("[bold blue]Syncing reports to public database...[/bold blue]")
+    try:
+        from app.models.database import SessionLocal
+        from app.services.report import Report
+        import sqlite3
+        import os
+
+        db = SessionLocal()
+        reports = db.query(Report).filter(Report.public_url.isnot(None)).all()
+        
+        db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "..", "public-dashboard", "public", "public_reports.db")
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS public_reports (
+                id TEXT PRIMARY KEY,
+                slug TEXT UNIQUE,
+                title TEXT,
+                summary TEXT,
+                verdict TEXT,
+                public_url TEXT
+            )
+        ''')
+        
+        synced = 0
+        for r in reports:
+            slug = r.public_url.split("/r/")[-1] if r.public_url and "/r/" in r.public_url else r.id
+            try:
+                cursor.execute('''
+                    INSERT INTO public_reports (id, slug, title, summary, verdict, public_url)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (r.id, slug, r.title, r.summary, r.verdict, r.public_url))
+                synced += 1
+            except sqlite3.IntegrityError:
+                pass # Already exists
+                
+        conn.commit()
+        conn.close()
+        db.close()
+        console.print(f"[green]✓ Successfully synced {synced} new reports to the public dashboard.[/green]")
+    except Exception as e:
+        console.print(f"[red]Failed to sync: {e}[/red]")
 
 @app.command()
 def status():
     """Checks system status."""
-    console.print("System is offline.")
+    console.print("[bold blue]Checking Factline system status...[/bold blue]")
+    try:
+        from app.models.database import SessionLocal
+        from sqlalchemy import text
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+        console.print("[green]✓ PostgreSQL Database: Online[/green]")
+    except Exception:
+        console.print("[red]✗ PostgreSQL Database: Offline[/red]")
+        
+    try:
+        import requests
+        res = requests.get("http://localhost:8000/api/v1/candidates", timeout=2)
+        if res.status_code == 200:
+            console.print("[green]✓ Intelligence Engine API: Online (http://localhost:8000)[/green]")
+        else:
+            console.print("[yellow]⚠ Intelligence Engine API: Unexpected Response[/yellow]")
+    except Exception:
+        console.print("[red]✗ Intelligence Engine API: Offline[/red]")
 
 if __name__ == "__main__":
     app()
