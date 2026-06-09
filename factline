@@ -40,4 +40,4 @@ fi
 # Pass any other commands (like "run") to the CLI
 cd "$DIR/intelligence-engine"
 source .venv/bin/activate
-python3 app/cli.py "$@"
+python3 -m app.cli "$@"

@@ -1,303 +1,202 @@
 # FACTLINE INTELLIGENCE ENGINE (FIE)
-
-## Local-First Autonomous Intelligence, Verification & Publishing Platform
-
-### Complete System Specification
+## Human-Guided Intelligence Investigation Platform
+### Complete System Specification (V2.1)
 
 ---
 
-## 1. Product Vision
-
-Factline Intelligence Engine (FIE) is a local-first intelligence operating system designed to discover, investigate, verify, document, and publish evidence-backed reports on emerging online discussions. The system continuously scans social media, news, research sources, public web content, and official statements. Its objective is to identify high-value discussions, perform forensic investigations, generate transparent reports, and create concise public-facing comments that direct readers toward detailed evidence pages.
-
-- **Core Principle**: The report is the product; the comment is only a distribution mechanism.
-- **System Value**: The pipeline is the core product; the dashboards exist to expose pipeline outputs.
-
----
-
-## 2. Primary Goals
-
-The system must:
-
-- Discover emerging discussions and detect potentially important claims.
-- Rank opportunities worth investigating and gather evidence recursively.
-- Verify claims, generate detailed reports, and generate concise evidence-backed comments.
-- Store all intelligence locally, publish approved investigations publicly, and build reusable institutional memory.
+# 1. PRODUCT VISION
+Factline is a local-first intelligence investigation platform. It is not a social media discovery engine, RSS reader, or autonomous content farm. The user discovers potentially interesting content and provides the starting signal. Factline performs the investigation, recursive evidence collection, source analysis, verification, report generation, and publication.
+The final product features:
+- Transparent investigation reports
+- Evidence-backed conclusions
+- Publicly shareable research
+- Full source transparency
 
 ---
 
-## 3. Hard Requirements
-
-### Cost & Compute
-
-- **Cost**: Operating with effectively zero recurring API costs. Prefer browser scraping, RSS feeds, public APIs, and local inference. Avoid paid APIs (OpenAI, Anthropic, Gemini, paid search APIs).
-- **Compute**: Runs entirely on local hardware (primary target: Apple Silicon M5 Max, 36GB Unified Memory).
-
-### Interface Priority
-
-1. Intelligence Pipeline
-2. CLI (Command Line Interface)
-3. Local Dashboard
-4. Public Dashboard
+# 2. CORE PRINCIPLE & FLOW
+1. **User finds & submits content**: Reddit/X post, news article, LinkedIn post, Hacker News discussion, YouTube video, government statement, research paper, or forum discussion.
+2. **Factline investigates**: Crawls, gathers evidence recursively, and verifies.
+3. **Factline outputs**: Generates a report, a shareable comment, and publishes findings.
 
 ---
 
-## 4. High-Level Architecture
-
-```text
-                    FACTLINE
-
-┌──────────────────────────────────────┐
-│      Intelligence Pipeline           │
-└──────────────────┬───────────────────┘
-                   │
-                   ▼
-┌──────────────────────────────────────┐
-│      Local Intelligence Database     │
-│            PostgreSQL                │
-└──────────────────┬───────────────────┘
-                   │
-                   ▼
-┌──────────────────────────────────────┐
-│        Local Analyst Dashboard       │
-└──────────────────┬───────────────────┘
-                   │ (Approve Reports For Publication)
-                   ▼
-┌──────────────────────────────────────┐
-│       Public Publishing Database     │
-│              SQLite                  │
-└──────────────────┬───────────────────┘
-                   │
-                   ▼
-┌──────────────────────────────────────┐
-│        Public React Dashboard        │
-└──────────────────────────────────────┘
-```
+# 3. PRIMARY GOALS
+- Investigate claims & verify information
+- Collect evidence & build evidence graphs
+- Generate transparent reports & concise comments
+- Maintain institutional memory & provide full source traceability
+*Note: Factline does not depend on discovering content automatically.*
 
 ---
 
-## 5. Technology Stack
-
-- **Backend**: Python 3.13+, FastAPI, Typer, SQLAlchemy 2.x, Pydantic v2, Redis, PostgreSQL, Qdrant, Playwright, LM Studio, Rich, Loguru, Docker Compose, uv
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
-- **Database**: PostgreSQL (Local Intelligence DB), SQLite (Public Publishing DB)
+# 4. SYSTEM ARCHITECTURE
+`User Input` ➔ `Investigation Engine` ➔ `Local DB (PostgreSQL)` ➔ `Local Dashboard` ➔ `Human Review` ➔ `Public SQLite DB` ➔ `Public Dashboard`
 
 ---
 
-## 6. CLI Design
-
-The CLI must remain extremely simple, avoiding complex command trees and manual worker orchestration.
-
-- `factline run`: Executes the entire pipeline: Discovery → Filtering → Ranking → Investigation → Verification → Report Generation → Comment Generation → Dashboard Update → Storage.
-- `factline dashboard`: Launches the local dashboard analyst workstation.
-- `factline serve`: Launches both backend and dashboard services.
-- `factline sync`: Exports approved reports to the public database.
-- `factline status`: Checks system status.
-- `factline config`: Views system configuration.
+# 5. INVESTIGATION INPUTS
+- **URLs**: Reddit/X posts, news articles, research papers, government releases.
+- **Raw Text**: Copied posts, discussions, or comments.
+- **Screenshots**: Tweets, posts, comments, or articles.
+- **Mixed Inputs**: Combination of URL + Comments + Notes + Screenshots.
 
 ---
 
-## 7. Pipeline Overview
-
-The pipeline consists of 10 major sequential stages:
-
-1. Discovery → 2. Deduplication → 3. Opportunity Ranking → 4. Opportunity Selection → 5. Claim Extraction → 6. Investigation Planning → 7. Evidence Collection → 8. Recursive Investigation → 9. Verification → 10. Report Generation
-
----
-
-## 8. Discovery Pipeline
-
-- **Sources**: Reddit, RSS feeds, news websites, research repositories, blogs, forums, official/corporate announcements, government releases, and Twitter/X browser sessions.
-- **Data Model (`CandidateItem`)**: `id`, `source_type`, `source_name`, `url`, `title`, `content`, `author`, `timestamp`, `engagement`, `raw_html`, `clean_text`, `collection_timestamp`
+# 6. CLI & COMMANDS
+- **Primary Command**: `factline investigate` (interactive mode prompts for URL, post, comments, notes)
+- **Direct Command**: `factline investigate <url>`
+- **Management Commands**:
+  - `factline dashboard`: Launch analyst workspace.
+  - `factline serve`: Start backend & dashboard services.
+  - `factline sync`: Export approved reports to public SQLite.
+  - `factline status`: Check system health.
+  - `factline config`: View configuration.
+*Note: Discovery is optional; investigation is primary.*
 
 ---
 
-## 9. Deduplication Pipeline
-
-- **Deduplication Targets**: Duplicate posts, mirrored articles, cross-posted content, spam, advertisements, and low-information content.
-- **Storage Strategy**: Mark and store duplicate relationships; do not delete duplicates.
+# 7. PIPELINE
+`Submission` ➔ `Content Extraction` ➔ `Claim Extraction` ➔ `Investigation Planning` ➔ `Query Generation` ➔ `Evidence Collection` ➔ `Recursive Investigation` ➔ `Evidence Graph Construction` ➔ `Verification` ➔ `Report Generation` ➔ `Comment Generation` ➔ `Publication`
 
 ---
 
-## 10. Opportunity Ranking Engine
-
-Discovered items receive an **Opportunity Score (0–100)** calculated using signals:
-
-- **Signals**: Newsworthiness, Engagement Velocity, Claim Density, Novelty, Controversy, Research Availability, Verification Potential, Entity Importance, Public Interest, Recency, Historical Significance.
+# 8. CLAIM EXTRACTION
+- **Extract**: Explicit, implicit, numerical, financial, geopolitical, and scientific claims.
+- **Store**: Claim text, entities, confidence, claim type, and origin source.
 
 ---
 
-## 11. Opportunity Selection
-
-Filter funnel flow example:
-`5000 Discovered Items` → `500 Filtered` → `100 Ranked` → `20 Selected for Investigation`
-
-Only selected opportunities enter the investigation stage.
-
----
-
-## 12. Claim Extraction
-
-- **Extraction Scope**: Explicit, implicit, numerical, scientific, political, financial, and geopolitical claims.
-- **Data Model (`Claim`)**: `id`, `claim_text`, `claim_type`, `entities`, `origin_source`, `confidence`
+# 9. INVESTIGATION PLANNING
+For every claim, determine:
+- Evidence required & primary, government, or research sources.
+- Contradictions and entities to investigate.
+- Generate search, browsing, and verification tasks.
 
 ---
 
-## 13. Investigation Planning
-
-For each claim, the system dynamically plans the investigation:
-
-- **Questions**: What evidence is needed? Which sources should be searched? Which contradictions checked? Which entities investigated?
-- **Outputs**: Investigation Plan, Search Queries, Research Tasks, Evidence Requirements.
+# 10. SEARCH GENERATION
+Generate targeted search queries (e.g., Claim: *"OpenAI released GPT-6"* ➔ Queries: *"OpenAI GPT-6 official announcement"*, *"OpenAI GPT-6 release Reuters"*, etc.).
+- **Search Providers**: Google (via Playwright), DuckDuckGo, Bing.
 
 ---
 
-## 14. Evidence Collection
-
-- **Scope**: Articles, tweets, Reddit posts/comments, research papers, government documents, press releases, official statements, archived pages, screenshots, and metadata.
-- **Rule**: Store EVERYTHING. No evidence is discarded.
-
----
-
-## 15. Browser Intelligence Layer
-
-Playwright-based browser manager.
-
-- **Capabilities**: Session persistence, cookies, login support, screenshots, HTML/article/metadata/link extraction, content cleaning, caching, retries, rate limiting, and parallel browsing.
+# 11. PLAYWRIGHT INVESTIGATION ENGINE
+First-class subsystem with capabilities:
+- **Search**: DuckDuckGo, Google, Bing.
+- **Extraction**: Article text, metadata, screenshot capture, links, and structured content.
+- **Recursive Crawling**: Visit discovered sources, follow citations, references, and linked evidence.
 
 ---
 
-## 16. Recursive Investigation Engine
-
-The primary investigation loop:
-
-1.  **Analyze**: Ask what remains unknown, unsupported, or contradictory.
-2.  **Act**: Generate follow-up queries/tasks and continue recursively.
-3.  **Stop Conditions**: Confidence threshold reached, maximum depth reached, or evidence saturation reached.
+# 12. EVIDENCE COLLECTION
+Collect and store everything (no evidence discarded):
+- News articles, government documents, research papers, official statements, press releases, blog/forum posts.
+- Referenced links, screenshots, metadata, and raw HTML.
 
 ---
 
-## 17. Evidence Graph
-
-A first-class object produced by every investigation:
-
-- **Nodes**: Claims, Evidence, Sources, Entities, Reports
-- **Edges**: `supports`, `contradicts`, `references`, `mentions`, `reported_by`, `derived_from`, `related_to`
+# 13. RECURSIVE INVESTIGATION
+- **Loop**: Starting from a single post: `Search` ➔ `Collect Evidence` ➔ `Extract Entities/References` ➔ `Generate New Searches` ➔ `Collect More Evidence` ➔ `Repeat`.
+- **Stop Conditions**: Confidence threshold reached, evidence saturation reached, or depth limit reached.
 
 ---
 
-## 18. Verification Engine
-
-Evaluates the evidence graph to produce: Supporting/Contradicting Evidence, Open Questions, Unknowns, Risk Factors, Verdict, and Confidence Score.
-
-- **Verdicts**: Verified, Likely True, Uncertain, Disputed, Likely False, False
-
----
-
-## 19. Report Generation
-
-Every generated report contains:
-
-- Executive & Investigation Summaries
-- Claims & Evidence Timeline
-- Supporting & Contradicting Evidence
-- Evidence Graph & Source Audit
-- Confidence Analysis & Verdict
-- Research Notes, Suggested Comments, and Transparency Section
+# 14. EVIDENCE GRAPH
+- **Nodes**: Claims, Sources, Evidence, Entities, Reports, Investigations.
+- **Edges**: `supports`, `contradicts`, `references`, `mentions`, `derived_from`, `reported_by`, `related_to`.
+*Note: The Graph is a first-class object.*
 
 ---
 
-## 20. Comment Generation
-
-Produces short, medium, and long evidence-backed comments to drive readers to the report (not replace it).
-
-- **Example**: _"Multiple independent sources support this claim, though some details remain unverified. Current confidence: 82%. Full evidence audit: https://domain.com/r/slug"_
-- **Rules**: Must remain concise, mention uncertainty, and never overstate confidence.
+# 15. VERIFICATION ENGINE
+- **Outputs**: Supporting/contradicting evidence, open questions, unknowns, risk factors, confidence score, and verdict.
+- **Verdicts**: `Verified`, `Likely True`, `Uncertain`, `Disputed`, `Likely False`, `False`.
 
 ---
 
-## 21. Local Dashboard
-
-The analyst workstation running locally to display complete pipeline activity.
-
-- **1. Run History**: Displays Run ID, Start/End Time, Duration, Items Collected/Investigated, Reports Generated, Errors, and Worker Statistics.
-- **2. Discovery Feed**: Displays every discovered item (Title, Source, Author, Timestamp, Engagement, Opportunity Score, Status). Clicking an item shows raw/extracted content, metadata, screenshots, and links.
-- **3. Rankings**: Displays ranked opportunities with Final Score, Score Breakdown, Ranking Reasoning, and Investigation Priority.
-- **4. Investigation Explorer**: Explores claims, evidence, entities, contradictions, sources, screenshots, timelines, and reasoning.
-- **5. Evidence Explorer**: Searches collected evidence with filters for Source, Entity, Date, Investigation, and Confidence.
-- **6. Report Review**: Shows full reports, confidence, verdicts, comment variants, source audits, and evidence graphs.
-- **7. Publish Queue**: Actions to Approve, Reject, Archive, or Export reports.
-- **8. Memory Explorer**: Browses claims, entities, reports, historical investigations, and relationships.
+# 16. REPORT GENERATION
+Reports contain:
+- Executive Summary & Original Submission (with comments)
+- Investigation Summary, Claims, Evidence Timeline
+- Supporting & Contradicting Evidence, Evidence Graph, Source Audit
+- Confidence Analysis, Verdict, Research Notes, Transparency Section, and Generated Comments.
 
 ---
 
-## 22. Publication Workflow
-
-`Local Dashboard` → `Review Report` → `Approve Report` → `Add To Publish Queue` → `factline sync` → `Export To Public Database (SQLite)` → `Copy SQLite Database` → `Deploy To Home Server`
-
----
-
-## 23. Public Database
-
-- **Engine**: SQLite (contains ONLY approved reports; never stores internal notes, failed investigations, raw reasoning, or private data).
-- **Tables**: `reports`, `report_sources`, `report_claims`, `report_evidence`, `report_screenshots`, `report_comments`
+# 17. COMMENT GENERATION
+Purpose: Drive readers to the report (not replace it).
+- **Format**: Concise, communicates uncertainty, links to report.
+- **Example**: *"I investigated this claim using primary sources, government releases, research papers, and independent reporting. Current assessment: Likely True (84% confidence). Full evidence audit: https://reports.factline.xyz/r/example"*
 
 ---
 
-## 24. Public Dashboard
-
-A read-only React-based dashboard for transparency (no intelligence processing/investigation).
-
-- **Homepage**: Latest/trending reports, recent investigations, and search.
-- **Report Page**: Headline, summary, verdict, confidence, claims, evidence, sources, screenshots, timeline, related reports, and creation/update dates.
-- **Transparency Page**: All evidence, sources, source weights, collection timestamps, and verification methodology.
-
----
-
-## 25. URL System
-
-- **Base URL**: Configured via `.env` as `PUBLIC_BASE_URL` (e.g., `https://reports.factline.xyz`).
-- **Report URLs**: `https://reports.factline.xyz/r/{slug}` (e.g., `https://reports.factline.xyz/r/openai-model-release-7fd3`).
+# 18. LOCAL DASHBOARD
+The analyst workstation UI containing:
+- **Home**: Active/completed investigations, published reports, recent activity, metrics.
+- **New Investigation**: Form accepting URL, text, comments, screenshots, and notes.
+- **Queue**: States: `Pending`, `Running`, `Completed`, `Published`, `Failed`.
+- **Workspace**: Shows original post, claims, searches, sources, screenshots, evidence graph, contradictions, confidence, verdict, generated comments, and draft report.
+- **Evidence Explorer**: Search/filter all evidence by source, date, investigation, confidence, entity.
+- **Report Review**: Review, edit metadata, approve, reject, generate publication URL.
+- **Publish Queue**: Manage publication workflow.
+- **Memory Explorer**: Browse claims, entities, investigations, relationships, historical reports.
 
 ---
 
-## 26. Memory System
-
-Maintains institutional memory for cross-investigation intelligence.
-
-- **Storage**: Qdrant vector database (claims, entities, reports, sources, evidence, relationships).
-- **Capabilities**: Similarity Search, Entity Linking, Historical Context, Investigation Reuse, and Relationship Discovery.
+# 19. DATABASE (PostgreSQL Tables)
+`investigation_inputs`, `submitted_urls`, `submitted_posts`, `submitted_comments`, `uploaded_images`, `investigations`, `claims`, `entities`, `sources`, `evidence`, `screenshots`, `search_queries`, `search_results`, `reports`, `comments`, `graph_nodes`, `graph_edges`, `relationships`.
 
 ---
 
-## 27. Local Model Strategy
-
-All models run locally via LM Studio:
-
-- **Small Models**: Classification, Deduplication, Entity Extraction, Tagging.
-- **Medium Models**: Claim Extraction, Investigation Planning, Evidence Analysis.
-- **Large Models**: Verification, Report/Comment Generation.
+# 20. MEMORY (Qdrant Vector DB)
+Stores: claims, entities, evidence, reports, investigations.
+Capabilities: Similarity search, entity linking, historical context, investigation reuse.
 
 ---
 
-## 28. Storage Design
-
-- **PostgreSQL**: Runs, candidates, rankings, investigations, claims, entities, sources, evidence, screenshots, reports, comments, relationships, graph nodes/edges.
-- **Qdrant**: Vector collections for claims, reports, entities, and evidence.
-- **Redis**: Job queues, worker coordination, and caching.
+# 21. LOCAL MODEL STRATEGY (LM Studio)
+- **MODEL_SMALL**: Classification, Tagging, Entity Extraction, Search Generation.
+- **MODEL_MEDIUM**: Claim Extraction, Investigation Planning, Evidence Analysis, Contradiction Detection.
+- **MODEL_LARGE**: Verification, Report Generation, Comment Generation.
 
 ---
 
-## 29. Performance Targets
+# 22. PUBLICATION WORKFLOW
+`Investigation` ➔ `Report` ➔ `Review` ➔ `Approve` ➔ `factline sync` ➔ `Public SQLite` ➔ `Home Server` ➔ `Public Dashboard`
 
-- **Discovery & Ranking**: 5000+ items per run.
-- **Investigations**: 10–20 high-quality investigations per run.
+---
+
+# 23. PUBLIC DATABASE (SQLite)
+Approved reports only. Never stores internal notes, draft investigations, private data, or reasoning traces.
+
+---
+
+# 24. PUBLIC DASHBOARD
+Research publication platform (not an admin dashboard):
+- **Homepage**: Latest & trending reports, search, categories.
+- **Report Page**: Title, summary, verdict, confidence, original submission, timeline, evidence, sources, screenshots, evidence graph, related reports, transparency section.
+
+---
+
+# 25. URL SYSTEM
+- **PUBLIC_BASE_URL**: e.g., `https://reports.factline.xyz`
+- **Report URLs**: `https://reports.factline.xyz/r/{slug}`
+
+---
+
+# 26. OPTIONAL DISCOVERY MODULE
+- Supports monitoring: RSS, news, government sources, research sources, Reddit, search queries.
+- May generate investigation suggestions, but user-submitted investigation remains the primary workflow.
+
+---
+
+# 27. PERFORMANCE TARGETS
+- **Volume**: 1–20 investigations per run; 50–500 evidence items per investigation.
 - **Concurrency**: 5+ concurrent browser workers.
-- **Report Generation**: Under 5 minutes per report.
-- **System Runtime**: Designed for continuous improvement.
+- **Speed**: Full investigation (5–20 mins), Report generation (< 2 mins), Real-time dashboard updates.
 
 ---
 
-## 30. Final Product Definition
-
-Factline Intelligence Engine is a local-first intelligence operating system that discovers, investigates, verifies, documents, and publishes evidence-backed reports. By maintaining institutional memory and providing full transparency, it enables evidence-backed public discourse through detailed forensic reports rather than opaque AI-generated conclusions.
+# 28. FINAL PRODUCT DEFINITION
+Factline is a human-guided intelligence investigation platform that transforms a single URL, post, discussion, or claim into a transparent, evidence-backed investigation report through recursive web research, source verification, evidence graph construction, and human-reviewed publication.

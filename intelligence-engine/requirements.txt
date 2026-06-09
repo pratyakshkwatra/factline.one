@@ -12,3 +12,7 @@ rich
 pyyaml
 requests
 psycopg2-binary
+praw
+asyncpraw
+aiohttp
+feedparser

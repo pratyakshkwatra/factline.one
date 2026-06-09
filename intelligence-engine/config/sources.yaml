@@ -1,96 +1,279 @@
+rss:
+  news:
+    - name: "Reuters World"
+      url: "https://feeds.reuters.com/Reuters/worldNews"
+    - name: "Reuters Business"
+      url: "https://feeds.reuters.com/reuters/businessNews"
+    - name: "Reuters Technology"
+      url: "https://feeds.reuters.com/reuters/technologyNews"
+    - name: "BBC World"
+      url: "http://feeds.bbci.co.uk/news/world/rss.xml"
+    - name: "BBC Technology"
+      url: "http://feeds.bbci.co.uk/news/technology/rss.xml"
+    - name: "BBC Business"
+      url: "http://feeds.bbci.co.uk/news/business/rss.xml"
+    - name: "NPR"
+      url: "https://feeds.npr.org/1001/rss.xml"
+    - name: "Associated Press"
+      url: "https://apnews.com/"
+    - name: "The Verge"
+      url: "https://www.theverge.com/"
+    - name: "Ars Technica"
+      url: "https://arstechnica.com/"
+    - name: "TechCrunch"
+      url: "https://techcrunch.com/"
+    - name: "Wired"
+      url: "https://www.wired.com/"
+    - name: "MIT Technology Review"
+      url: "https://www.technologyreview.com/"
+    - name: "Engadget"
+      url: "https://www.engadget.com/"
+    - name: "Axios"
+      url: "https://www.axios.com/"
+    - name: "Politico"
+      url: "https://www.politico.com/"
+    - name: "Semafor"
+      url: "https://www.semafor.com/"
+    - name: "The Atlantic"
+      url: "https://www.theatlantic.com/"
+    - name: "Wall Street Journal"
+      url: "https://www.wsj.com/"
+    - name: "New York Times"
+      url: "https://www.nytimes.com/"
+    - name: "Washington Post"
+      url: "https://www.washingtonpost.com/"
+    - name: "TIME"
+      url: "https://time.com/"
+    - name: "Newsweek"
+      url: "https://www.newsweek.com/"
+    - name: "CNBC"
+      url: "https://www.cnbc.com/"
+    - name: "MarketWatch"
+      url: "https://www.marketwatch.com/"
+    - name: "Yahoo Finance"
+      url: "https://finance.yahoo.com/"
+    - name: "Financial Times"
+      url: "https://www.ft.com/"
+    - name: "The Economist"
+      url: "https://www.economist.com/"
+    - name: "DW"
+      url: "https://www.dw.com/"
+    - name: "France24"
+      url: "https://www.france24.com/"
+    - name: "Al Jazeera"
+      url: "https://www.aljazeera.com/"
+
+  india:
+    - name: "PIB"
+      url: "https://pib.gov.in/"
+    - name: "RBI"
+      url: "https://www.rbi.org.in/"
+    - name: "SEBI"
+      url: "https://www.sebi.gov.in/"
+    - name: "MEA"
+      url: "https://www.mea.gov.in/"
+    - name: "MHA"
+      url: "https://www.mha.gov.in/"
+    - name: "Ministry of Defence"
+      url: "https://mod.gov.in/"
+    - name: "NITI Aayog"
+      url: "https://www.niti.gov.in/"
+    - name: "Economic Times"
+      url: "https://economictimes.indiatimes.com/"
+    - name: "Business Standard"
+      url: "https://www.business-standard.com/"
+    - name: "Mint"
+      url: "https://www.livemint.com/"
+    - name: "The Hindu"
+      url: "https://www.thehindu.com/"
+    - name: "Indian Express"
+      url: "https://indianexpress.com/"
+    - name: "Moneycontrol"
+      url: "https://www.moneycontrol.com/"
+
+  government:
+    - name: "White House"
+      url: "https://www.whitehouse.gov/"
+    - name: "US State Department"
+      url: "https://www.state.gov/"
+    - name: "US Department of Defense"
+      url: "https://www.defense.gov/"
+    - name: "US Treasury"
+      url: "https://home.treasury.gov/"
+    - name: "US Department of Justice"
+      url: "https://www.justice.gov/"
+    - name: "Federal Reserve"
+      url: "https://www.federalreserve.gov/"
+    - name: "European Commission"
+      url: "https://commission.europa.eu/"
+    - name: "European Parliament"
+      url: "https://www.europarl.europa.eu/"
+    - name: "European Central Bank"
+      url: "https://www.ecb.europa.eu/"
+    - name: "UK Government"
+      url: "https://www.gov.uk/"
+    - name: "NATO"
+      url: "https://www.nato.int/"
+    - name: "United Nations"
+      url: "https://www.un.org/"
+    - name: "WHO"
+      url: "https://www.who.int/"
+    - name: "UNESCO"
+      url: "https://www.unesco.org/"
+    - name: "UNICEF"
+      url: "https://www.unicef.org/"
+    - name: "OECD"
+      url: "https://www.oecd.org/"
+    - name: "World Bank"
+      url: "https://www.worldbank.org/"
+    - name: "IMF"
+      url: "https://www.imf.org/"
+    - name: "WTO"
+      url: "https://www.wto.org/"
+
+  finance:
+    - name: "SEC"
+      url: "https://www.sec.gov/"
+    - name: "FINRA"
+      url: "https://www.finra.org/"
+    - name: "Nasdaq"
+      url: "https://www.nasdaq.com/"
+    - name: "NYSE"
+      url: "https://www.nyse.com/"
+    - name: "Federal Reserve"
+      url: "https://www.federalreserve.gov/"
+    - name: "ECB"
+      url: "https://www.ecb.europa.eu/"
+    - name: "Bank of England"
+      url: "https://www.bankofengland.co.uk/"
+    - name: "BIS"
+      url: "https://www.bis.org/"
+    - name: "FRED"
+      url: "https://fred.stlouisfed.org/"
+    - name: "CoinDesk"
+      url: "https://www.coindesk.com/"
+    - name: "The Block"
+      url: "https://www.theblock.co/"
+    - name: "Messari"
+      url: "https://messari.io/"
+    - name: "Glassnode"
+      url: "https://glassnode.com/"
+
+  research:
+    - name: "arXiv"
+      url: "https://arxiv.org/"
+    - name: "PubMed"
+      url: "https://pubmed.ncbi.nlm.nih.gov/"
+    - name: "Crossref"
+      url: "https://www.crossref.org/"
+    - name: "Semantic Scholar"
+      url: "https://www.semanticscholar.org/"
+    - name: "SSRN"
+      url: "https://www.ssrn.com/"
+    - name: "Nature"
+      url: "https://www.nature.com/"
+    - name: "Science"
+      url: "https://www.science.org/"
+    - name: "IEEE"
+      url: "https://ieeexplore.ieee.org/"
+    - name: "ACM"
+      url: "https://dl.acm.org/"
+    - name: "OpenReview"
+      url: "https://openreview.net/"
+    - name: "bioRxiv"
+      url: "https://www.biorxiv.org/"
+    - name: "medRxiv"
+      url: "https://www.medrxiv.org/"
+
+  cybersecurity:
+    - name: "The Hacker News"
+      url: "https://thehackernews.com/"
+    - name: "BleepingComputer"
+      url: "https://www.bleepingcomputer.com/"
+    - name: "Krebs on Security"
+      url: "https://krebsonsecurity.com/"
+    - name: "Dark Reading"
+      url: "https://www.darkreading.com/"
+    - name: "CISA"
+      url: "https://www.cisa.gov/"
+    - name: "NIST"
+      url: "https://www.nist.gov/"
+    - name: "SANS"
+      url: "https://www.sans.org/"
+    - name: "CrowdStrike"
+      url: "https://www.crowdstrike.com/blog/"
+    - name: "Microsoft Security"
+      url: "https://www.microsoft.com/security/blog/"
+    - name: "Google Security"
+      url: "https://security.googleblog.com/"
+    - name: "Cloudflare"
+      url: "https://blog.cloudflare.com/"
+    - name: "Mandiant"
+      url: "https://cloud.google.com/blog/topics/threat-intelligence"
+    - name: "Cisco Talos"
+      url: "https://blog.talosintelligence.com/"
+    - name: "Palo Alto Unit42"
+      url: "https://unit42.paloaltonetworks.com/"
+
+  ai:
+    - name: "OpenAI"
+      url: "https://openai.com/"
+    - name: "Anthropic"
+      url: "https://www.anthropic.com/"
+    - name: "Google DeepMind"
+      url: "https://deepmind.google/"
+    - name: "Meta AI"
+      url: "https://ai.meta.com/"
+    - name: "Microsoft AI"
+      url: "https://www.microsoft.com/ai"
+    - name: "Hugging Face"
+      url: "https://huggingface.co/"
+    - name: "Mistral"
+      url: "https://mistral.ai/"
+    - name: "Perplexity"
+      url: "https://www.perplexity.ai/"
+    - name: "Cohere"
+      url: "https://cohere.com/"
+    - name: "EleutherAI"
+      url: "https://www.eleuther.ai/"
+    - name: "Allen AI"
+      url: "https://allenai.org/"
+    - name: "LAION"
+      url: "https://laion.ai/"
+    - name: "NVIDIA Research"
+      url: "https://research.nvidia.com/"
+
 reddit:
-  world_news:
+  all_topics:
     weight: 1.0
     subreddits:
       - worldnews
       - news
       - geopolitics
-      - anime_titties
       - europe
       - asia
-      - ukpolitics
-      - canada
-      - australia
-      - china
-      - russia
-      - ukraine
-      - Israel
-      - Palestine
-      - GlobalTalk
-  technology:
-    weight: 0.9
-    subreddits:
       - technology
       - programming
-      - compsci
-      - selfhosted
-      - homelab
-      - linux
-      - macsysadmin
-      - sysadmin
-      - devops
-      - cybersecurity
-      - netsec
-      - privacy
-  artificial_intelligence:
-    weight: 1.0
-    subreddits:
       - singularity
-      - artificial
       - MachineLearning
       - LocalLLaMA
       - OpenAI
-      - ClaudeAI
-      - ChatGPT
-      - AGI
-      - deeplearning
-  finance:
-    weight: 0.8
-    subreddits:
+      - artificial
       - stocks
       - investing
       - wallstreetbets
       - options
-      - valueinvesting
       - economics
-      - SecurityAnalysis
-      - StockMarket
       - finance
-      - quant
-  business:
-    weight: 0.7
-    subreddits:
-      - business
-      - entrepreneur
-      - startups
-      - smallbusiness
-  science:
-    weight: 0.85
-    subreddits:
-      - science
-      - Futurology
-      - space
-      - Physics
-      - biology
-      - chemistry
-      - medicine
-  india:
-    weight: 0.8
-    subreddits:
       - india
       - indiaspeaks
-      - unitedstatesofindia
       - indianews
-      - indianstockmarket
-      - developersIndia
       - IndiaInvestments
-      - IndiaTech
-  osint:
-    weight: 1.0
-    subreddits:
-      - OSINT
-      - RBI
-      - DataHoarder
-      - privacy
+      - developersIndia
       - cybersecurity
       - netsec
+      - OSINT
+      - DataHoarder
+      - privacy
+      - selfhosted
+      - homelab

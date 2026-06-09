@@ -1,199 +1,135 @@
-import uuid
-import json
-import requests
-from requests.exceptions import RequestException
-import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
-import time
+import asyncio
+import aiohttp
 import yaml
 from loguru import logger
 from sqlalchemy.orm import Session
-from app.models.database import CandidateItem
+from app.models.database import CandidateItem, Source
 
-RSS_FEEDS = [
-    {"name": "BBC World", "url": "http://feeds.bbci.co.uk/news/world/rss.xml"},
-    {"name": "BBC Technology", "url": "http://feeds.bbci.co.uk/news/technology/rss.xml"},
-    {"name": "Associated Press", "url": "https://apnews.com/hub/ap-top-news?output=rss"},
-    {"name": "The Verge", "url": "https://www.theverge.com/rss/index.xml"},
-    {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/index"},
-    {"name": "TechCrunch", "url": "https://techcrunch.com/feed/"},
-    {"name": "Hacker News", "url": "https://hnrss.org/newest"},
-]
+from app.services.discovery_providers.direct import DirectProvider
+from app.services.discovery_providers.search import SearchProvider
+from app.services.discovery_providers.social import SocialProvider
 
-def load_reddit_config():
+def load_yaml(path: str) -> dict:
     try:
-        with open("config/sources.yaml", "r") as f:
-            return yaml.safe_load(f).get("reddit", {})
-    except Exception as e:
-        logger.error(f"Failed to load config/sources.yaml: {e}")
+        with open(path, "r") as f:
+            return yaml.safe_load(f) or {}
+    except Exception:
         return {}
 
-def fetch_rss_feed(feed):
-    items = []
-    logger.info(f"Fetching RSS feed: {feed['name']}")
-    try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/rss+xml, application/xml, text/xml, */*'
-        }
-        response = requests.get(feed['url'], headers=headers, timeout=10)
-        response.raise_for_status()
-        
-        try:
-            root = ET.fromstring(response.content)
-            for item in root.findall('.//item')[:5]:
-                title = item.findtext('title')
-                link = item.findtext('link')
-                description = item.findtext('description') or ""
+def ensure_sources_in_db(db: Session, config: dict):
+    """Parses sources.yaml and inserts/updates Source models."""
+    existing_names = {s.name for s in db.query(Source).all()}
+    existing_urls = {s.url for s in db.query(Source).all() if s.url}
+    
+    added_names = set()
+    added_urls = set()
+    
+    # Process RSS
+    for cat, feeds in config.get("rss", {}).items():
+        for feed in feeds:
+            name = feed["name"]
+            url = feed.get("url", "")
+            if name not in existing_names and name not in added_names and url not in existing_urls and url not in added_urls:
+                db.add(Source(id=name, name=name, url=url, category=cat, source_type="rss"))
+                added_names.add(name)
+                added_urls.add(url)
                 
-                items.append(CandidateItem(
-                    id=str(uuid.uuid4()),
-                    source_type="rss",
-                    source_name=feed['name'],
-                    url=link,
-                    title=title,
-                    content=description,
-                    clean_text=description,
-                    author=feed['name'],
-                    timestamp=datetime.utcnow(),
-                    status="discovered",
-                    source_metadata={"category": "rss"}
-                ))
-        except ET.ParseError as e:
-            logger.warning(f"XML Parsing failed for feed {feed['name']} (likely blocked by captcha). Skipping.")
+    # Process Research
+    for feed in config.get("research", []):
+        name = feed["name"]
+        url = feed.get("api_endpoint", "")
+        if name not in existing_names and name not in added_names and url not in existing_urls and url not in added_urls:
+            db.add(Source(id=name, name=name, url=url, category="research", source_type="api"))
+            added_names.add(name)
+            added_urls.add(url)
             
-    except RequestException as e:
-        logger.error(f"Failed to fetch feed {feed['name']}: {e}")
-    return items
+    db.commit()
 
-def fetch_reddit_subreddit(subreddit, category_weight):
-    items = []
-    endpoints = ["hot.json", "new.json", "rising.json", "top.json?t=day"]
-    for ep in endpoints:
-        url = f"https://www.reddit.com/r/{subreddit}/{ep}"
-        logger.info(f"Fetching Reddit endpoint: {url}")
-        try:
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'Sec-Fetch-Dest': 'document',
-                'Sec-Fetch-Mode': 'navigate',
-                'Sec-Fetch-Site': 'none',
-                'Sec-Fetch-User': '?1',
-                'TE': 'trailers',
-            }
-            response = requests.get(url, headers=headers, timeout=10)
+async def async_run_discovery(db: Session):
+    sources_config = load_yaml("config/sources.yaml")
+    topics_config = load_yaml("config/topics.yaml").get("topics", [])
+    searches_config = load_yaml("config/searches.yaml").get("searches", {})
+    
+    ensure_sources_in_db(db, sources_config)
+    
+    providers = [
+        DirectProvider(sources_config),
+        SearchProvider(searches_config, topics_config),
+        SocialProvider(sources_config.get("reddit", {}))
+    ]
+    
+    logger.info(f"Starting Multi-Layer Discovery with {len(providers)} providers...")
+    
+    all_results = []
+    async with aiohttp.ClientSession() as session:
+        tasks = [p.discover(session) for p in providers]
+        provider_results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        for res_group in provider_results:
+            if isinstance(res_group, Exception):
+                logger.error(f"Provider failed: {res_group}")
+                continue
+            all_results.extend(res_group)
             
-            if response.status_code == 403:
-                logger.warning(f"HTTP 403 on Reddit {url}. Reddit is requiring OAuth or blocking the IP. Skipping endpoint.")
-                time.sleep(2)
+    return process_results(db, all_results)
+
+def process_results(db: Session, results: list):
+    new_items_count = 0
+    metrics = []
+    
+    # Track URLs we've added in this specific run to prevent constraint violations
+    # before db.commit() is called.
+    added_urls_this_run = set()
+    
+    for res in results:
+        if isinstance(res, Exception) or not res:
+            continue
+            
+        source = res.get("source", "unknown")
+        items = res.get("items", [])
+        status = res.get("status", "failed")
+        time_sec = res.get("time", 0.0)
+        
+        added = 0
+        for item in items:
+            if item.url in added_urls_this_run:
                 continue
                 
-            response.raise_for_status()
-            data = response.json()
-            
-            children = data.get("data", {}).get("children", [])
-            current_time = datetime.now(timezone.utc).timestamp()
-            
-            for child in children[:5]: # limit to prevent mass inserts
-                post = child.get("data", {})
-                title = post.get("title", "")
-                body = post.get("selftext", "")
-                score = post.get("score", 0)
-                comments = post.get("num_comments", 0)
-                author = post.get("author", "")
-                permalink = f"https://www.reddit.com{post.get('permalink', '')}"
-                created_utc = post.get("created_utc", current_time)
+            exists = db.query(CandidateItem).filter(CandidateItem.url == item.url).first()
+            if not exists:
+                db.add(item)
+                added_urls_this_run.add(item.url)
+                new_items_count += 1
+                added += 1
                 
-                # Calculate point-in-time velocity
-                age_hours = max((current_time - created_utc) / 3600.0, 0.1)
-                score_velocity = score / age_hours
-                comment_velocity = comments / age_hours
-                
-                metadata = {
-                    "score": score,
-                    "upvote_ratio": post.get("upvote_ratio", 1.0),
-                    "comment_count": comments,
-                    "awards": post.get("total_awards_received", 0),
-                    "flair": post.get("link_flair_text", ""),
-                    "subreddit": subreddit,
-                    "subreddit_subscribers": post.get("subreddit_subscribers", 0),
-                    "category_weight": category_weight,
-                    "ranking_source": ep.split('.')[0],
-                    "score_velocity": round(score_velocity, 2),
-                    "comment_velocity": round(comment_velocity, 2),
-                    "num_crossposts": post.get("num_crossposts", 0)
-                }
-                
-                items.append(CandidateItem(
-                    id=str(uuid.uuid4()),
-                    source_type="reddit",
-                    source_name=f"r/{subreddit}",
-                    url=permalink,
-                    title=title,
-                    content=body,
-                    clean_text=body,
-                    author=author,
-                    engagement=score + comments,
-                    timestamp=datetime.utcfromtimestamp(created_utc),
-                    status="discovered",
-                    source_metadata=metadata
-                ))
-            time.sleep(1) # simple rate limit for Reddit API
-        except RequestException as e:
-            logger.error(f"HTTP Error on Reddit {url}: {e}")
-            time.sleep(2)
-        except Exception as e:
-            logger.error(f"Failed to fetch Reddit {url}: {e}")
-    return items
-
-import os
-import concurrent.futures
+        metrics.append({
+            "source": source[:28] + '..' if len(source) > 30 else source,
+            "status": status,
+            "time_sec": round(time_sec, 2),
+            "candidates": added
+        })
+        
+    db.commit()
+    
+    # Render Metrics Table
+    logger.info("="*65)
+    logger.info("DISCOVERY PIPELINE METRICS")
+    logger.info("="*65)
+    logger.info(f"{'Source':<30} | {'Status':<15} | {'Time (s)':<8} | {'New'}")
+    logger.info("-" * 65)
+    for m in metrics:
+        logger.info(f"{m['source']:<30} | {m['status']:<15} | {m['time_sec']:<8} | {m['candidates']}")
+    logger.info("="*65)
+    
+    total_sources = len(metrics)
+    failed_sources = sum(1 for m in metrics if m["status"] == "failed")
+    
+    logger.info(f"Total Sources Processed: {total_sources}")
+    logger.info(f"Failed Sources: {failed_sources}")
+    logger.info(f"Total New Candidates: {new_items_count}")
+    logger.info("="*65)
+    
+    return new_items_count
 
 def run_discovery(db: Session):
-    logger.info("Starting discovery process from configured sources...")
-    new_items_count = 0
-    all_items = []
-    
-    # Dynamically scale threads based on available CPU cores (multiplier for I/O bound tasks)
-    optimal_workers = (os.cpu_count() or 4) * 4
-    with concurrent.futures.ThreadPoolExecutor(max_workers=optimal_workers) as executor:
-        future_to_source = {}
-        
-        # Submit RSS Feeds
-        for feed in RSS_FEEDS:
-            future = executor.submit(fetch_rss_feed, feed)
-            future_to_source[future] = f"RSS: {feed['name']}"
-            
-        # Submit Reddit Subreddits
-        reddit_config = load_reddit_config()
-        for cat_name, cat_data in reddit_config.items():
-            weight = cat_data.get("weight", 1.0)
-            subreddits = cat_data.get("subreddits", [])
-            for sub in subreddits[:3]: 
-                future = executor.submit(fetch_reddit_subreddit, sub, weight)
-                future_to_source[future] = f"Reddit: r/{sub}"
-                
-        # Collect results as they complete
-        for future in concurrent.futures.as_completed(future_to_source):
-            source_name = future_to_source[future]
-            try:
-                items = future.result()
-                all_items.extend(items)
-            except Exception as exc:
-                logger.error(f"Source {source_name} generated an exception: {exc}")
-
-    # Deduplicate and insert sequentially to maintain thread safety with the DB session
-    for item in all_items:
-        exists = db.query(CandidateItem).filter(CandidateItem.url == item.url).first()
-        if not exists:
-            db.add(item)
-            new_items_count += 1
-                    
-    db.commit()
-    logger.info(f"Discovery complete. Added {new_items_count} new candidate items to database.")
-    return new_items_count
+    return asyncio.run(async_run_discovery(db))
