@@ -3,6 +3,7 @@ import requests
 from rich.console import Console
 from loguru import logger
 from sqlalchemy.exc import OperationalError
+from typing import Optional
 
 from app.models.database import SessionLocal, init_db
 from app.services.discovery import run_discovery
@@ -70,6 +71,74 @@ def run():
         db.close()
         
     console.print("\n[bold blue]Pipeline execution cycle complete![/bold blue]")
+
+@app.command()
+def investigate(url: Optional[str] = typer.Argument(None, help="Optional URL to automatically fetch and investigate")):
+    """
+    Start a new human-guided investigation. Provides an interactive prompt if no URL is specified.
+    """
+    console.print("[bold blue]Factline Investigation Engine[/bold blue]")
+    
+    from app.models.database import SessionLocal, InvestigationInput, SubmittedUrl, OriginalPost, OriginalComment
+    import uuid
+    from datetime import datetime
+    
+    db = SessionLocal()
+    
+    try:
+        if url:
+            console.print(f"[cyan]Automatically fetching and investigating URL: {url}[/cyan]")
+            
+            new_input_id = str(uuid.uuid4())
+            new_input = InvestigationInput(
+                id=new_input_id,
+                input_type="url",
+                status="pending",
+                created_at=datetime.utcnow()
+            )
+            db.add(new_input)
+            
+            submitted_url = SubmittedUrl(id=str(uuid.uuid4()), input_id=new_input_id, url=url)
+            db.add(submitted_url)
+            
+            db.commit()
+            console.print("[green]Investigation task submitted to queue.[/green]")
+        else:
+            console.print("[bold yellow]Interactive Investigation Mode[/bold yellow]")
+            console.print("Paste your context below to begin an investigation. Press Enter to skip optional fields.")
+            
+            input_url = typer.prompt("URL (optional)", default="", show_default=False)
+            post_content = typer.prompt("Post content", default="", show_default=False)
+            comments = typer.prompt("Comments (optional)", default="", show_default=False)
+            notes = typer.prompt("Investigation notes (optional)", default="", show_default=False)
+            
+            console.print("\n[bold cyan]Submitting investigation...[/bold cyan]")
+            
+            new_input_id = str(uuid.uuid4())
+            new_input = InvestigationInput(
+                id=new_input_id,
+                input_type="mixed",
+                status="pending",
+                notes=notes,
+                created_at=datetime.utcnow()
+            )
+            db.add(new_input)
+            
+            if input_url:
+                db.add(SubmittedUrl(id=str(uuid.uuid4()), input_id=new_input_id, url=input_url))
+            
+            if post_content:
+                db.add(OriginalPost(id=str(uuid.uuid4()), input_id=new_input_id, content=post_content))
+                
+            db.commit()
+            console.print("[green]Investigation task submitted to queue.[/green]")
+            notify_ui()
+            
+    except Exception as e:
+        console.print(f"[red]Error submitting investigation: {e}[/red]")
+        db.rollback()
+    finally:
+        db.close()
 
 @app.command()
 def dashboard():
