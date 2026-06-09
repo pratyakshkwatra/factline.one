@@ -16,6 +16,7 @@ import {
   AlertTriangle,
   XCircle,
   HelpCircle,
+  PlusCircle,
 } from "lucide-react";
 import "./index.css";
 
@@ -186,6 +187,7 @@ export const App = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3 mt-4">
             Workspace
           </div>
+          <SidebarItem icon={PlusCircle} label="New Investigation" id="new_investigation" />
           <SidebarItem icon={Database} label="Overview" id="overview" />
           <SidebarItem icon={Search} label="Discovery Feed" id="discovery" />
           <SidebarItem
@@ -194,7 +196,7 @@ export const App = () => {
             id="investigations"
           />
           <SidebarItem icon={FileText} label="Report Review" id="reports" />
-          <SidebarItem icon={Network} label="Memory Explorer" id="memory" />
+          <SidebarItem icon={Network} label="Source Explorer" id="memory" />
         </nav>
 
         <div className="p-4 border-t border-border">
@@ -264,6 +266,47 @@ export const App = () => {
                   <div className="text-3xl font-bold">{reports.length}</div>
                 </div>
               </div>
+            </motion.div>
+          )}
+
+          {/* NEW INVESTIGATION TAB */}
+          {activeTab === "new_investigation" && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="max-w-4xl mx-auto space-y-8">
+              <div>
+                <h2 className="text-2xl font-semibold tracking-tight">
+                  New Investigation
+                </h2>
+                <p className="text-muted-foreground text-sm mt-1">
+                  Submit a URL, text, or context to initiate a human-guided autonomous investigation.
+                </p>
+              </div>
+
+              <form className="space-y-6 bg-card border border-border rounded-xl p-6 shadow-sm" onSubmit={(e) => { e.preventDefault(); setActiveTab('investigations'); }}>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Primary URL (Optional)</label>
+                    <input type="text" placeholder="https://..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Post Content or Claim</label>
+                    <textarea rows={4} placeholder="Paste the claim or original post text here..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Original Comments or Discussion Context</label>
+                    <textarea rows={3} placeholder="Paste relevant comments or context..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Investigation Notes</label>
+                    <textarea rows={2} placeholder="What should the agents focus on?" className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex justify-end">
+                  <button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors shadow-sm">
+                    Begin Investigation
+                  </button>
+                </div>
+              </form>
             </motion.div>
           )}
 
@@ -455,20 +498,20 @@ export const App = () => {
             </div>
           )}
 
-          {/* MEMORY EXPLORER TAB */}
+          {/* SOURCE EXPLORER TAB */}
           {activeTab === "memory" && (
             <div className="max-w-6xl mx-auto space-y-6">
               <div className="flex justify-between items-end mb-6">
                 <div>
                   <h2 className="text-2xl font-semibold tracking-tight">
-                    Memory & Evidence Graph
+                    Source Explorer
                   </h2>
                   <p className="text-muted-foreground text-sm mt-1">
-                    Raw artifacts collected by intelligence agents.
+                    Display every page visited, collected sources, raw content, and reasoning.
                   </p>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {evidence.length} artifacts
+                  {evidence.length} sources
                 </div>
               </div>
 
@@ -496,14 +539,14 @@ export const App = () => {
                     >
                       {ev.url}
                     </a>
-                    <p className="text-sm text-muted-foreground bg-secondary/30 p-3 rounded-lg font-mono leading-relaxed h-32 overflow-y-auto">
+                    <p className="text-sm text-muted-foreground bg-secondary/30 p-3 rounded-lg font-mono leading-relaxed h-32 overflow-y-auto whitespace-pre-wrap">
                       {ev.extracted_text}
                     </p>
                   </div>
                 ))}
                 {evidence.length === 0 && (
                   <div className="col-span-full py-12 text-center text-muted-foreground border border-dashed border-border rounded-xl">
-                    No evidence artifacts collected yet.
+                    No evidence sources collected yet.
                   </div>
                 )}
               </div>
