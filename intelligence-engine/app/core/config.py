@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     PUBLIC_BASE_URL: str = "https://reports.factline.xyz"
 
     class Config:
-        env_file = ".env"
+        env_file = (".env", "../.env")
+        extra = "ignore"
 
 settings = Settings()

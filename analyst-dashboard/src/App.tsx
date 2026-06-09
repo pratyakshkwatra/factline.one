@@ -19,6 +19,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import "./index.css";
+import { Input } from "postcss";
 
 // --- Types ---
 interface Candidate {
@@ -89,45 +90,46 @@ export const App = () => {
   useWebSocket("ws://localhost:8000/api/v1/ws");
 
   const { data: candidatesData } = useQuery({
-    queryKey: ['candidates'],
+    queryKey: ["candidates"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/v1/candidates");
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
-    }
+    },
   });
 
   const { data: reportsData, refetch: refetchReports } = useQuery({
-    queryKey: ['reports'],
+    queryKey: ["reports"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/v1/reports");
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
-    }
+    },
   });
 
   const { data: evidenceData } = useQuery({
-    queryKey: ['evidence'],
+    queryKey: ["evidence"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/v1/evidence");
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
-    }
+    },
   });
 
   const { data: investigationsData } = useQuery({
-    queryKey: ['investigations'],
+    queryKey: ["investigations"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/v1/investigations");
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
-    }
+    },
   });
 
   const candidates: Candidate[] = candidatesData?.candidates || [];
   const reports: Report[] = reportsData?.reports || [];
   const evidence: Evidence[] = evidenceData?.evidence || [];
-  const investigations: Investigation[] = investigationsData?.investigations || [];
+  const investigations: Investigation[] =
+    investigationsData?.investigations || [];
   const inputs: Input[] = investigationsData?.inputs || [];
 
   const handlePublish = async (reportId: string) => {
@@ -145,16 +147,19 @@ export const App = () => {
   const handleInvestigationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/v1/investigations/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: newInvUrl,
-          post_content: newInvContent,
-          comments: newInvComments,
-          notes: newInvNotes,
-        }),
-      });
+      const res = await fetch(
+        "http://localhost:8000/api/v1/investigations/submit",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: newInvUrl,
+            post_content: newInvContent,
+            comments: newInvComments,
+            notes: newInvNotes,
+          }),
+        },
+      );
       if (res.ok) {
         setNewInvUrl("");
         setNewInvContent("");
@@ -196,9 +201,10 @@ export const App = () => {
   );
   const filteredInputs = useMemo(
     () =>
-      inputs.filter((i) =>
-        i.input_type.toLowerCase().includes(lowerQuery) ||
-        (i.notes && i.notes.toLowerCase().includes(lowerQuery)),
+      inputs.filter(
+        (i) =>
+          i.input_type.toLowerCase().includes(lowerQuery) ||
+          (i.notes && i.notes.toLowerCase().includes(lowerQuery)),
       ),
     [inputs, lowerQuery],
   );
@@ -227,7 +233,11 @@ export const App = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3 mt-4">
             Workspace
           </div>
-          <SidebarItem icon={PlusCircle} label="New Investigation" id="new_investigation" />
+          <SidebarItem
+            icon={PlusCircle}
+            label="New Investigation"
+            id="new_investigation"
+          />
           <SidebarItem icon={Database} label="Overview" id="overview" />
           <SidebarItem icon={Search} label="Discovery Feed" id="discovery" />
           <SidebarItem
@@ -268,7 +278,12 @@ export const App = () => {
         <div className="flex-1 overflow-y-auto p-6 md:p-8">
           {/* OVERVIEW TAB */}
           {activeTab === "overview" && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="max-w-6xl mx-auto space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-6xl mx-auto space-y-8"
+            >
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight">
                   Intelligence Overview
@@ -311,38 +326,82 @@ export const App = () => {
 
           {/* NEW INVESTIGATION TAB */}
           {activeTab === "new_investigation" && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="max-w-4xl mx-auto space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-4xl mx-auto space-y-8"
+            >
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight">
                   New Investigation
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Submit a URL, text, or context to initiate a human-guided autonomous investigation.
+                  Submit a URL, text, or context to initiate a human-guided
+                  autonomous investigation.
                 </p>
               </div>
 
-              <form className="space-y-6 bg-card border border-border rounded-xl p-6 shadow-sm" onSubmit={handleInvestigationSubmit}>
+              <form
+                className="space-y-6 bg-card border border-border rounded-xl p-6 shadow-sm"
+                onSubmit={handleInvestigationSubmit}
+              >
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Primary URL (Optional)</label>
-                    <input type="text" value={newInvUrl} onChange={e => setNewInvUrl(e.target.value)} placeholder="https://..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+                    <label className="block text-sm font-medium mb-1">
+                      Primary URL (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={newInvUrl}
+                      onChange={(e) => setNewInvUrl(e.target.value)}
+                      placeholder="https://..."
+                      className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Post Content or Claim</label>
-                    <textarea rows={4} value={newInvContent} onChange={e => setNewInvContent(e.target.value)} placeholder="Paste the claim or original post text here..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <label className="block text-sm font-medium mb-1">
+                      Post Content or Claim
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={newInvContent}
+                      onChange={(e) => setNewInvContent(e.target.value)}
+                      placeholder="Paste the claim or original post text here..."
+                      className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                    ></textarea>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Original Comments or Discussion Context</label>
-                    <textarea rows={3} value={newInvComments} onChange={e => setNewInvComments(e.target.value)} placeholder="Paste relevant comments or context..." className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <label className="block text-sm font-medium mb-1">
+                      Original Comments or Discussion Context
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={newInvComments}
+                      onChange={(e) => setNewInvComments(e.target.value)}
+                      placeholder="Paste relevant comments or context..."
+                      className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                    ></textarea>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Investigation Notes</label>
-                    <textarea rows={2} value={newInvNotes} onChange={e => setNewInvNotes(e.target.value)} placeholder="What should the agents focus on?" className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+                    <label className="block text-sm font-medium mb-1">
+                      Investigation Notes
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={newInvNotes}
+                      onChange={(e) => setNewInvNotes(e.target.value)}
+                      placeholder="What should the agents focus on?"
+                      className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                    ></textarea>
                   </div>
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                  <button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors shadow-sm">
+                  <button
+                    type="submit"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors shadow-sm"
+                  >
                     Begin Investigation
                   </button>
                 </div>
@@ -352,7 +411,12 @@ export const App = () => {
 
           {/* REPORTS TAB */}
           {activeTab === "reports" && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="max-w-6xl mx-auto space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-6xl mx-auto space-y-6"
+            >
               <div className="flex justify-between items-end">
                 <div>
                   <h2 className="text-2xl font-semibold tracking-tight">
@@ -421,7 +485,12 @@ export const App = () => {
 
           {/* DISCOVERY TAB */}
           {activeTab === "discovery" && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="max-w-6xl mx-auto space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-6xl mx-auto space-y-6"
+            >
               <div className="flex justify-between items-end mb-6">
                 <div>
                   <h2 className="text-2xl font-semibold tracking-tight">
@@ -490,13 +559,16 @@ export const App = () => {
                   Investigation Workspace
                 </h2>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Manage user-submitted investigations and live autonomous agent queries.
+                  Manage user-submitted investigations and live autonomous agent
+                  queries.
                 </p>
               </div>
 
               {/* User Submitted Investigations Queue */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium tracking-tight">Submitted Investigations</h3>
+                <h3 className="text-lg font-medium tracking-tight">
+                  Submitted Investigations
+                </h3>
                 <div className="bg-card border border-border rounded-xl overflow-hidden">
                   <table className="w-full text-sm text-left">
                     <thead className="bg-secondary/50 text-muted-foreground text-xs uppercase font-medium">
@@ -540,7 +612,10 @@ export const App = () => {
                       ))}
                       {filteredInputs.length === 0 && (
                         <tr>
-                          <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
+                          <td
+                            colSpan={4}
+                            className="px-6 py-8 text-center text-muted-foreground"
+                          >
                             No investigations submitted yet.
                           </td>
                         </tr>
@@ -552,7 +627,9 @@ export const App = () => {
 
               {/* Agent Queries Queue */}
               <div className="space-y-4 pt-6">
-                <h3 className="text-lg font-medium tracking-tight">Active Agent Queries</h3>
+                <h3 className="text-lg font-medium tracking-tight">
+                  Active Agent Queries
+                </h3>
                 <div className="bg-card border border-border rounded-xl overflow-hidden">
                   <table className="w-full text-sm text-left">
                     <thead className="bg-secondary/50 text-muted-foreground text-xs uppercase font-medium">
@@ -592,7 +669,10 @@ export const App = () => {
                       ))}
                       {filteredInvestigations.length === 0 && (
                         <tr>
-                          <td colSpan={3} className="px-6 py-8 text-center text-muted-foreground">
+                          <td
+                            colSpan={3}
+                            className="px-6 py-8 text-center text-muted-foreground"
+                          >
                             No active agent queries.
                           </td>
                         </tr>
@@ -613,7 +693,8 @@ export const App = () => {
                     Source Explorer
                   </h2>
                   <p className="text-muted-foreground text-sm mt-1">
-                    Display every page visited, collected sources, raw content, and reasoning.
+                    Display every page visited, collected sources, raw content,
+                    and reasoning.
                   </p>
                 </div>
                 <div className="text-sm text-muted-foreground">

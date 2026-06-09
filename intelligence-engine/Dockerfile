@@ -26,6 +26,9 @@ COPY --from=builder /build/requirements.txt .
 
 RUN pip install --no-cache /wheels/*
 
+# Install Playwright browsers and dependencies
+RUN playwright install --with-deps chromium
+
 COPY . .
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
