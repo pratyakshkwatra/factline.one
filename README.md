@@ -2,6 +2,8 @@
 
 **Tagline:** Autonomous Intelligence Discovery, Investigation & Verification Platform
 
+> _In an era where misinformation spreads faster than human analysts can track, the truth needs an autonomous defender. Enter Factline: an intelligence operating system that never sleeps. It scours the internet for emerging narratives, isolates factual claims from the noise, and deploys headless browser agents to cross-reference evidence against authoritative sources—synthesizing verifiable, transparency reports before a false narrative can take hold._
+
 Factline began as a multi-modal news verification platform focused on validating user-submitted content. The project has since evolved into a local-first intelligence operating system capable of discovering, investigating, verifying, and publishing evidence-backed reports autonomously.
 
 ---
