@@ -1,7 +1,7 @@
 import uuid
 import json
-import urllib.request
-import urllib.error
+import requests
+from requests.exceptions import RequestException
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 import time
@@ -34,10 +34,15 @@ def fetch_rss_feed(feed):
     items = []
     logger.info(f"Fetching RSS feed: {feed['name']}")
     try:
-        req = urllib.request.Request(feed['url'], headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=10) as response:
-            xml_data = response.read()
-            root = ET.fromstring(xml_data)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+        }
+        response = requests.get(feed['url'], headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        try:
+            root = ET.fromstring(response.content)
             for item in root.findall('.//item')[:5]:
                 title = item.findtext('title')
                 link = item.findtext('link')
@@ -56,7 +61,10 @@ def fetch_rss_feed(feed):
                     status="discovered",
                     source_metadata={"category": "rss"}
                 ))
-    except Exception as e:
+        except ET.ParseError as e:
+            logger.error(f"XML Parsing failed for feed {feed['name']}: {e}. This usually means the server returned an HTML error page (e.g. Cloudflare captcha).")
+            
+    except RequestException as e:
         logger.error(f"Failed to fetch feed {feed['name']}: {e}")
     return items
 
@@ -67,60 +75,69 @@ def fetch_reddit_subreddit(subreddit, category_weight):
         url = f"https://www.reddit.com/r/{subreddit}/{ep}"
         logger.info(f"Fetching Reddit endpoint: {url}")
         try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'FactlineBot/3.0'})
-            with urllib.request.urlopen(req, timeout=10) as response:
-                data = json.loads(response.read().decode('utf-8'))
-                children = data.get("data", {}).get("children", [])
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 FactlineBot/3.1'
+            }
+            response = requests.get(url, headers=headers, timeout=10)
+            
+            if response.status_code == 403:
+                logger.error(f"HTTP 403 on Reddit {url}. Reddit is likely blocking the request or requires OAuth.")
+                time.sleep(2)
+                continue
                 
-                current_time = datetime.now(timezone.utc).timestamp()
+            response.raise_for_status()
+            data = response.json()
+            
+            children = data.get("data", {}).get("children", [])
+            current_time = datetime.now(timezone.utc).timestamp()
+            
+            for child in children[:5]: # limit to prevent mass inserts
+                post = child.get("data", {})
+                title = post.get("title", "")
+                body = post.get("selftext", "")
+                score = post.get("score", 0)
+                comments = post.get("num_comments", 0)
+                author = post.get("author", "")
+                permalink = f"https://www.reddit.com{post.get('permalink', '')}"
+                created_utc = post.get("created_utc", current_time)
                 
-                for child in children[:5]: # limit to prevent mass inserts
-                    post = child.get("data", {})
-                    title = post.get("title", "")
-                    body = post.get("selftext", "")
-                    score = post.get("score", 0)
-                    comments = post.get("num_comments", 0)
-                    author = post.get("author", "")
-                    permalink = f"https://www.reddit.com{post.get('permalink', '')}"
-                    created_utc = post.get("created_utc", current_time)
-                    
-                    # Calculate point-in-time velocity
-                    age_hours = max((current_time - created_utc) / 3600.0, 0.1)
-                    score_velocity = score / age_hours
-                    comment_velocity = comments / age_hours
-                    
-                    metadata = {
-                        "score": score,
-                        "upvote_ratio": post.get("upvote_ratio", 1.0),
-                        "comment_count": comments,
-                        "awards": post.get("total_awards_received", 0),
-                        "flair": post.get("link_flair_text", ""),
-                        "subreddit": subreddit,
-                        "subreddit_subscribers": post.get("subreddit_subscribers", 0),
-                        "category_weight": category_weight,
-                        "ranking_source": ep.split('.')[0],
-                        "score_velocity": round(score_velocity, 2),
-                        "comment_velocity": round(comment_velocity, 2),
-                        "num_crossposts": post.get("num_crossposts", 0)
-                    }
-                    
-                    items.append(CandidateItem(
-                        id=str(uuid.uuid4()),
-                        source_type="reddit",
-                        source_name=f"r/{subreddit}",
-                        url=permalink,
-                        title=title,
-                        content=body,
-                        clean_text=body,
-                        author=author,
-                        engagement=score + comments,
-                        timestamp=datetime.utcfromtimestamp(created_utc),
-                        status="discovered",
-                        source_metadata=metadata
-                    ))
+                # Calculate point-in-time velocity
+                age_hours = max((current_time - created_utc) / 3600.0, 0.1)
+                score_velocity = score / age_hours
+                comment_velocity = comments / age_hours
+                
+                metadata = {
+                    "score": score,
+                    "upvote_ratio": post.get("upvote_ratio", 1.0),
+                    "comment_count": comments,
+                    "awards": post.get("total_awards_received", 0),
+                    "flair": post.get("link_flair_text", ""),
+                    "subreddit": subreddit,
+                    "subreddit_subscribers": post.get("subreddit_subscribers", 0),
+                    "category_weight": category_weight,
+                    "ranking_source": ep.split('.')[0],
+                    "score_velocity": round(score_velocity, 2),
+                    "comment_velocity": round(comment_velocity, 2),
+                    "num_crossposts": post.get("num_crossposts", 0)
+                }
+                
+                items.append(CandidateItem(
+                    id=str(uuid.uuid4()),
+                    source_type="reddit",
+                    source_name=f"r/{subreddit}",
+                    url=permalink,
+                    title=title,
+                    content=body,
+                    clean_text=body,
+                    author=author,
+                    engagement=score + comments,
+                    timestamp=datetime.utcfromtimestamp(created_utc),
+                    status="discovered",
+                    source_metadata=metadata
+                ))
             time.sleep(1) # simple rate limit for Reddit API
-        except urllib.error.HTTPError as e:
-            logger.error(f"HTTP {e.code} on Reddit {url}")
+        except RequestException as e:
+            logger.error(f"HTTP Error on Reddit {url}: {e}")
             time.sleep(2)
         except Exception as e:
             logger.error(f"Failed to fetch Reddit {url}: {e}")
