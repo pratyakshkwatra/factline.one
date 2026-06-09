@@ -8,64 +8,41 @@ Factline began as a multi-modal news verification platform focused on validating
 
 ## Evolution of Factline
 
-Factline began as a multi-modal news verification platform focused on validating user-submitted content.
+### Factline V1 (Legacy)
 
-The project has since evolved into a local-first intelligence operating system capable of discovering, investigating, verifying, and publishing evidence-backed reports autonomously.
+The original Factline platform focused on user-submitted verification via a Flutter mobile application. It solved the problem of opaque verification and information voids by allowing users to submit claims for distributed digital audits. 
 
----
+The V1 source code has been preserved in the `legacy-v1/` directory.
 
-## Factline V1 (Legacy)
+### Factline V2 (Current)
 
-### Factline V1 Interface
+User-submitted verification has fundamental limitations in the modern information ecosystem due to information overload and the sheer velocity of misinformation.
 
-![Factline V1 Screenshot 1](assets/screenshots/1.jpeg)
-
-_Factline V1 Interface - Verification Dashboard_
-
-![Factline V1 Screenshot 2](assets/screenshots/2.jpeg)
-
-_Factline V1 Interface - Multi-Modal Analysis_
-
-The original Factline platform focused on:
-
-- User-submitted verification
-- Multi-modal analysis
-- News verification
-- Forensic scoring
-- Transparency-focused design
-
-The original system solved the problem of opaque verification and information voids by allowing users to submit claims for distributed digital audits.
-
-_(See [docs/v1/README.md](docs/v1/README.md) for legacy documentation.)_
+Factline V2 is an autonomous intelligence engine that operates proactively. It:
+- Discovers discussions from global sources
+- Ranks opportunities based on velocity
+- Investigates claims using recursive search
+- Collects and archives verifiable evidence
+- Generates evidence-backed consensus reports
+- Publishes transparent research to a decentralized static dashboard
 
 ---
 
-## Why Factline Evolved
+## Architecture & Technology Stack
 
-User-submitted verification, while powerful, has fundamental limitations in the modern information ecosystem.
+Factline V2 employs a highly modular, decoupled architecture:
 
-- **Information Overload**: Users cannot manually submit every emerging claim.
-- **Emerging Discussions**: Critical intelligence often forms in niche communities before reaching mainstream awareness.
-- **Misinformation Velocity**: False narratives spread faster than they can be manually verified.
-- **Need for Proactive Intelligence Gathering**: To effectively combat disinformation, a system must discover and analyze claims autonomously, before they cause harm.
+### 1. Intelligence Engine (Backend)
+- **Stack**: FastAPI, Python, SQLAlchemy, PostgreSQL, Loguru
+- **Function**: The brain of the operation. It runs the automated pipeline (Discovery -> Ranking -> Extraction -> Investigation -> Report Generation) and exposes real-time WebSocket feeds and REST endpoints.
 
-This led to the transition to Factline V2.
+### 2. Analyst Dashboard (Frontend)
+- **Stack**: React, TypeScript, Vite, TailwindCSS
+- **Function**: The command center for human operators. It provides a real-time window into the intelligence engine's operation, allowing analysts to monitor the evidence graph, track running investigations, and formally publish final reports.
 
----
-
-## Factline V2 (Current)
-
-Factline is now an autonomous intelligence engine that:
-
-- Discovers discussions
-- Ranks opportunities
-- Investigates claims
-- Collects evidence
-- Verifies information
-- Generates reports
-- Publishes transparent research
-
-_(See [docs/v2/factline_2.0.md](docs/v2/factline_2.0.md) for current specifications.)_
+### 3. Public Dashboard (Frontend)
+- **Stack**: React, TypeScript, Vite, TailwindCSS, WebAssembly (sql.js)
+- **Function**: A highly resilient, decentralized public interface. It reads directly from a static SQLite database (`public_reports.db`). There is no central API dependency, ensuring that published intelligence remains robust and transparently verifiable.
 
 ---
 
@@ -73,77 +50,13 @@ _(See [docs/v2/factline_2.0.md](docs/v2/factline_2.0.md) for current specificati
 
 ```mermaid
 graph TD
-    A[Discovery] --> B[Ranking]
-    B --> C[Investigation]
-    C --> D[Verification]
-    D --> E[Reporting]
-    E --> F[Publishing]
+    A[Discovery Feed] --> B[Velocity Ranking]
+    B --> C[Claim Extraction]
+    C --> D[Targeted Investigation & Search]
+    D --> E[Consensus Generation]
+    E --> F[Analyst Review & Publishing]
+    F --> G[Static Public Dashboard]
 ```
-
----
-
-## Key Features
-
-- **Intelligence Discovery**: Autonomous scouting of emerging narratives.
-- **Recursive Investigations**: Multi-layered search and analysis.
-- **Evidence Graphs**: Visual representation of claims and grounding sources.
-- **Source Auditing**: Recursive validation of origin domains.
-- **Local AI Inference**: Secure and cost-effective processing using local models.
-- **Transparency Reports**: Full access to the evidence and reasoning behind verdicts.
-- **Analyst Dashboard**: A dedicated interface for human operators.
-- **Public Report Platform**: A portal for publishing verified findings.
-- **Knowledge Memory**: Persistent storage of past investigations and entities.
-- **Human-in-the-Loop Publishing**: Final review by human analysts before public release.
-
----
-
-## Architecture
-
-```mermaid
-graph TD
-    subgraph Autonomous Engine
-        Scraper[Web Scraper/Discovery]
-        Analyzer[Local AI Analyzer]
-        Memory[Vector Database]
-    end
-
-    subgraph Human Interface
-        Dashboard[Local Analyst Dashboard]
-        Publisher[Transparency Platform]
-    end
-
-    Scraper --> Analyzer
-    Analyzer <--> Memory
-    Analyzer --> Dashboard
-    Dashboard --> Publisher
-```
-
----
-
-## Technology Stack
-
-- **Backend**: FastAPI, Python
-- **Frontend**: Flutter (Dashboard), Web (Public Platform)
-- **Database**: PostgreSQL, Qdrant (Vector DB)
-- **AI Models**: Gemini 3.1, Local LLMs
-- **Infrastructure**: Docker, Nginx
-- **Browser Automation**: Playwright/Selenium
-
----
-
-## Local Analyst Dashboard
-
-The Local Analyst Dashboard is the primary interface for human operators to monitor autonomous investigations, review evidence graphs, and authorize the publication of intelligence reports.
-
-_(Screenshots coming soon)_
-
----
-
-## Public Transparency Platform
-
-The Public Transparency Platform is where verified reports are published for public consumption, featuring complete evidence chains and source auditing details.
-
-_(Screenshots coming soon)_
 
 ---
 
@@ -151,60 +64,78 @@ _(Screenshots coming soon)_
 
 ```text
 factline/
-├── assets/
-│   └── screenshots/       # V1 and UI Screenshots
-├── docs/
-│   ├── v1/                # Legacy documentation and architecture
-│   └── v2/                # Current specifications and architecture
-├── backend/               # Core intelligence engine and APIs
-├── lib/                   # Flutter application code
-├── web/                   # Web platform assets
-└── docker-compose.yml     # Infrastructure configuration
+├── intelligence-engine/   # Core Python FastAPI backend and pipeline logic
+├── analyst-dashboard/     # React application for human operators
+├── public-dashboard/      # React application for public static reporting
+├── legacy-v1/             # Preserved V1 Flutter mobile app and Docker configs
+├── docs/                  # Architecture specifications
+└── factline               # Root CLI launcher script
 ```
 
 ---
 
 ## Getting Started
 
+### Prerequisites
+- Node.js (v18+)
+- Python (3.10+)
+- PostgreSQL
+
 ### Installation
 
-1. Clone the repository.
-2. Ensure you have Docker and Flutter installed.
-3. Configure environment variables (e.g., API keys).
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/pratyakshkwatra/factline.git
+   cd factline
+   ```
 
-### Configuration
+2. **Setup the Python Environment:**
+   ```bash
+   cd intelligence-engine
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   cd ..
+   ```
 
-Set the required environment variables in a `.env` file at the root.
+3. **Install Dashboard Dependencies:**
+   ```bash
+   cd analyst-dashboard && npm install && cd ..
+   cd public-dashboard && npm install && cd ..
+   ```
 
-### Running
+### Running Factline
 
-Start the backend infrastructure:
+The easiest way to boot the entire Factline ecosystem (Backend, Analyst Dashboard, and Public Dashboard) is to use the root CLI script:
 
 ```bash
-docker compose up -d --build
+./factline serve
 ```
 
-Start the application:
+This will automatically launch:
+- **Intelligence API**: `http://localhost:8000`
+- **Analyst Dashboard**: `http://localhost:5173`
+- **Public Dashboard**: `http://localhost:5174`
 
+### Interacting with the Pipeline
+
+You can run individual pipeline commands using the python CLI:
 ```bash
-flutter run
+cd intelligence-engine
+source .venv/bin/activate
+python3 app/cli.py --help
 ```
-
----
-
-## Roadmap
-
-- **Factline V1**: Multi-modal verification, forensic scoring, mobile app launch. (Completed)
-- **Factline V2**: Autonomous discovery, local inference, public reporting platform. (In Progress)
-- **Future Plans**: Decentralized intelligence sharing, real-time video forensics.
+Commands include:
+- `python3 app/cli.py run`: Execute a full intelligence pipeline cycle.
+- `python3 app/cli.py status`: Check database and API health.
+- `python3 app/cli.py sync`: Manually sync the static SQLite database.
 
 ---
 
 ## Design Principles
 
 - **Local First**: Prioritizing local inference for security and speed.
-- **Transparent**: Exposing the entire reasoning chain.
-- **Evidence Based**: Grounding all verdicts in auditable sources.
+- **Transparent**: Exposing the entire reasoning chain, not just the verdict.
+- **Evidence Based**: Grounding all verdicts in auditable primary sources.
 - **Human Supervised**: Ensuring final publication rests with human analysts.
-- **Cost Efficient**: Optimizing API calls and utilizing local models.
-- **Open Architecture**: Building modular components for future expansion.
+- **Decentralized Publication**: Utilizing static DB files for public dashboards to prevent censorship or downtime.
