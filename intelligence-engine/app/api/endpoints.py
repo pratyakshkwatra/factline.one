@@ -1,7 +1,7 @@
 import sqlite3
 import os
 import uuid
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, BackgroundTasks
 from typing import List, Optional
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -71,8 +71,38 @@ class InvestigationSubmitRequest(BaseModel):
     comments: Optional[str] = None
     notes: Optional[str] = None
 
+def run_investigation_pipeline():
+    from app.models.database import SessionLocal, InvestigationInput
+    from app.services.extraction import extract_claims
+    from app.services.investigation import run_investigation
+    from app.services.report import generate_reports
+    import requests
+    
+    db = SessionLocal()
+    try:
+        extract_claims(db)
+        try: requests.post("http://localhost:8000/api/v1/notify", timeout=1)
+        except: pass
+        
+        run_investigation(db)
+        try: requests.post("http://localhost:8000/api/v1/notify", timeout=1)
+        except: pass
+        
+        generate_reports(db)
+        
+        # Mark all running inputs as completed after reports are generated
+        running_inputs = db.query(InvestigationInput).filter(InvestigationInput.status == "running").all()
+        for i in running_inputs:
+            i.status = "completed"
+        db.commit()
+        
+        try: requests.post("http://localhost:8000/api/v1/notify", timeout=1)
+        except: pass
+    finally:
+        db.close()
+
 @router.post("/investigations/submit")
-def submit_investigation(request: InvestigationSubmitRequest, db: Session = Depends(get_db)):
+def submit_investigation(request: InvestigationSubmitRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     from datetime import datetime
     new_input_id = str(uuid.uuid4())
     input_type = "url" if request.url and not request.post_content else "mixed"
@@ -99,8 +129,13 @@ def submit_investigation(request: InvestigationSubmitRequest, db: Session = Depe
         db.add(OriginalPost(id=str(uuid.uuid4()), input_id=new_input_id, content=content.strip()))
         
     db.commit()
-    import json
-    # Use async event loop or simple sync call to broadcast if possible, or just skip
+    
+    background_tasks.add_task(run_investigation_pipeline)
+    
+    import requests
+    try: requests.post("http://localhost:8000/api/v1/notify", timeout=1)
+    except: pass
+    
     return {"status": "submitted", "id": new_input_id}
 
 @router.get("/evidence")
