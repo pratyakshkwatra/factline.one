@@ -11,8 +11,6 @@ from sqlalchemy.orm import Session
 from app.models.database import CandidateItem
 
 RSS_FEEDS = [
-    {"name": "Reuters World News", "url": "https://feeds.reuters.com/Reuters/worldNews"},
-    {"name": "Reuters Technology", "url": "https://feeds.reuters.com/reuters/technologyNews"},
     {"name": "BBC World", "url": "http://feeds.bbci.co.uk/news/world/rss.xml"},
     {"name": "BBC Technology", "url": "http://feeds.bbci.co.uk/news/technology/rss.xml"},
     {"name": "Associated Press", "url": "https://apnews.com/hub/ap-top-news?output=rss"},
@@ -62,7 +60,7 @@ def fetch_rss_feed(feed):
                     source_metadata={"category": "rss"}
                 ))
         except ET.ParseError as e:
-            logger.error(f"XML Parsing failed for feed {feed['name']}: {e}. This usually means the server returned an HTML error page (e.g. Cloudflare captcha).")
+            logger.warning(f"XML Parsing failed for feed {feed['name']} (likely blocked by captcha). Skipping.")
             
     except RequestException as e:
         logger.error(f"Failed to fetch feed {feed['name']}: {e}")
@@ -76,12 +74,22 @@ def fetch_reddit_subreddit(subreddit, category_weight):
         logger.info(f"Fetching Reddit endpoint: {url}")
         try:
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 FactlineBot/3.1'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'TE': 'trailers',
             }
             response = requests.get(url, headers=headers, timeout=10)
             
             if response.status_code == 403:
-                logger.error(f"HTTP 403 on Reddit {url}. Reddit is likely blocking the request or requires OAuth.")
+                logger.warning(f"HTTP 403 on Reddit {url}. Reddit is requiring OAuth or blocking the IP. Skipping endpoint.")
                 time.sleep(2)
                 continue
                 
