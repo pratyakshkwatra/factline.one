@@ -151,33 +151,45 @@ def fetch_reddit_subreddit(subreddit, category_weight):
             logger.error(f"Failed to fetch Reddit {url}: {e}")
     return items
 
+import concurrent.futures
+
 def run_discovery(db: Session):
     logger.info("Starting discovery process from configured sources...")
     new_items_count = 0
+    all_items = []
     
-    # RSS Sources
-    for feed in RSS_FEEDS:
-        items = fetch_rss_feed(feed)
-        for item in items:
-            exists = db.query(CandidateItem).filter(CandidateItem.url == item.url).first()
-            if not exists:
-                db.add(item)
-                new_items_count += 1
-                
-    # Reddit Sources via Config
-    reddit_config = load_reddit_config()
-    for cat_name, cat_data in reddit_config.items():
-        weight = cat_data.get("weight", 1.0)
-        subreddits = cat_data.get("subreddits", [])
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_source = {}
         
-        # limit subreddits during dev to prevent massive runtimes, taking top 3 per category
-        for sub in subreddits[:3]: 
-            items = fetch_reddit_subreddit(sub, weight)
-            for item in items:
-                exists = db.query(CandidateItem).filter(CandidateItem.url == item.url).first()
-                if not exists:
-                    db.add(item)
-                    new_items_count += 1
+        # Submit RSS Feeds
+        for feed in RSS_FEEDS:
+            future = executor.submit(fetch_rss_feed, feed)
+            future_to_source[future] = f"RSS: {feed['name']}"
+            
+        # Submit Reddit Subreddits
+        reddit_config = load_reddit_config()
+        for cat_name, cat_data in reddit_config.items():
+            weight = cat_data.get("weight", 1.0)
+            subreddits = cat_data.get("subreddits", [])
+            for sub in subreddits[:3]: 
+                future = executor.submit(fetch_reddit_subreddit, sub, weight)
+                future_to_source[future] = f"Reddit: r/{sub}"
+                
+        # Collect results as they complete
+        for future in concurrent.futures.as_completed(future_to_source):
+            source_name = future_to_source[future]
+            try:
+                items = future.result()
+                all_items.extend(items)
+            except Exception as exc:
+                logger.error(f"Source {source_name} generated an exception: {exc}")
+
+    # Deduplicate and insert sequentially to maintain thread safety with the DB session
+    for item in all_items:
+        exists = db.query(CandidateItem).filter(CandidateItem.url == item.url).first()
+        if not exists:
+            db.add(item)
+            new_items_count += 1
                     
     db.commit()
     logger.info(f"Discovery complete. Added {new_items_count} new candidate items to database.")
