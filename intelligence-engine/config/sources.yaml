@@ -1,0 +1,96 @@
+reddit:
+  world_news:
+    weight: 1.0
+    subreddits:
+      - worldnews
+      - news
+      - geopolitics
+      - anime_titties
+      - europe
+      - asia
+      - ukpolitics
+      - canada
+      - australia
+      - china
+      - russia
+      - ukraine
+      - Israel
+      - Palestine
+      - GlobalTalk
+  technology:
+    weight: 0.9
+    subreddits:
+      - technology
+      - programming
+      - compsci
+      - selfhosted
+      - homelab
+      - linux
+      - macsysadmin
+      - sysadmin
+      - devops
+      - cybersecurity
+      - netsec
+      - privacy
+  artificial_intelligence:
+    weight: 1.0
+    subreddits:
+      - singularity
+      - artificial
+      - MachineLearning
+      - LocalLLaMA
+      - OpenAI
+      - ClaudeAI
+      - ChatGPT
+      - AGI
+      - deeplearning
+  finance:
+    weight: 0.8
+    subreddits:
+      - stocks
+      - investing
+      - wallstreetbets
+      - options
+      - valueinvesting
+      - economics
+      - SecurityAnalysis
+      - StockMarket
+      - finance
+      - quant
+  business:
+    weight: 0.7
+    subreddits:
+      - business
+      - entrepreneur
+      - startups
+      - smallbusiness
+  science:
+    weight: 0.85
+    subreddits:
+      - science
+      - Futurology
+      - space
+      - Physics
+      - biology
+      - chemistry
+      - medicine
+  india:
+    weight: 0.8
+    subreddits:
+      - india
+      - indiaspeaks
+      - unitedstatesofindia
+      - indianews
+      - indianstockmarket
+      - developersIndia
+      - IndiaInvestments
+      - IndiaTech
+  osint:
+    weight: 1.0
+    subreddits:
+      - OSINT
+      - RBI
+      - DataHoarder
+      - privacy
+      - cybersecurity
+      - netsec

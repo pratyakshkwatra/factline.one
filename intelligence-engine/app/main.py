@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
+from app.api.endpoints import router as api_router
+from app.models.database import init_db
 
 app = FastAPI(
     title="Factline Intelligence Engine API",
@@ -20,6 +22,13 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     logger.info("Starting up Factline Intelligence Engine...")
+    try:
+        init_db()
+        logger.info("Database initialized successfully.")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
+
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():

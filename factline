@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+COMMAND=$1
+
+if [ "$COMMAND" = "serve" ]; then
+    echo "=========================================="
+    echo "🚀 Starting Factline V2 Infrastructure..."
+    echo "=========================================="
+    
+    # Start the API Backend
+    cd "$DIR/intelligence-engine"
+    source .venv/bin/activate
+    python3 -m uvicorn app.main:app --port 8000 &
+    API_PID=$!
+    echo "🟢 Intelligence API running on http://localhost:8000"
+
+    # Start Analyst Dashboard
+    cd "$DIR/analyst-dashboard"
+    npm run dev -- --port 5173 &
+    ANALYST_PID=$!
+    echo "🟢 Analyst Dashboard running on http://localhost:5173"
+
+    # Start Public Dashboard
+    cd "$DIR/public-dashboard"
+    npm run dev -- --port 5174 &
+    PUBLIC_PID=$!
+    echo "🟢 Public Dashboard running on http://localhost:5174"
+
+    echo "=========================================="
+    echo "All services running! Press Ctrl+C to stop."
+    echo "=========================================="
+    
+    # Kill all background processes when script exits
+    trap "kill $API_PID $ANALYST_PID $PUBLIC_PID 2>/dev/null" EXIT
+    wait
+    exit 0
+fi
+
+# Pass any other commands (like "run") to the Typer CLI
+cd "$DIR/intelligence-engine"
+source .venv/bin/activate
+python3 app/cli.py "$@"

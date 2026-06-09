@@ -9,3 +9,6 @@ qdrant-client
 playwright
 loguru
 rich
+pyyaml
+requests
+psycopg2-binary
