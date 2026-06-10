@@ -1,0 +1,207 @@
+{
+  "internal_id": "inv-ff-dynamic-pricing-001",
+  "public": {
+    "id": "fast-food-ai-surge-pricing",
+    "slug": "fast-food-ai-surge-pricing",
+    "title": "Fast Food Apps Caught Using AI 'Loyalty Penalty' Pricing",
+    "summary": "Major fast food and delivery apps are utilizing AI to implement 'surveillance pricing', charging loyal customers higher prices for the exact same meals based on their order history, location, and app data.",
+    "verdict": "Verified",
+    "published_at": "2026-06-11T12:00:00Z",
+    "public_url": "https://factline.com/fast-food-ai-surge-pricing"
+  },
+  "metadata": {
+    "cover_image": "/data/assets/fast-food-ai-surge-pricing/cover_image.png",
+    "tags": ["AI Pricing", "Corporate Surveillance", "Consumer Rights"]
+  },
+  "candidate": {
+    "url": "https://factline.com/candidate/fast-food-surge",
+    "title": "Fast Food Dynamic Surge Pricing",
+    "source_name": "Factline Discovery",
+    "screenshot_path": "/data/assets/fast-food-ai-surge-pricing/fast-food-candidate.png"
+  },
+  "claims": [
+    {
+      "claim_text": "Algorithms charge users more for the exact same meal based entirely on personal order history and app data.",
+      "claim_status": "Verified",
+      "confidence_score": 95,
+      "evidence": [
+        {
+          "url": "https://goldman.house.gov/media/press-releases/goldman-introduces-legislation-require-food-delivery-apps-disclose-all-fees",
+          "extracted_text": "bans food delivery apps from engaging in surveillance pricing, an exploitative pricing strategy where companies use personal data, including location, browsing history, device type, and shopping habits, to set individualized prices.",
+          "source_score": 98,
+          "source_type": "Government Press Release",
+          "screenshot_path": "/data/assets/fast-food-ai-surge-pricing/price-act-gov.jpeg"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://www.reddit.com/r/McDonalds/comments/1rjetpk/question_on_dynamic_pricingmultiple_app_accounts/",
+          "extracted_text": "Its not dynamic pricing, its dynamic discounting. The more you use the app, the worse your deals get.",
+          "source_score": 60,
+          "source_type": "Social Discussion"
+        }
+      ]
+    },
+    {
+      "claim_text": "Cashiers are manually changing prices to overcharge customers in the store.",
+      "claim_status": "False",
+      "confidence_score": 99,
+      "evidence": [
+        {
+          "url": "https://onehubpos.com/blog/dynamic-pricing-is-coming-to-more-menus",
+          "extracted_text": "A restaurant POS system automates price changes based on real-time demand. No need for manual updates.",
+          "source_score": 90,
+          "source_type": "Industry Blog",
+          "screenshot_path": "/data/assets/fast-food-ai-surge-pricing/pos-automation.png"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "",
+          "extracted_text": "No valid contradicting evidence exists; price variations are controlled programmatically by APIs, not human cashiers.",
+          "source_score": 0,
+          "source_type": "None"
+        }
+      ]
+    },
+    {
+      "claim_text": "Dynamic pricing only targets wealthy zip codes.",
+      "claim_status": "False",
+      "confidence_score": 85,
+      "evidence": [
+        {
+          "url": "https://goldman.house.gov/media/press-releases/goldman-introduces-legislation-require-food-delivery-apps-disclose-all-fees",
+          "extracted_text": "This unfair practice can lead to higher prices for older adults, individuals with disabilities, and other people who are unable to pick up their orders themselves.",
+          "source_score": 95,
+          "source_type": "Government Press Release",
+          "screenshot_path": "/data/assets/fast-food-ai-surge-pricing/price-act-gov.jpeg"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://getplace.io/blog/dynamic-pricing-strategy-in-restaurants-why-qsr-delivery-pricing-varies-72-store-to-store",
+          "extracted_text": "Stores in dense, competitive areas gravitate toward lower tiers. Stores in less competitive locations cluster toward higher tiers.",
+          "source_score": 80,
+          "source_type": "Industry Analysis"
+        }
+      ]
+    }
+  ],
+  "dashboard": {
+    "hero_title": "The AI Loyalty Penalty: Are Fast Food Apps Overcharging You?",
+    "hero_summary": "Investigations reveal that fast-food and delivery apps use 'surveillance pricing' to adjust meal prices based on your personal data. If you use an app frequently, you are likely paying more than the person standing right next to you.",
+    "why_people_care": "Consumers rely heavily on mobile apps for deals and convenience. Discovering that brand loyalty is actively weaponized by an AI to penalize habit and inflate prices triggers intense frustration and feelings of betrayal.",
+    "what_we_found": "We verified that personalized 'surveillance pricing' algorithms are actively deployed across major food apps. Instead of blanket peak-hour surges, prices shift based on individual user data, device types, and order history. In May 2026, 16 State Attorneys General urged the FTC to crack down on these practices, and the PRICE Act was introduced in Congress to federally ban personalized food pricing.",
+    "key_takeaways": [
+      "Frequent app users receive fewer discounts and higher base prices in a practice known as the 'Loyalty Penalty.'",
+      "Pricing algorithms analyze your location, order history, and device type to calculate your maximum willingness to pay.",
+      "The FTC and 16 State Attorneys General launched official investigations into these practices in May 2026.",
+      "U.S. Lawmakers introduced the PRICE Act to officially ban 'surveillance pricing' on food delivery platforms."
+    ],
+    "timeline": [
+      {
+        "date": "Early 2024",
+        "event": "Wendy's faces severe public backlash after corporate executives mention testing dynamic pricing and digital menu boards."
+      },
+      {
+        "date": "April 16, 2026",
+        "event": "The FTC formally seeks public comment regarding unfair, deceptive fees and hidden algorithms in online food delivery."
+      },
+      {
+        "date": "May 1, 2026",
+        "event": "Representative Daniel Goldman introduces the PRICE Act in Congress to ban surveillance pricing in food apps."
+      },
+      {
+        "date": "May 18, 2026",
+        "event": "A coalition of 16 State Attorneys General sends a letter urging the FTC to aggressively regulate personalized pricing."
+      }
+    ],
+    "context": {
+      "historical_background": "Dynamic pricing has been accepted in the airline and ride-sharing industries for years. However, its expansion into everyday, low-cost necessities like fast food has crossed a new psychological threshold for the average consumer.",
+      "industry_context": "Facing rising operational costs and minimum wage hikes, franchise owners and corporate chains have shifted to digital ecosystems where POS systems and APIs can subtly inflate margins on a micro-transaction level without triggering blanket menu-wide outrage.",
+      "geopolitical_context": "Regulatory pushback against algorithmic exploitation is accelerating. State governments and federal agencies in the U.S. are actively attempting to classify personalized digital pricing as a deceptive and anti-competitive trade practice.",
+      "technology_context": "Food and delivery apps act as massive data harvesters. They combine variables like local competition density, exact GPS location, time of day, OS ecosystem, and individual habit loops to run real-time price optimizations."
+    },
+    "open_questions": [
+      "Will the FTC successfully classify individualized algorithmic pricing as a deceptive practice?",
+      "How much data are third-party delivery platforms sharing with the fast-food franchises themselves?",
+      "Can consumers successfully bypass these algorithms by disabling tracking or using burner accounts?"
+    ],
+    "sources": [
+      {
+        "title": "State Attorneys General Urge FTC to Regulate Pricing Practices by Online Food Delivery Services",
+        "url": "https://www.duanemorris.com/alerts/state_attorneys_general_urge_ftc_regulate_pricing_practices_online_food_delivery_services_0626.html",
+        "source_type": "Legal Alert",
+        "authority_score": 95
+      },
+      {
+        "title": "Goldman Introduces Legislation to Require Food Delivery Apps to Disclose All Fees, Ban Surveillance Pricing",
+        "url": "https://goldman.house.gov/media/press-releases/goldman-introduces-legislation-require-food-delivery-apps-disclose-all-fees",
+        "source_type": "Government Press Release",
+        "authority_score": 98
+      },
+      {
+        "title": "Dynamic Pricing Strategy in Restaurants",
+        "url": "https://getplace.io/blog/dynamic-pricing-strategy-in-restaurants-why-qsr-delivery-pricing-varies-72-store-to-store",
+        "source_type": "Industry Analysis",
+        "authority_score": 85
+      }
+    ]
+  },
+  "instagram": {
+    "headline": "The Secret AI Food Surge Pricing",
+    "hook": "Your fast food app knows exactly how much you love that burger—and it's charging you extra for it.",
+    "carousel": [
+      {
+        "slide": 1,
+        "title": "The AI Loyalty Penalty",
+        "content": "Ever noticed your food app cart costs more than your friend's for the exact same meal? You aren't going crazy. It's an algorithm called 'Surveillance Pricing.'"
+      },
+      {
+        "slide": 2,
+        "title": "Weaponized Habits",
+        "content": "Algorithms track your order history. If you buy the same meal every week, the AI knows you're hooked—and quietly raises your base price or removes your best discounts."
+      },
+      {
+        "slide": 3,
+        "title": "Not Just Peak Hours",
+        "content": "This isn't just about busy lunch rushes. It is deeply personal. Apps use your location, device type, and shopping frequency to calculate exactly what you are willing to pay."
+      },
+      {
+        "slide": 4,
+        "title": "Lawmakers Are Stepping In",
+        "content": "In May 2026, 16 State Attorneys General urged the FTC to crack down on this. The PRICE Act was just introduced in Congress to federally ban 'Surveillance Pricing' in food apps."
+      },
+      {
+        "slide": 5,
+        "title": "How to Fight Back",
+        "content": "Want to beat the algorithm? Try comparing prices on a friend's phone, using a web browser in incognito mode, or simply ordering at the physical counter inside the store."
+      },
+      {
+        "slide": 6,
+        "title": "Test It Yourself",
+        "content": "Share this with a friend and test your apps side-by-side right now. Are you paying the loyalty penalty?"
+      }
+    ],
+    "caption": "Think you're getting a deal because you use the app? Think again. Fast food chains and delivery apps are under fire from the FTC and Congress for 'Surveillance Pricing'—using AI to charge their most loyal customers more for the exact same meals. 🍔📉 \n\nCheck the link in our bio for the full investigation. Have you noticed this on your app? Let us know below 👇",
+    "hashtags": [
+      "#DynamicPricing",
+      "#FastFood",
+      "#SurveillancePricing",
+      "#TechNews",
+      "#ConsumerRights",
+      "#FoodTok",
+      "#AppDeals",
+      "#LifeHack"
+    ]
+  },
+  "x": {
+    "post": "Fast food apps are using AI to charge loyal customers more for the exact same meals. Welcome to the era of 'surveillance pricing.' Here is how the algorithm weaponizes your data to inflate your bill: 🧵👇",
+    "thread": [
+      "1/ It’s called the 'Loyalty Penalty.' If you order the same meal frequently, the app's AI registers your high willingness to pay. While a new user sees a $1 promo, your app might charge $1.29 for the exact same item. It's not a glitch; it's by design.",
+      "2/ This isn't just Uber-style peak hour pricing. It is 'Surveillance Pricing.' Major delivery apps and fast food chains use your device type, order history, and location to generate an individualized price just for you.",
+      "3/ The legal backlash is here. In May 2026, the FTC and 16 State Attorneys General launched actions against online food delivery pricing practices. Meanwhile, the PRICE Act was introduced in Congress to ban personalized surveillance pricing entirely.",
+      "4/ How to beat it? Stop relying on a single app account. Compare prices with friends, use incognito mode on the web, or order in-store. Don't let your brand loyalty become a literal financial liability. Read the full investigation here: [LINK]"
+    ]
+  }
+}

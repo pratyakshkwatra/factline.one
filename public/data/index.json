@@ -7,5 +7,14 @@
     "verdict": "Mixed Evidence",
     "published_at": "2026-06-10T12:00:00Z",
     "public_url": "https://factline.com/investigations/apple-siri-gemini-cloud-wwdc"
+  },
+  {
+    "id": "fast-food-ai-surge-pricing",
+    "slug": "fast-food-ai-surge-pricing",
+    "title": "Fast Food Apps Caught Using AI 'Loyalty Penalty' Pricing",
+    "summary": "Major fast food and delivery apps are utilizing AI to implement 'surveillance pricing', charging loyal customers higher prices for the exact same meals based on their order history, location, and app data.",
+    "verdict": "Verified",
+    "published_at": "2026-06-11T12:00:00Z",
+    "public_url": "https://factline.com/fast-food-ai-surge-pricing"
   }
 ]
