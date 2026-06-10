@@ -159,6 +159,7 @@ function InvestigationShowcase({ report }: { report: FeaturedReport }) {
                 src={report.metadata.cover_image}
                 alt={title}
                 fill
+                priority
                 className="object-cover grayscale-[20%] group-hover:scale-105 transition-transform duration-700"
               />
             </div>

@@ -37,8 +37,20 @@ export default async function Home() {
   const reports        = await getReports();
   const featuredReport = await getFeaturedReport(reports);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Factline | Intelligence Archive",
+    url: "https://factline.one",
+    description: "Immutable, evidence-backed intelligence reports. We go down the rabbit hole so you don't have to.",
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main className="relative z-10 pt-0">
         <LandingPage reports={reports} featuredReport={featuredReport} />

@@ -9,10 +9,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans:  ['Inter', 'system-ui', 'sans-serif'],
-        mono:  ['Geist', 'ui-monospace', 'monospace'],
-        serif: ['Playfair Display', 'Merriweather', 'serif'],
-        geist: ['Geist', 'Inter', 'sans-serif'],
+        sans:  ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono:  ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        serif: ['var(--font-playfair)', 'Merriweather', 'serif'],
+        geist: ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
         border:      "hsl(var(--border-tw))",

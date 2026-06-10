@@ -15,6 +15,7 @@ export function Navbar() {
           alt="Factline Logo"
           width={150}
           height={32}
+          priority
           className="h-6 sm:h-8 w-auto group-hover:opacity-80 transition-opacity"
         />
       </Link>

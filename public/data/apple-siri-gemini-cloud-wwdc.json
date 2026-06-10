@@ -12,7 +12,7 @@
     "title": "Did Apple Outsource Siri's Brain to Google and Nvidia?",
     "summary": "Following WWDC 2026, claims spread that Apple completely replaced Siri with Google Gemini and compromised user privacy by sending data to Google Cloud. Investigation reveals Apple did co-develop new models with Google and uses Nvidia chips in Google Cloud, but strict cryptographic firewalls via 'Private Cloud Compute' ensure neither Google nor Apple can access user data.",
     "verdict": "Mixed Evidence",
-    "published_at": "2026-06-10T12:00:00Z",
+    "published_at": "2026-06-10T00:00:00+05:30",
     "public_url": "https://factline.com/investigations/apple-siri-gemini-cloud-wwdc"
   },
   "candidate": {

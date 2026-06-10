@@ -45,6 +45,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       images: [image],
     },
+    alternates: {
+      canonical: `https://factline.one/report/${params.slug}`,
+    },
   };
 }
 
@@ -60,8 +63,28 @@ export default async function ReportPage({ params }: Props) {
     report.metadata.cover_image = `/data/assets/${params.slug}/cover_image.jpg`;
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: report.public.title,
+    description: report.public.summary,
+    image: [
+      `https://factline.one${report.metadata.cover_image}`
+    ],
+    datePublished: report.public.published_at,
+    author: [{
+      "@type": "Organization",
+      "name": "Factline",
+      "url": "https://factline.one"
+    }]
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Deep Dark Dynamic Background */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#A259FF]/10 rounded-full blur-[150px]" />
