@@ -100,73 +100,74 @@ export function DetailedView({ report }: { report: any }) {
   return (
     <article className="min-h-screen bg-zinc-950 pb-32">
       {/* ══════════════════════════════════════════════════════
-          HERO HEADER
+          HERO HEADER (Medium Style)
       ══════════════════════════════════════════════════════ */}
-      <header className="relative w-full">
-        {metadata?.cover_image && (
-          <div className="w-full h-[50vh] sm:h-[60vh] relative">
-            <Image
-              src={metadata.cover_image}
-              alt="Cover Image"
-              fill
-              priority
-              className="object-cover grayscale-[20%] opacity-80"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent pointer-events-none" />
+      <header className="max-w-5xl mx-auto px-6 pt-32 sm:pt-40 pb-12">
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          <div
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-widest ${verdictCfg.bg} ${verdictCfg.color} border ${verdictCfg.border}`}
+          >
+            {verdictCfg.icon}
+            {pub.verdict}
           </div>
-        )}
+          {metadata?.tags?.map((t: string) => (
+            <span
+              key={t}
+              className="px-3 py-1.5 rounded-full border border-zinc-800 text-zinc-400 text-xs uppercase tracking-widest font-semibold"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
 
-        <div className="max-w-4xl mx-auto px-6 -mt-32 relative z-10">
-          <div className="bg-zinc-950 p-8 sm:p-12 border border-zinc-800 rounded-lg shadow-2xl">
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <div
-                className={`flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest ${verdictCfg.bg} ${verdictCfg.color} border ${verdictCfg.border}`}
-              >
-                {verdictCfg.icon}
-                {pub.verdict}
-              </div>
-              {metadata?.tags?.map((t: string) => (
-                <span
-                  key={t}
-                  className="px-3 py-1 rounded-full border border-zinc-800 text-zinc-400 text-[10px] uppercase tracking-widest font-semibold"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
+        <h1 className="font-geist text-5xl sm:text-6xl lg:text-7xl font-black text-zinc-100 leading-[1.05] mb-8">
+          {dashboard?.hero_title || pub.title}
+        </h1>
 
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-100 leading-[1.1] mb-6">
-              {dashboard?.hero_title || pub.title}
-            </h1>
+        <p className="text-2xl sm:text-3xl text-zinc-400 font-geist leading-snug mb-10 italic">
+          {dashboard?.hero_summary || pub.summary}
+        </p>
 
-            <p className="text-xl sm:text-2xl text-zinc-400 font-serif leading-relaxed mb-8 italic">
-              {dashboard?.hero_summary || pub.summary}
-            </p>
-
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-zinc-500 border-t border-zinc-800/50 pt-6">
-              {pub.published_at && (
-                <span className="flex items-center gap-1.5 font-medium">
-                  <Clock className="w-4 h-4" />
-                  {new Date(pub.published_at).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </span>
-              )}
-              <span className="flex items-center gap-1.5 font-medium">
-                <BookOpen className="w-4 h-4" />
-                {readTime} min read
-              </span>
-              <div className="ml-auto">
-                <ShareButton />
-              </div>
-            </div>
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4 text-base text-zinc-500 border-t border-zinc-800/50 pt-8">
+          {pub.published_at && (
+            <span className="flex items-center gap-2 font-medium">
+              <Clock className="w-5 h-5" />
+              {new Date(pub.published_at).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
+          )}
+          <span className="flex items-center gap-2 font-medium">
+            <BookOpen className="w-5 h-5" />
+            {readTime} min read
+          </span>
+          <div className="ml-auto">
+            <ShareButton />
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 mt-16 space-y-20">
+      {/* ══════════════════════════════════════════════════════
+          COVER IMAGE
+      ══════════════════════════════════════════════════════ */}
+      {metadata?.cover_image && (
+        <div className="w-full max-w-6xl mx-auto px-6 mb-20">
+          <div className="w-full aspect-[16/9] sm:aspect-[21/9] relative rounded-2xl overflow-hidden shadow-2xl border border-zinc-800/50">
+            <Image
+              src={metadata.cover_image}
+              alt="Cover Image"
+              fill
+              sizes="100vw"
+              priority
+              className="object-cover opacity-90 transition-transform duration-1000 hover:scale-105"
+            />
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-5xl mx-auto px-6 mt-10 space-y-24">
         {/* ══════════════════════════════════════════════════════
             ORIGIN & CANDIDATE
         ══════════════════════════════════════════════════════ */}
@@ -202,10 +203,10 @@ export function DetailedView({ report }: { report: any }) {
             <section className="grid sm:grid-cols-2 gap-8">
               {dashboard.why_people_care && (
                 <div>
-                  <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-4 border-b border-zinc-800 pb-2">
+                  <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-4 border-b border-zinc-800 pb-2">
                     The Context
                   </h2>
-                  <p className="text-lg text-zinc-300 leading-relaxed font-serif">
+                  <p className="text-lg text-zinc-300 leading-relaxed font-geist">
                     {dashboard.why_people_care}
                   </p>
                 </div>
@@ -215,11 +216,11 @@ export function DetailedView({ report }: { report: any }) {
                   <div className="absolute top-0 right-0 opacity-5 p-4 pointer-events-none">
                     <ShieldCheck className="w-32 h-32 text-emerald-500" />
                   </div>
-                  <h2 className="font-serif text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-3 relative z-10">
+                  <h2 className="font-geist text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-3 relative z-10">
                     <ShieldCheck className="w-6 h-6 text-emerald-500" />
                     What We Found
                   </h2>
-                  <p className="text-lg text-emerald-100/90 leading-relaxed font-serif relative z-10">
+                  <p className="text-lg text-emerald-100/90 leading-relaxed font-geist relative z-10">
                     {dashboard.what_we_found}
                   </p>
                 </div>
@@ -232,7 +233,7 @@ export function DetailedView({ report }: { report: any }) {
         ══════════════════════════════════════════════════════ */}
         {dashboard?.key_takeaways?.length > 0 && (
           <section>
-            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-6 border-b border-zinc-800 pb-2">
+            <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-6 border-b border-zinc-800 pb-2">
               Key Takeaways
             </h2>
             <div className="grid gap-4">
@@ -244,7 +245,7 @@ export function DetailedView({ report }: { report: any }) {
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-zinc-800 text-zinc-300 flex items-center justify-center text-sm font-bold border border-zinc-700">
                     {i + 1}
                   </span>
-                  <p className="text-lg text-zinc-300 leading-relaxed font-serif pt-0.5">
+                  <p className="text-lg text-zinc-300 leading-relaxed font-geist pt-0.5">
                     {item}
                   </p>
                 </div>
@@ -259,7 +260,7 @@ export function DetailedView({ report }: { report: any }) {
         {claims && claims.length > 0 && (
           <section>
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="font-serif text-3xl font-bold text-zinc-100">
+              <h2 className="font-geist text-3xl font-bold text-zinc-100">
                 Evidence Dossier
               </h2>
               <div className="h-px bg-zinc-800 flex-grow" />
@@ -294,7 +295,7 @@ export function DetailedView({ report }: { report: any }) {
                           </span>
                         </div>
                       </div>
-                      <h3 className="font-serif text-2xl font-bold text-zinc-100 leading-snug">
+                      <h3 className="font-geist text-2xl font-bold text-zinc-100 leading-snug">
                         {claim.claim_text}
                       </h3>
                     </div>
@@ -312,7 +313,7 @@ export function DetailedView({ report }: { report: any }) {
                                 key={i}
                                 className="pl-4 border-l-2 border-emerald-800/50"
                               >
-                                <p className="text-zinc-300 font-serif italic mb-3 leading-relaxed">
+                                <p className="text-zinc-300 font-geist italic mb-3 leading-relaxed">
                                   &quot;{ev.extracted_text}&quot;
                                 </p>
                                 <div className="flex items-center justify-between mb-4">
@@ -359,7 +360,7 @@ export function DetailedView({ report }: { report: any }) {
                                   key={i}
                                   className="pl-4 border-l-2 border-rose-800/50"
                                 >
-                                  <p className="text-zinc-300 font-serif italic mb-3 leading-relaxed">
+                                  <p className="text-zinc-300 font-geist italic mb-3 leading-relaxed">
                                     &quot;{ev.extracted_text}&quot;
                                   </p>
                                   <div className="flex items-center justify-between mb-4">
@@ -416,7 +417,7 @@ export function DetailedView({ report }: { report: any }) {
             {/* Context */}
             {dashboard.context && (
               <div className="md:col-span-3">
-                <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8">
+                <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-8">
                   Investigation Context
                 </h2>
                 <div className="grid gap-6">
@@ -429,7 +430,7 @@ export function DetailedView({ report }: { report: any }) {
                         <FileText className="w-4 h-4 text-zinc-600" />
                         {key.replace(/_/g, " ")}
                       </h4>
-                      <p className="text-zinc-300 font-serif leading-relaxed text-lg">
+                      <p className="text-zinc-300 font-geist leading-relaxed text-lg">
                         {val as string}
                       </p>
                     </div>
@@ -441,7 +442,7 @@ export function DetailedView({ report }: { report: any }) {
             {/* Timeline */}
             {dashboard.timeline && (
               <div className="md:col-span-2">
-                <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8">
+                <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-8">
                   Timeline
                 </h2>
                 <div className="relative border-l border-zinc-800 ml-3 space-y-8 pb-4">
@@ -451,7 +452,7 @@ export function DetailedView({ report }: { report: any }) {
                       <div className="text-xs font-bold font-mono text-blue-400 mb-1.5 tracking-widest uppercase">
                         {item.date}
                       </div>
-                      <p className="text-zinc-300 font-serif leading-relaxed">
+                      <p className="text-zinc-300 font-geist leading-relaxed">
                         {item.event}
                       </p>
                     </div>
@@ -467,7 +468,7 @@ export function DetailedView({ report }: { report: any }) {
         ══════════════════════════════════════════════════════ */}
         {dashboard?.open_questions?.length > 0 && (
           <section className="pt-10 border-t border-zinc-800">
-            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-6">
+            <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-6">
               Open Questions
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -477,7 +478,7 @@ export function DetailedView({ report }: { report: any }) {
                   className="flex items-start gap-3 p-6 bg-zinc-900/40 border border-zinc-800 rounded-lg"
                 >
                   <HelpCircle className="w-5 h-5 text-zinc-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-zinc-300 font-serif text-lg leading-relaxed">
+                  <p className="text-zinc-300 font-geist text-lg leading-relaxed">
                     {q}
                   </p>
                 </div>
@@ -491,7 +492,7 @@ export function DetailedView({ report }: { report: any }) {
         ══════════════════════════════════════════════════════ */}
         {dashboard?.sources?.length > 0 && (
           <section className="pt-12 border-t border-zinc-800">
-            <h2 className="font-serif text-3xl font-bold text-zinc-100 mb-8 flex items-center gap-3">
+            <h2 className="font-geist text-3xl font-bold text-zinc-100 mb-8 flex items-center gap-3">
               <FileText className="w-6 h-6 text-zinc-600" />
               Sources & Citations
             </h2>
@@ -515,7 +516,7 @@ export function DetailedView({ report }: { report: any }) {
                         {i + 1}
                       </div>
                       <div>
-                        <h4 className="font-serif text-zinc-200 font-bold leading-snug group-hover:text-blue-400 transition-colors mb-2">
+                        <h4 className="font-geist text-zinc-200 font-bold leading-snug group-hover:text-blue-400 transition-colors mb-2">
                           {src.title}
                         </h4>
                         <div className="flex items-center flex-wrap gap-3 text-xs font-mono text-zinc-500">
@@ -537,7 +538,7 @@ export function DetailedView({ report }: { report: any }) {
                         <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold mb-1">
                           Authority
                         </span>
-                        <span className="text-2xl font-serif italic text-emerald-400/90 font-bold">
+                        <span className="text-2xl font-geist italic text-emerald-400/90 font-bold">
                           {src.authority_score}
                           <span className="text-sm text-zinc-600">/100</span>
                         </span>

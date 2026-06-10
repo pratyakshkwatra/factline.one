@@ -9,49 +9,49 @@
 @layer base {
   :root {
     /* --- Core Palette --- */
-    --bg-base:    #09090b; /* zinc-950 */
-    --bg-s1:      #18181b; /* zinc-900 */
-    --bg-s2:      #27272a; /* zinc-800 */
-    --bg-s3:      #3f3f46; /* zinc-700 */
+    --bg-base: #09090b; /* zinc-950 */
+    --bg-s1: #18181b; /* zinc-900 */
+    --bg-s2: #27272a; /* zinc-800 */
+    --bg-s3: #3f3f46; /* zinc-700 */
 
     /* --- Borders --- */
-    --border:     rgba(255, 255, 255, 0.1);
-    --border-md:  rgba(255, 255, 255, 0.15);
-    --border-lg:  rgba(255, 255, 255, 0.25);
+    --border: rgba(255, 255, 255, 0.1);
+    --border-md: rgba(255, 255, 255, 0.15);
+    --border-lg: rgba(255, 255, 255, 0.25);
 
     /* --- Text --- */
-    --text-primary:   #f4f4f5; /* zinc-100 */
+    --text-primary: #f4f4f5; /* zinc-100 */
     --text-secondary: #d4d4d8; /* zinc-300 */
-    --text-tertiary:  #a1a1aa; /* zinc-400 */
-    --text-muted:     #71717a; /* zinc-500 */
+    --text-tertiary: #a1a1aa; /* zinc-400 */
+    --text-muted: #71717a; /* zinc-500 */
 
     /* --- Accent --- */
-    --accent:         #3b82f6;
-    --accent-dim:     rgba(59, 130, 246, 0.15);
+    --accent: #3b82f6;
+    --accent-dim: rgba(59, 130, 246, 0.15);
 
     /* --- Status Colors --- */
-    --verified:       #10b981;
-    --verified-dim:   rgba(16, 185, 129, 0.15);
-    --likely:         #3b82f6;
-    --likely-dim:     rgba(59, 130, 246, 0.15);
-    --mixed:          #f59e0b;
-    --mixed-dim:      rgba(245, 158, 11, 0.15);
-    --false:          #ef4444;
-    --false-dim:      rgba(239, 68, 68, 0.15);
-    --uncertain:      #6b7280;
-    --uncertain-dim:  rgba(107, 114, 128, 0.15);
+    --verified: #10b981;
+    --verified-dim: rgba(16, 185, 129, 0.15);
+    --likely: #3b82f6;
+    --likely-dim: rgba(59, 130, 246, 0.15);
+    --mixed: #f59e0b;
+    --mixed-dim: rgba(245, 158, 11, 0.15);
+    --false: #ef4444;
+    --false-dim: rgba(239, 68, 68, 0.15);
+    --uncertain: #6b7280;
+    --uncertain-dim: rgba(107, 114, 128, 0.15);
 
     /* --- Radius --- */
-    --radius-sm:  4px;
-    --radius-md:  8px;
-    --radius-lg:  16px;
-    --radius-xl:  24px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
     --radius-2xl: 32px;
 
     /* --- Motion --- */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-expo:  cubic-bezier(0.7, 0, 0.84, 0);
-    --ease-inout:    cubic-bezier(0.45, 0, 0.55, 1);
+    --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+    --ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
 
     /* Legacy vars for Tailwind compatibility */
     --background: 240 10% 4%;
@@ -73,63 +73,133 @@
    ============================================================ */
 
 @keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
-  50%       { box-shadow: 0 0 40px rgba(59, 130, 246, 0.35); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.35);
+  }
 }
 
 @keyframes scan-line {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  10%  { opacity: 0.6; }
-  90%  { opacity: 0.6; }
-  100% { transform: translateY(100vh); opacity: 0; }
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
 }
 
 @keyframes draw-line {
-  from { stroke-dashoffset: 1; }
-  to   { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes live-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.8); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10%       { transform: translate(-2%, -3%); }
-  20%       { transform: translate(3%, 2%); }
-  30%       { transform: translate(-1%, 4%); }
-  40%       { transform: translate(2%, -2%); }
-  50%       { transform: translate(-3%, 1%); }
-  60%       { transform: translate(1%, 3%); }
-  70%       { transform: translate(-2%, -1%); }
-  80%       { transform: translate(3%, -3%); }
-  90%       { transform: translate(-1%, 2%); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2%, -3%);
+  }
+  20% {
+    transform: translate(3%, 2%);
+  }
+  30% {
+    transform: translate(-1%, 4%);
+  }
+  40% {
+    transform: translate(2%, -2%);
+  }
+  50% {
+    transform: translate(-3%, 1%);
+  }
+  60% {
+    transform: translate(1%, 3%);
+  }
+  70% {
+    transform: translate(-2%, -1%);
+  }
+  80% {
+    transform: translate(3%, -3%);
+  }
+  90% {
+    transform: translate(-1%, 2%);
+  }
 }
 
 @keyframes nodePulse {
-  0%   { opacity: 0.1; }
-  100% { opacity: 0.65; }
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.65;
+  }
 }
 
 @keyframes lineFlicker {
-  0%   { opacity: 0.05; }
-  100% { opacity: 0.35; }
+  0% {
+    opacity: 0.05;
+  }
+  100% {
+    opacity: 0.35;
+  }
 }
 
 /* ============================================================
@@ -137,7 +207,9 @@
    ============================================================ */
 
 @layer base {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
     @apply border-[rgba(255,255,255,0.1)];
   }
@@ -153,7 +225,10 @@
     background-color: #09090b;
     color: #f4f4f5;
     font-family: var(--font-inter), system-ui, sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1,
+      "ss01" 1;
     overflow-x: hidden;
     min-height: 100vh;
   }
@@ -193,7 +268,7 @@
 
 /* Grain texture overlay */
 .grain-overlay::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: -50%;
   width: 200%;
@@ -210,9 +285,9 @@
 .shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255,255,255,0.03) 0%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.03) 100%
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
@@ -220,13 +295,18 @@
 
 /* Scan line effect */
 .scan-line::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(162, 89, 255, 0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(162, 89, 255, 0.4),
+    transparent
+  );
   animation: scan-line 6s ease-in-out infinite;
   pointer-events: none;
 }
@@ -246,4 +326,35 @@
 /* Noise bg for cards */
 .noise-card {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   GOOGLE TRANSLATE OVERRIDES
+   ============================================================ */
+
+/* Reposition fixed navbar when the translation banner appears */
+html.translated-ltr nav.fixed,
+html.translated-rtl nav.fixed {
+  top: 40px !important;
+}
+
+html.translated-ltr .translate-container,
+html.translated-rtl .translate-container {
+  /* Optionally hide our custom widget if the official banner is showing */
+}
+
+/* Hide the annoying tooltip that appears when hovering translated text */
+#goog-gt-tt,
+.goog-tooltip {
+  display: none !important;
+}
+
+/* Hide original widget container */
+.hidden-translate {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

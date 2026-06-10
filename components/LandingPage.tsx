@@ -159,6 +159,7 @@ function InvestigationShowcase({ report }: { report: FeaturedReport }) {
                 src={report.metadata.cover_image}
                 alt={title}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 priority
                 className="object-cover grayscale-[20%] group-hover:scale-105 transition-transform duration-700"
               />
@@ -190,11 +191,11 @@ function InvestigationShowcase({ report }: { report: FeaturedReport }) {
               </span>
             </div>
 
-            <h3 className="text-3xl sm:text-4xl font-black font-serif tracking-tight text-zinc-100 leading-snug mb-4 group-hover:text-blue-400 transition-colors">
+            <h3 className="text-3xl sm:text-4xl font-black font-geist tracking-tight text-zinc-100 leading-snug mb-4 group-hover:text-blue-400 transition-colors">
               {title}
             </h3>
 
-            <p className="text-zinc-400 text-lg font-serif leading-relaxed mb-8 italic">
+            <p className="text-zinc-400 text-lg font-geist leading-relaxed mb-8 italic">
               {report.dashboard?.hero_summary || report.public.summary}
             </p>
 
@@ -240,7 +241,7 @@ function ReportMiniCard({ report, index }: { report: Report; index: number }) {
                 : "—"}
             </time>
           </div>
-          <h4 className="text-zinc-200 group-hover:text-blue-400 text-xl font-bold font-serif leading-snug line-clamp-3 transition-colors">
+          <h4 className="text-zinc-200 group-hover:text-blue-400 text-xl font-bold font-geist leading-snug line-clamp-3 transition-colors">
             {report.title}
           </h4>
         </div>
@@ -292,7 +293,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-5xl sm:text-7xl lg:text-[8rem] font-black font-serif tracking-tight text-zinc-100 leading-[1.05] mb-8"
+              className="text-5xl sm:text-7xl lg:text-[8rem] font-black font-geist tracking-tight text-zinc-100 leading-[1.05] mb-8"
             >
               Everyone saw the headline.
             </motion.h1>
@@ -301,7 +302,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-              className="text-2xl sm:text-4xl font-serif text-zinc-400 leading-tight italic"
+              className="text-2xl sm:text-4xl font-geist text-zinc-400 leading-tight italic"
             >
               We read the sources. Factline investigates the claims circulating
               online, gathering evidence, and publishing transparent reports.
@@ -349,7 +350,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
         <section className="relative py-24 sm:py-32 border-t border-zinc-800 bg-zinc-950/50">
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
             <Reveal className="mb-12">
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-serif mb-4">
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-geist mb-4">
                 Latest Investigation
               </h2>
               <div className="w-24 h-1 bg-zinc-800" />
@@ -367,7 +368,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
       <section className="relative py-24 sm:py-32 border-t border-zinc-800">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <Reveal className="mb-16">
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-serif mb-4">
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-geist mb-4">
               The Factline Standard
             </h2>
             <div className="w-24 h-1 bg-zinc-800" />
@@ -394,7 +395,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
               <Reveal key={i} delay={i * 0.1}>
                 <div>
                   {item.icon}
-                  <h3 className="text-2xl font-bold font-serif text-zinc-100 mb-4">
+                  <h3 className="text-2xl font-bold font-geist text-zinc-100 mb-4">
                     {item.title}
                   </h3>
                   <p className="text-zinc-400 leading-relaxed text-lg">
@@ -415,7 +416,7 @@ export function LandingPage({ reports, featuredReport }: LandingPageProps) {
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
             <Reveal className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <div>
-                <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-serif mb-4">
+                <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-100 font-geist mb-4">
                   The Archive
                 </h2>
                 <div className="w-24 h-1 bg-zinc-800" />

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -17,6 +18,7 @@ export function Navbar() {
           height={32}
           priority
           className="h-6 sm:h-8 w-auto group-hover:opacity-80 transition-opacity"
+          style={{ width: 'auto' }}
         />
       </Link>
       <div className="ml-auto flex items-center gap-6">
@@ -40,6 +42,12 @@ export function Navbar() {
         >
           About
         </Link>
+        
+        {/* Custom Language Selector */}
+        <LanguageSelector />
+
+        {/* Hidden Google Translate Element */}
+        <div id="google_translate_element" className="hidden-translate hidden" />
       </div>
     </nav>
   );

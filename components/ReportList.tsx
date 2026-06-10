@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import { ReportCardView, Report } from './ReportCardView';
@@ -8,10 +8,10 @@ import { ReportCardView, Report } from './ReportCardView';
 // ── Animation variants ─────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0 },
-  show: {
+  show: (isInitialLoad: boolean) => ({
     opacity: 1,
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
-  },
+    transition: { staggerChildren: 0.07, delayChildren: isInitialLoad ? 3.1 : 0.1 },
+  }),
 };
 
 // ── Verdict filter tabs ─────────────────────────────────────────
@@ -33,6 +33,13 @@ const TAGLINES = [
 export function ReportList({ initialReports }: { initialReports: Report[] }) {
   const [searchQuery,    setSearchQuery]    = useState('');
   const [activeFilter,   setActiveFilter]   = useState('all');
+  const [isInitialLoad,  setIsInitialLoad]  = useState(true);
+
+  // Disable the long entry delay after the initial sequence finishes (~3.1s)
+  useEffect(() => {
+    const t = setTimeout(() => setIsInitialLoad(false), 3500);
+    return () => clearTimeout(t);
+  }, []);
 
   const filteredReports = useMemo(() => {
     let reports = initialReports;
@@ -237,6 +244,7 @@ export function ReportList({ initialReports }: { initialReports: Report[] }) {
           {filteredReports.length > 0 ? (
             <motion.div
               key={`${activeFilter}-${searchQuery}`}
+              custom={isInitialLoad}
               variants={containerVariants}
               initial="hidden"
               animate="show"
