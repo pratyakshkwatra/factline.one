@@ -16,5 +16,14 @@
     "verdict": "Verified",
     "published_at": "2026-06-10T05:45:00+05:30",
     "public_url": "https://factline.com/fast-food-ai-surge-pricing"
+  },
+  {
+    "id": "delhi-water-evaporation",
+    "slug": "delhi-water-evaporation",
+    "title": "Evaporation vs. Leakage: The Real Reason Delhi Is Out of Water",
+    "summary": "An exhaustive analysis of Delhi Chief Minister Rekha Gupta's viral claim that water 'evaporates on the way' reveals a stark divergence between open-channel conveyance reality and closed-conduit distribution mechanics. While open canals bleed up to 30% of raw water into the atmosphere and soil, the primary driver of household dry taps is not solar evaporation, but a catastrophic 45% to 53% Non-Revenue Water loss driven by decaying infrastructure and organized theft.",
+    "verdict": "Misleading",
+    "published_at": "2026-06-11T18:00:00+05:30",
+    "public_url": "Unknown"
   }
 ]

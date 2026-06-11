@@ -47,8 +47,32 @@
           "claim_text": { "type": "string" },
           "claim_status": { "type": "string" },
           "confidence_score": { "type": "integer" },
-          "evidence": { "type": "array" },
-          "contradicting_evidence": { "type": "array" }
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": { "type": "string" },
+                "extracted_text": { "type": "string" },
+                "source_score": { "type": "integer" },
+                "source_type": { "type": "string" },
+                "screenshot_path": { "type": "string" }
+              }
+            }
+          },
+          "contradicting_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": { "type": "string" },
+                "extracted_text": { "type": "string" },
+                "source_score": { "type": "integer" },
+                "source_type": { "type": "string" },
+                "screenshot_path": { "type": "string" }
+              }
+            }
+          }
         }
       }
     },
@@ -60,14 +84,73 @@
         "why_people_care": { "type": "string" },
         "what_we_found": { "type": "string" },
         "key_takeaways": { "type": "array", "items": { "type": "string" } },
-        "timeline": { "type": "array" },
-        "context": { "type": "object" },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "event": { "type": "string" }
+            }
+          }
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "historical_background": { "type": "string" },
+            "industry_context": { "type": "string" },
+            "geopolitical_context": { "type": "string" },
+            "technology_context": { "type": "string" }
+          }
+        },
         "open_questions": { "type": "array", "items": { "type": "string" } },
-        "sources": { "type": "array" }
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "url": { "type": "string" },
+              "source_type": { "type": "string" },
+              "authority_score": { "type": "integer" }
+            }
+          }
+        }
       }
     },
-    "instagram": { "type": "object" },
-    "x": { "type": "object" }
+    "instagram": {
+      "type": "object",
+      "properties": {
+        "headline": { "type": "string" },
+        "hook": { "type": "string" },
+        "carousel": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slide": { "type": "integer" },
+              "title": { "type": "string" },
+              "content": { "type": "string" }
+            }
+          }
+        },
+        "caption": { "type": "string" },
+        "hashtags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "x": {
+      "type": "object",
+      "properties": {
+        "post": { "type": "string" },
+        "thread": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
   },
   "required": ["internal_id", "public", "claims", "dashboard"]
 }
