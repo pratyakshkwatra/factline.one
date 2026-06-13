@@ -25,5 +25,14 @@
     "verdict": "Misleading",
     "published_at": "2026-06-11T18:00:00+05:30",
     "public_url": "Unknown"
+  },
+  {
+    "id": "delhi-ev-policy-petrol-bike-ban",
+    "slug": "delhi-ev-policy-petrol-bike-ban",
+    "title": "The Internet Thinks Delhi Is Banning Petrol Bikes. That's Not What The Policy Says.",
+    "summary": "Viral posts claim Delhi is banning petrol bikes, making existing motorcycles illegal, and forcing residents into EVs. The draft Delhi EV Policy actually proposes stopping new registrations of petrol/CNG two-wheelers from April 2028 while allowing existing vehicles to remain on the road. Because the proposal is still a draft and applies only to new registrations in Delhi, missing context has fueled confusion, outrage, and debate over pollution, charging infrastructure, consumer choice, and the practical impact of the policy.",
+    "verdict": "MISSING_CONTEXT",
+    "published_at": "2026-06-13T17:00:00+05:30",
+    "public_url": "https://factline.com/investigations/delhi-ev-policy-petrol-bike-ban"
   }
 ]

@@ -50,7 +50,7 @@
       ],
       "contradicting_evidence": [
         {
-          "url": "https://timesofindia.indiatimes.com/'Evaporates on the way': Delhi CM Rekha Gupta's remark on water shortage sparks row— video",
+          "url": "https://timesofindia.indiatimes.com/education/news/water-evaporates-on-the-way-delhi-cm-rekha-guptas-remark-on-water-shortage-sparks-row-video/articleshow/131520331.cms",
           "extracted_text": "Jab itni bhari garmi ho rahi hai, pani jo aata hai wo evaporate ho jata hai beech me kuch pani, to uske karan shortage ho jati hai. (When the heat is so intense, some of the water that is supplied evaporates on the way. Because of that, a shortage occurs.)",
           "source_score": 40,
           "source_type": "Political Address"
@@ -190,37 +190,37 @@
     "sources": [
       {
         "title": "Performance Audit on Functioning of Delhi Jal Board (Report 3 of 2025)",
-        "url": "https://cag.gov.in/Performance Audit on Functioning of Delhi Jal Board (Report 3 of 2025)",
+        "url": "https://cag.gov.in/ag/new-delhi/en/audit-report/details/124748",
         "source_type": "Official Statutory Audit Report",
         "authority_score": 98
       },
       {
         "title": "Final Report on the Assistance Related to Delhi Water Supply Improvement Project",
-        "url": "https://openjicareport.jica.go.jp/FINAL REPORT ON THE ASSISTANCE RELATED TO DELHI WATER SUPPLY IMPROVEMENT PROJECT MARCH 2018",
+        "url": "https://www2.jica.go.jp/en/evaluation/pdf/2023_201201836_4_f.pdf",
         "source_type": "International Engineering Master Plan",
         "authority_score": 95
       },
       {
         "title": "Estimation of Total Water Losses in a Munak Canal, Panipat",
-        "url": "https://ijcrt.org/Estimation of Total Water Losses in a Munak Canal, Panipat - IJCRT.org",
+        "url": "https://mail.ijcrt.org/papers/IJCRT1705471.pdf",
         "source_type": "Hydrological Engineering Study",
         "authority_score": 88
       },
       {
         "title": "Linear Increase in Annual Evaporation Rate in Indian Reservoirs From 2000 to 2019",
-        "url": "https://researchgate.net/Linear increase in annual evaporation rate in Indian reservoirs from 2000 to 2019 - ResearchGate",
+        "url": "https://www.researchgate.net/figure/Linear-increase-in-annual-evaporation-rate-in-Indian-reservoirs-from-2000-to-2019_fig2_355126977",
         "source_type": "Peer-Reviewed Climate Journal",
         "authority_score": 90
       },
       {
         "title": "Nearly 18% of Delhi's Water Pipes 30 Yrs Old: DJB Internal Report",
-        "url": "https://hindustantimes.com/Nearly 18% of Delhi's water pipes 30 yrs old: DJB report - Hindustan Times",
+        "url": "https://www.hindustantimes.com/cities/delhi-news/nearly-18-per-cent-of-delhis-water-pipes-30-yrs-old-djb-internal-report",
         "source_type": "Investigative News Report",
         "authority_score": 85
       },
       {
         "title": "Delhi Government Infrastructure Mandate: Munak Canal Solar Canopy Project",
-        "url": "https://indianexpress.com/To cut water loss & generate renewable energy, solar cover to be installed on Munak canal | Delhi News - The Indian Express",
+        "url": "https://indianexpress.com/article/cities/delhi/to-cut-water-loss-generate-renewable-energy-solar-cover-to-be-installed-on-munak-canal/",
         "source_type": "Government Infrastructure Announcement",
         "authority_score": 90
       }

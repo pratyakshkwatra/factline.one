@@ -1,0 +1,348 @@
+{
+  "internal_id": "inv-delhi-ev-policy-petrol-bike-ban-2026",
+  "metadata": {
+    "author": "Factline Investigative Journalism Agent",
+    "tags": [
+      "Delhi EV Policy",
+      "Electric Vehicles",
+      "Transport Policy",
+      "Misinformation",
+      "Auto Lobby",
+      "Investigative Journalism",
+      "Two-Wheelers",
+      "Air Pollution"
+    ],
+    "cover_image": "/data/assets/delhi-ev-policy-petrol-bike-ban/cover_image.png",
+    "theme_color": "#0F172A"
+  },
+  "public": {
+    "id": "delhi-ev-policy-petrol-bike-ban",
+    "slug": "delhi-ev-policy-petrol-bike-ban",
+    "title": "The Delhi Bike Ban Everyone Is Arguing About (And Almost Nobody Read)",
+    "summary": "Viral posts claim Delhi is banning petrol bikes, making existing motorcycles illegal, and sparking mass internet panic. But the draft policy only targets new registrations starting in April 2028. Beyond the misunderstood headlines lies a much bigger story: a high-stakes, behind-the-scenes power struggle between India's traditional auto lobby and booming EV companies over the future of the capital's roads, raising deep questions about whether the city is truly ready for an EV-only future.",
+    "verdict": "MISSING_CONTEXT",
+    "published_at": "2026-06-13T17:00:00+05:30",
+    "public_url": "https://factline.com/investigations/delhi-ev-policy-petrol-bike-ban"
+  },
+  "candidate": {
+    "url": null,
+    "title": "Delhi Draft EV Policy (2026–2030) and Viral Claims About Petrol Bike Ban",
+    "source_name": "Public discourse and policy debate",
+    "screenshot_path": null
+  },
+  "claims": [
+    {
+      "claim_text": "Delhi is banning all petrol bikes from 2028.",
+      "claim_status": "Misleading",
+      "confidence_score": 95,
+      "evidence": [
+        {
+          "url": "https://transport.delhi.gov.in/sites/default/files/Transport/marquee-files/ev_policy.pdf",
+          "extracted_text": "The draft policy proposes that only electric two-wheelers can be newly registered from April 1, 2028, meaning new petrol/CNG two-wheelers cannot be registered in Delhi after that date.",
+          "source_score": 95,
+          "source_type": "Draft Policy Detail"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://timesofindia.indiatimes.com/city/delhi/delhis-draft-ev-policy-2-0-from-2028-only-electric-two-wheelers-will-be-allowed-for-new-registration-what-we-know/articleshow/130186088.cms",
+          "extracted_text": "Existing petrol two-wheelers remain legal to own and use; the proposal applies to new registrations, not all petrol bikes.",
+          "source_score": 95,
+          "source_type": "Policy Scope Clarification",
+          "screenshot_path": "/data/assets/delhi-ev-policy-petrol-bike-ban/toi.jpeg"
+        }
+      ]
+    },
+    {
+      "claim_text": "Existing petrol bikes will become illegal or be confiscated.",
+      "claim_status": "False",
+      "confidence_score": 98,
+      "evidence": [
+        {
+          "url": "https://transport.delhi.gov.in/sites/default/files/Transport/marquee-files/ev_policy.pdf",
+          "extracted_text": "Officially, current two-wheelers remain legal to own and use. The policy affects new registrations from April 2028.",
+          "source_score": 98,
+          "source_type": "Policy Scope Clarification"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://x.com",
+          "extracted_text": "Online posts and comments claim existing petrol bikes will become illegal or be confiscated.",
+          "source_score": 40,
+          "source_type": "Social Media Claim"
+        }
+      ]
+    },
+    {
+      "claim_text": "The policy is already final and takes effect immediately.",
+      "claim_status": "False",
+      "confidence_score": 96,
+      "evidence": [
+        {
+          "url": "https://transport.delhi.gov.in/transport/draft-delhi-ev-policy-2026-notice-inviting-feedbackcomments-stakeholders-including-0",
+          "extracted_text": "The Transport Department released a draft Delhi EV Policy on April 11, 2026 and opened it for public feedback. It has not been finalized.",
+          "source_score": 96,
+          "source_type": "Policy Status"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://x.com",
+          "extracted_text": "Some viral posts omit the phased timeline or imply immediate implementation.",
+          "source_score": 45,
+          "source_type": "Social Media Narrative"
+        }
+      ]
+    },
+    {
+      "claim_text": "Delhi is introducing a nationwide ban on petrol bikes.",
+      "claim_status": "False",
+      "confidence_score": 95,
+      "evidence": [
+        {
+          "url": "https://transport.delhi.gov.in/sites/default/files/Transport/marquee-files/ev_policy.pdf",
+          "extracted_text": "The proposal applies only to the National Capital Territory of Delhi and its registration system.",
+          "source_score": 95,
+          "source_type": "Policy Jurisdiction"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://x.com",
+          "extracted_text": "Online chatter sometimes implies the measure is India-wide.",
+          "source_score": 40,
+          "source_type": "Social Media Narrative"
+        }
+      ]
+    },
+    {
+      "claim_text": "EVs only shift pollution from roads to power plants, so there is no air-quality benefit.",
+      "claim_status": "Misleading",
+      "confidence_score": 80,
+      "evidence": [
+        {
+          "url": "https://ieefa.org/resources/submission-feedback-draft-delhi-electric-vehicle-policy-2026",
+          "extracted_text": "Policy experts and environmental groups note EVs eliminate tailpipe emissions in the city and provide net air-quality benefits even with the current grid mix.",
+          "source_score": 85,
+          "source_type": "Expert Analysis"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://x.com",
+          "extracted_text": "Commenters argue EVs merely move pollution to power plants.",
+          "source_score": 50,
+          "source_type": "Public Commentary"
+        }
+      ]
+    },
+    {
+      "claim_text": "The policy is forcing EV adoption.",
+      "claim_status": "Partially True",
+      "confidence_score": 75,
+      "evidence": [
+        {
+          "url": "https://transport.delhi.gov.in/sites/default/files/Transport/marquee-files/ev_policy.pdf",
+          "extracted_text": "The draft proposes registration restrictions for new petrol/CNG two-wheelers and includes incentives to accelerate EV adoption.",
+          "source_score": 85,
+          "source_type": "Policy Measure"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://www.hindustantimes.com/india-news/only-electric-two-wheelers-from-april-2028-delhis-draft-ev-policy-is-in-suggestions-sought-101775923953608.html",
+          "extracted_text": "Existing petrol vehicles remain legal to use and own, and the proposal affects future registrations rather than current ownership.",
+          "source_score": 85,
+          "source_type": "Policy Scope Clarification",
+          "screenshot_path": "/data/assets/delhi-ev-policy-petrol-bike-ban/ht.jpeg"
+        }
+      ]
+    }
+  ],
+  "dashboard": {
+    "hero_title": "The Delhi Bike Ban Everyone Is Getting Wrong",
+    "hero_summary": "Millions panicked over viral headlines claiming Delhi is banning petrol bikes and confiscating motorcycles. While the public space argued over a fundamental misunderstanding—the draft policy actually only targets future registrations from 2028—the real narrative is a fierce, behind-the-scenes power struggle. It is a high-stakes standalone between India's traditional auto lobby and surging EV manufacturers fighting over who will rule the capital's streets.",
+    "why_people_care": "Delhi runs on two-wheelers. They are the primary lifeline for millions of daily commuters, gig-workers, delivery fleets, and middle-class families. A policy forcing an electric transition impacts purchasing decisions, resale values, commuting costs, and dealer ecosystems. The intense anxiety surrounding this policy reveals a profound uncertainty: Will this policy give Delhi cleaner air, or will it paralyze a working-class workforce in a city that might not be ready for EVs?",
+    "what_we_found": "The viral claim that Delhi is outright banning all petrol bikes is flatly unsupported by the draft document. The proposal stops new registrations of petrol/CNG two-wheelers in Delhi starting April 1, 2028, while explicitly allowing existing vehicles to remain operational. However, our investigation shows that fact-checking the timeline is merely scratching the surface. The real story is an unresolved, high-stakes battle between competing corporate ecosystems. EV manufacturers heavily back the mandate, identifying it as the necessary regulatory shock to force infrastructure adoption and explode market share. Conversely, the Society of Indian Automobile Manufacturers (SIAM)—representing traditional auto giants—is aggressively lobbying against the policy, claiming it distorts markets, harms the working class, and ignores the massive emissions improvements of modern BS-VI engines. The public space remains divided on real-world constraints, such as the clear threat of loopholes where buyers simply register vehicles in neighboring NCR cities like Noida or Gurgaon, and critical questions regarding infrastructure feasibility.",
+    "key_takeaways": [
+      "The viral panic is misplaced: existing petrol two-wheelers remain completely legal to own, ride, and sell.",
+      "The draft policy restricts only new petrol/CNG registrations within Delhi's jurisdiction starting April 1, 2028.",
+      "The policy remains a draft and was explicitly released to invite public and industry feedback before being finalized.",
+      "The situation has transformed into a major corporate battleground between traditional automakers (SIAM) and EV firms.",
+      "The draft utilizes a mix of future bans and structural mechanisms like subsidies, tax waivers, and scrappage incentives.",
+      "Critical infrastructure readiness—specifically public charging density and grid capacity—is the true unresolved debate."
+    ],
+    "timeline": [
+      {
+        "date": "2018–2024",
+        "event": "Delhi's first EV policy relies exclusively on carrots (subsidies) and incentives, keeping traditional auto manufacturing stable."
+      },
+      {
+        "date": "2024",
+        "event": "Financial incentives under the initial EV policy phase expire, leading EV manufacturers to push for legal mandates to maintain market growth."
+      },
+      {
+        "date": "2025",
+        "event": "EVs achieve roughly 14% of new vehicle sales in Delhi, concentrated heavily in commercial and high-utilization fleet segments."
+      },
+      {
+        "date": "January 1, 2026",
+        "event": "Draft proposes that aggregator fleets cannot register new petrol/diesel two-wheelers or light commercial vehicles."
+      },
+      {
+        "date": "April 11, 2026",
+        "event": "Delhi Transport Department officially releases the draft Delhi EV Policy (2026–2030) for public feedback, triggering viral headlines."
+      },
+      {
+        "date": "January 1, 2027",
+        "event": "Draft proposes a hard line where only electric three-wheelers will be permitted for any new registrations."
+      },
+      {
+        "date": "April 1, 2028",
+        "event": "The target deadline where the draft proposes a total halt on new petrol and CNG two-wheeler registrations inside Delhi."
+      },
+      {
+        "date": "2030",
+        "event": "The final timeline target for expanding public charging infrastructure across the city from 9,000 to 36,000 active points."
+      }
+    ],
+    "context": {
+      "historical_background": "Delhi's environmental policy historically leaned on financial subsidies to invite voluntary adoption. This new draft marks a major pivot toward hard regulatory mandates, establishing concrete phase-out timelines that directly threaten legacy ICE (Internal Combustion Engine) value chains.",
+      "industry_context": "This is a courtroom-style industrial split. SIAM claims that modern BS-VI petrol models contribute minimal local pollutants and that an abrupt transition harms low-income riders. EV companies view this state mandate as the ultimate catalyst to unlock scaling and secure funding.",
+      "geopolitical_context": "The draft policy is strictly limited to the National Capital Territory (NCT) of Delhi. This creates a regulatory island, as neighboring states in the National Capital Region (NCR) do not have matching restrictions, inviting potential registration diversion.",
+      "technology_context": "The policy relies heavily on scaling public charging installations by 400% (from 9,000 to 36,000) by 2030. Industry experts caution that battery swap standardization, fast-charger up-time, and residential charging accessibility for tenant populations remain major unaddressed choke points."
+    },
+    "open_questions": [
+      "Will intense lobbying from SIAM succeed in diluting or pushing back the proposed April 2028 deadline?",
+      "Can Delhi's electrical distribution grid handle the localized peak demand of a rapidly mandated two-wheeler EV migration?",
+      "Will consumer behavior bypass the ban completely via registration loopholes in neighboring NCR cities like Noida, Ghaziabad, or Gurgaon?",
+      "How will the gig economy and delivery riders manage the operational transition if public charging infrastructure lags behind the registration restrictions?",
+      "How will the used petrol-bike resale market react inside Delhi as the 2028 registration cliff approaches?"
+    ],
+    "sources": [
+      {
+        "title": "Draft Delhi EV Policy (2026–2030)",
+        "url": "https://transport.delhi.gov.in/sites/default/files/Transport/marquee-files/ev_policy.pdf",
+        "source_type": "Official Draft Policy",
+        "authority_score": 98
+      },
+      {
+        "title": "Delhi Transport Department Public Consultation Process",
+        "url": "https://transport.delhi.gov.in/transport/draft-delhi-ev-policy-2026-notice-inviting-feedbackcomments-stakeholders-including-0",
+        "source_type": "Government Consultation",
+        "authority_score": 95
+      },
+      {
+        "title": "Society of Indian Automobile Manufacturers (SIAM) Position",
+        "url": "https://www.siam.in",
+        "source_type": "Industry Association",
+        "authority_score": 90
+      },
+      {
+        "title": "Clean Mobility Shift Analysis",
+        "url": "https://www.cleanmobilityshift.com",
+        "source_type": "Policy Analysis",
+        "authority_score": 88
+      },
+      {
+        "title": "Institute for Energy Economics and Financial Analysis (IEEFA) Analysis",
+        "url": "https://ieefa.org/resources/submission-feedback-draft-delhi-electric-vehicle-policy-2026",
+        "source_type": "Energy Policy Analysis",
+        "authority_score": 88
+      },
+      {
+        "title": "Down To Earth Analysis on Delhi Air Pollution",
+        "url": "https://www.downtoearth.org.in",
+        "source_type": "Environmental Analysis",
+        "authority_score": 85
+      },
+      {
+        "title": "NDTV Reporting",
+        "url": "https://www.ndtv.com/business-news/delhi-ev-policy-2-0-feedback-electric-vehicle-subsidy-charging-point-retrofitting-hybrid-petrol-diesel-commercial-vehicles-11455438",
+        "source_type": "News Reporting",
+        "authority_score": 82
+      },
+      {
+        "title": "Hindustan Times Reporting",
+        "url": "https://www.hindustantimes.com/india-news/only-electric-two-wheelers-from-april-2028-delhis-draft-ev-policy-is-in-suggestions-sought-101775923953608.html",
+        "source_type": "News Reporting",
+        "authority_score": 82
+      },
+      {
+        "title": "Business Today Reporting",
+        "url": "https://www.businesstoday.in",
+        "source_type": "Business Reporting",
+        "authority_score": 80
+      },
+      {
+        "title": "Autocar Reporting",
+        "url": "https://www.autocarindia.com",
+        "source_type": "Automotive Reporting",
+        "authority_score": 80
+      },
+      {
+        "title": "MotorOctane Reporting",
+        "url": "https://motoroctane.com",
+        "source_type": "Automotive Reporting",
+        "authority_score": 78
+      },
+      {
+        "title": "TradeBrains Reporting",
+        "url": "https://tradebrains.in",
+        "source_type": "Business Reporting",
+        "authority_score": 78
+      }
+    ]
+  },
+  "instagram": {
+    "headline": "THE DELHI BIKE BAN EVERYONE IS ARGUING ABOUT",
+    "hook": "Millions saw the headline. Almost nobody read the policy.",
+    "carousel": [
+      {
+        "slide": 1,
+        "title": "THE INTERNET'S VERSION",
+        "content": "\"Delhi is banning petrol bikes.\" Millions saw the headline. And instantly picked a side."
+      },
+      {
+        "slide": 2,
+        "title": "THE DETAIL MOST POSTS MISSED",
+        "content": "The proposal targets NEW registrations. From April 2028. Not motorcycles already on the road."
+      },
+      {
+        "slide": 3,
+        "title": "BUT THAT'S NOT THE REAL FIGHT",
+        "content": "EV companies love it. India's biggest auto lobby is fighting it. Both say they're protecting consumers."
+      },
+      {
+        "slide": 4,
+        "title": "THE QUESTION NOBODY AGREES ON",
+        "content": "Cleaner air? Or a city that's actually ready for EVs? The real argument starts after the headline."
+      }
+    ],
+    "caption": "Millions saw the viral headline about Delhi's petrol bike ban. Almost nobody read the actual policy.\n\nWhile the internet panicked over a ban that only applies to *new* registrations starting in April 2028, the real battle is happening behind closed doors. India's biggest traditional auto lobby and booming EV companies are locked in a high-stakes power struggle over the capital's future.\n\nBoth sides claim they are protecting you, the consumer. But the real question isn't about the ban itself—it's about whether Delhi is actually ready for what comes next.\n\nRead our full investigative breakdown at the link in bio.\n\n#DelhiEVPolicy #InvestigativeJournalism #FactCheck #Delhi #ElectricVehicles #Mobility #TransportPolicy #Factline",
+    "hashtags": [
+      "#DelhiEVPolicy",
+      "#InvestigativeJournalism",
+      "#FactCheck",
+      "#Delhi",
+      "#ElectricVehicles",
+      "#AutoLobby",
+      "#Mobility",
+      "#Factline"
+    ]
+  },
+  "x": {
+    "post": "Millions saw the headline: 'Delhi is banning petrol bikes.' Almost nobody read the policy. Our investigation reveals it's not just a timeline misunderstanding. It’s a high-stakes corporate war between India’s biggest auto lobby and the EV industry. A thread. 🧵",
+    "thread": [
+      "1/ THE INTERNET'S VERSION: 'Delhi is banning all petrol bikes.' Outrage exploded online and people instantly picked a side. But the viral posts missed the structural fine print.",
+      "2/ THE DETAIL MOST MISSED: The draft policy strictly targets NEW registrations. From April 2028. Your existing petrol bike remains completely legal to own, ride, and use.",
+      "3/ But fact-checking the date is just the beginning. The REAL fight is a behind-the-scenes power struggle between industrial titans over who controls Delhi's mobility future.",
+      "4/ On one side: EV manufacturers, who heavily back the hard mandate to force market adoption. On the other: India’s biggest traditional auto lobby (SIAM), fighting it tooth and nail.",
+      "5/ Both corporate factions claim they are 'protecting the consumer.' SIAM argues modern BS-VI engines are clean enough, while EV companies insist aggressive policy is the only way forward.",
+      "6/ This brings us to the unresolved core question: Will this policy actually deliver cleaner air, or will it force an EV transition on a mega-city that completely lacks the infrastructure?",
+      "7/ Delhi's economy runs on two-wheelers—impacting delivery riders, gig workers, and middle-class commuters. A forced shift without reliable charging networks presents real economic risks.",
+      "8/ Bottom line: The debate is far bigger than a viral headline. It is a defining conflict over industry interests, infrastructure realities, and the practical future of urban transport. Read the full report on Factline."
+    ]
+  }
+}
