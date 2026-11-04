@@ -1,0 +1,47 @@
+[
+  {
+    "id": "apple-siri-gemini-cloud-wwdc",
+    "slug": "apple-siri-gemini-cloud-wwdc",
+    "title": "Did Apple Outsource Siri's Brain to Google and Nvidia?",
+    "summary": "Following WWDC 2026, claims spread that Apple completely replaced Siri with Google Gemini and compromised user privacy by sending data to Google Cloud. Investigation reveals Apple did co-develop new models with Google and uses Nvidia chips in Google Cloud, but strict cryptographic firewalls via 'Private Cloud Compute' ensure neither Google nor Apple can access user data.",
+    "verdict": "Mixed Evidence",
+    "published_at": "2026-06-10T00:00:00+05:30",
+    "public_url": "https://factline.com/investigations/apple-siri-gemini-cloud-wwdc"
+  },
+  {
+    "id": "fast-food-ai-surge-pricing",
+    "slug": "fast-food-ai-surge-pricing",
+    "title": "Fast Food Apps Caught Using AI 'Loyalty Penalty' Pricing",
+    "summary": "Major fast food and delivery apps are utilizing AI to implement 'surveillance pricing', charging loyal customers higher prices for the exact same meals based on their order history, location, and app data.",
+    "verdict": "Verified",
+    "published_at": "2026-06-10T05:45:00+05:30",
+    "public_url": "https://factline.com/fast-food-ai-surge-pricing"
+  },
+  {
+    "id": "delhi-water-evaporation",
+    "slug": "delhi-water-evaporation",
+    "title": "Evaporation vs. Leakage: The Real Reason Delhi Is Out of Water",
+    "summary": "An exhaustive analysis of Delhi Chief Minister Rekha Gupta's viral claim that water 'evaporates on the way' reveals a stark divergence between open-channel conveyance reality and closed-conduit distribution mechanics. While open canals bleed up to 30% of raw water into the atmosphere and soil, the primary driver of household dry taps is not solar evaporation, but a catastrophic 45% to 53% Non-Revenue Water loss driven by decaying infrastructure and organized theft.",
+    "verdict": "Misleading",
+    "published_at": "2026-06-11T18:00:00+05:30",
+    "public_url": "Unknown"
+  },
+  {
+    "id": "delhi-ev-policy-petrol-bike-ban",
+    "slug": "delhi-ev-policy-petrol-bike-ban",
+    "title": "The Internet Thinks Delhi Is Banning Petrol Bikes. That's Not What The Policy Says.",
+    "summary": "Viral posts claim Delhi is banning petrol bikes, making existing motorcycles illegal, and forcing residents into EVs. The draft Delhi EV Policy actually proposes stopping new registrations of petrol/CNG two-wheelers from April 2028 while allowing existing vehicles to remain on the road. Because the proposal is still a draft and applies only to new registrations in Delhi, missing context has fueled confusion, outrage, and debate over pollution, charging infrastructure, consumer choice, and the practical impact of the policy.",
+    "verdict": "MISSING_CONTEXT",
+    "published_at": "2026-06-13T17:00:00+05:30",
+    "public_url": "https://factline.com/investigations/delhi-ev-policy-petrol-bike-ban"
+  },
+  {
+    "id": "andaman-hydrocarbon-discovery",
+    "slug": "andaman-hydrocarbon-discovery",
+    "title": "The Flame: What India Actually Found in the Andaman Sea",
+    "summary": "In June 2026, the internet erupted with claims that India had discovered a massive, ready-to-extract natural gas reserve in the Andaman Sea. An exhaustive investigation into the geological data and corporate disclosures reveals a different reality: India has not quantified a commercially viable reserve. Instead, they discovered something far more important to scientists\u2014a continuous methane flare that physically proves a highly active petroleum system exists in a deepwater frontier. The true story isn't about an instant economic windfall, but a multi-billion-dollar scientific validation that will take decades to monetize.",
+    "verdict": "Missing Context",
+    "published_at": "2026-06-14T14:00:00+05:30",
+    "public_url": "https://factline.com/investigations/andaman-hydrocarbon-discovery"
+  }
+]

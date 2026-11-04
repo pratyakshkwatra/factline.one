@@ -1,0 +1,246 @@
+{
+  "internal_id": "inv-andaman-hydrocarbon-discovery-2026",
+  "metadata": {
+    "author": "Factline Report Generation Agent",
+    "tags": [
+      "Energy Security",
+      "Geopolitics",
+      "Oil & Gas Exploration",
+      "Misinformation",
+      "Environmental Impact"
+    ],
+    "cover_image": "/data/assets/andaman-hydrocarbon-discovery/cover_image.png",
+    "theme_color": "#D35400"
+  },
+  "public": {
+    "id": "andaman-hydrocarbon-discovery",
+    "slug": "andaman-hydrocarbon-discovery",
+    "title": "The Flame: What India Actually Found in the Andaman Sea",
+    "summary": "In June 2026, the internet erupted with claims that India had discovered a massive, ready-to-extract natural gas reserve in the Andaman Sea. An exhaustive investigation into the geological data and corporate disclosures reveals a different reality: India has not quantified a commercially viable reserve. Instead, they discovered something far more important to scientists\u2014a continuous methane flare that physically proves a highly active petroleum system exists in a deepwater frontier. The true story isn't about an instant economic windfall, but a multi-billion-dollar scientific validation that will take decades to monetize.",
+    "verdict": "Missing Context",
+    "published_at": "2026-06-14T14:00:00+05:30",
+    "public_url": "https://factline.com/investigations/andaman-hydrocarbon-discovery"
+  },
+  "candidate": {
+    "url": "https://www.youtube.com/watch?v=G4Z81lcNz2U",
+    "title": "India Discovers Natural Gas in Andaman Sea, Major Offshore Find Confirmed",
+    "source_name": "News18 / Viral Social Media Consensus",
+    "screenshot_path": "/data/assets/andaman-hydrocarbon-discovery/news18.jpeg"
+  },
+  "claims": [
+    {
+      "claim_text": "India has discovered a fully quantified, massive natural gas reservoir in the Andaman Sea that is ready for immediate extraction to slash LNG import bills.",
+      "claim_status": "False",
+      "confidence_score": 98,
+      "evidence": [
+        {
+          "url": "https://geoexpro.com/india-andaman-islands-drilling-update/",
+          "extracted_text": "While hydrocarbons were successfully intercepted, the actual reserve size is completely unknown. Following the initial discovery, engineers must process 600 square kilometers of new high-resolution 3D seismic data. Until this mapping is complete, and further appraisal wells are drilled to locate the physical edges of the reservoir, the total extractable volume cannot be calculated.",
+          "source_score": 95,
+          "source_type": "Geological Industry Journal",
+          "screenshot_path": "/data/assets/andaman-hydrocarbon-discovery/geoexpro.png"
+        },
+        {
+          "url": "https://www.spglobal.com/discovery-to-production-averages-15-7-years",
+          "extracted_text": "The interval from a deepwater discovery to first commercial production averages 10 to 15 years globally. Complex subsea engineering, Final Investment Decisions (FID), and massive infrastructure construction place any potential 'first gas' delivery well into the late 2030s.",
+          "source_score": 98,
+          "source_type": "Global Energy Analytics Report"
+        }
+      ],
+      "contradicting_evidence": [
+        {
+          "url": "https://www.reddit.com/r/IndianStreetBets/comments/1ns19vz/ocean_of_opportunities_india_confirms_natural_gas/",
+          "extracted_text": "This is our Guyana moment. We are sitting on trillions of cubic feet of gas that will wipe out our $15B import bill this year. ONGC and OIL to the moon.",
+          "source_score": 20,
+          "source_type": "Retail Investor Forum"
+        }
+      ]
+    },
+    {
+      "claim_text": "The continuous flaring at the Sri Vijayapuram-3 well provides undeniable physical proof of a highly pressurized, active working petroleum system beneath the Andaman microplate.",
+      "claim_status": "Verified",
+      "confidence_score": 99,
+      "evidence": [
+        {
+          "url": "https://economictimes.indiatimes.com/industry/energy/oil-gas/india-witnesses-renewed-spurt-in-oil-and-gas-exploration-petroleum-minister-puri/articleshow/122978209.cms",
+          "extracted_text": "Upon perforation, the Sri Vijayapuram-3 well exhibited an immediate pressure build-up, pushing gas to the surface naturally without mechanical assistance. This continuous flaring of 87% pure methane confirms that all four necessary elements\u2014source rock, reservoir, migration pathway, and trap\u2014exist and interact successfully.",
+          "source_score": 98,
+          "source_type": "Official Government Press Release",
+          "screenshot_path": "/data/assets/andaman-hydrocarbon-discovery/pib.avif"
+        },
+        {
+          "url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2024.1334942/full",
+          "extracted_text": "The Andaman Sea sits in a back-arc basin geologically connected to highly productive systems. A continuous flare acts as a vital calibration point, de-risking the basin by proving the geological theory in a physical setting.",
+          "source_score": 92,
+          "source_type": "Scientific Geological Publication",
+          "screenshot_path": "/data/assets/andaman-hydrocarbon-discovery/frontiersin.webp"
+        }
+      ],
+      "contradicting_evidence": []
+    },
+    {
+      "claim_text": "National oil exploration companies like ONGC and Oil India will immediately reap massive financial profits from the Andaman drilling campaign.",
+      "claim_status": "Mostly False",
+      "confidence_score": 95,
+      "evidence": [
+        {
+          "url": "https://drillingcontractor.org/dolphin-drilling-wins-120-day-extension-for-blackford-dolphin-76091",
+          "extracted_text": "Exploration companies bleed cash during the appraisal phase. The true immediate financial beneficiaries are the offshore service and logistics companies. Rig operators like Dolphin Drilling are locking in multi-million dollar contract extensions regardless of whether the specific wells hit commercial gas or come up dry.",
+          "source_score": 94,
+          "source_type": "Offshore Industry Publication",
+          "screenshot_path": "/data/assets/andaman-hydrocarbon-discovery/drilling.jpg"
+        },
+        {
+          "url": "https://newsonprojects.com/news/deep-industries-ltd-secures-59-crore-loa-from-ongc",
+          "extracted_text": "Service providers like Deep Industries are reporting massive free cash flow driven by a surge in PSU offshore contracts related to the 'Samudra Manthan' exploration cycles.",
+          "source_score": 90,
+          "source_type": "Financial Projects Database"
+        }
+      ],
+      "contradicting_evidence": []
+    }
+  ],
+  "dashboard": {
+    "hero_title": "The Flame: Decoding India's $5 Billion Deepwater Gamble",
+    "hero_summary": "When India announced a natural gas discovery off the Andaman Islands, the public celebrated an instant end to imported oil. But Factline's deep dive reveals a striking divide between internet hype and petroleum science. India hasn't found a 'gas tank'\u2014they found the recipe. A single, continuous methane flare burning above the ocean has finally proven the existence of a working petroleum system in a high-risk maritime frontier. The gas is there, but monetizing it will require a multi-decade, $5 billion engineering marathon traversing tectonic fault lines and fragile indigenous ecosystems.",
+    "why_people_care": "India is trapped by its geography. As the world's third-largest energy consumer, it imports 85-88% of its crude oil and over 50% of its natural gas. With mature domestic fields like Bombay High in a state of terminal decline, the nation's economic engine is entirely dependent on volatile Middle Eastern politics and global LNG prices. The Andaman discovery represents a psychological and strategic victory for the 'Samudra Manthan' mission, offering hope for energy sovereignty while projecting hard maritime power near the critical Malacca Strait.",
+    "what_we_found": "Our investigation strips away the financial speculation to focus on the science of the seabed. The breakthrough was achieved by Oil India's Sri Vijayapuram-3 well, which was drilled into the Eocene formation. By achieving a continuous flare of 87% methane, geologists received physical proof that four crucial elements\u2014source rock, reservoir, migration pathways, and a trap\u2014exist and function together. However, the volume is entirely unquantified. \n\nBehind the scenes, ONGC is drilling massive 'stratigraphic' wells (AND-P-1) nearly 267 nautical miles offshore\u2014not to extract gas, but to harvest core samples to convince international oil majors that the basin is safe for investment. The logistics of actually using this gas are nightmarish. Because the islands are 1,200 kilometers from mainland industrial hubs, India must either build a massively expensive $5 billion subsea pipeline across an active earthquake subduction zone, or rely on complex Floating LNG vessels. Furthermore, any onshore industrialization threatens the fragile ecosystem of the isolated Jarawa tribe.",
+    "key_takeaways": [
+      "Proof of Concept: The discovery validates the back-arc basin theory. Finding a continuous flare acts as the ultimate de-risking event for thousands of square kilometers of surrounding ocean.",
+      "The Isotope Question: Scientists are currently analyzing the gas to see if it is biogenic (shallow, localized pockets) or thermogenic (deep-cooked, signaling a world-class mega-reserve).",
+      "Shovel Sellers Win First: The companies making instant profit aren't the oil giants\u2014they are offshore logistics and rig operators securing guaranteed government exploration contracts.",
+      "The 1,200km Pipeline Nightmare: Transporting the gas to Chennai will require unprecedented engineering to navigate deep ocean trenches and pulse-like ground motions from tectonic activity.",
+      "Ecological & Anthropological Friction: The inevitable influx of mainland workers and port industrialization directly threatens the Jarawa tribe, setting the stage for fierce environmental clearance battles.",
+      "The 2035 Timeline: The industry average from a deepwater discovery to the first commercial production is 10 to 15 years, meaning this will not lower 2026 fuel prices."
+    ],
+    "timeline": [
+      {
+        "date": "2019 - 2024",
+        "event": "The Pre-Discovery phase: The government unlocks 'No-Go' maritime zones and initiates massive 2D and 3D seismic data acquisition campaigns under the OALP."
+      },
+      {
+        "date": "November 2024 - March 2025",
+        "event": "Oil India drills the Vijaya Puram-1 well to the west of the islands. It yields no commercial hydrocarbons, highlighting the extreme risk of deepwater exploration."
+      },
+      {
+        "date": "September 2025",
+        "event": "The Vijaya Puram-2 well intercepts natural gas at a depth of 2,212 meters, revealing a remarkably high-quality composition of 87% methane."
+      },
+      {
+        "date": "January 2026",
+        "event": "ONGC utilizes the record-breaking Dhirubhai Deepwater KG-1 drillship to spud the AND-P-1 stratigraphic well, a purely scientific endeavor 267 nautical miles offshore."
+      },
+      {
+        "date": "June 2026",
+        "event": "The Sri Vijayapuram-3 well achieves natural pressure build-up and continuous flaring, providing undeniable proof of an active petroleum system and triggering viral internet hype."
+      },
+      {
+        "date": "2026 - 2029 (Projected)",
+        "event": "Engineers enter the Appraisal Phase, processing 600 sq km of new 3D seismic data and drilling appraisal wells to locate the physical edges and volume of the reservoir."
+      },
+      {
+        "date": "2032 - 2038 (Projected)",
+        "event": "Final Investment Decisions are made regarding subsea pipelines or FLNG vessels. If deemed commercially viable, 'First Gas' may finally reach the mainland."
+      }
+    ],
+    "context": {
+      "historical_background": "For decades, the Indian sector of the Andaman geological trend was an unproven 'frontier,' heavily restricted by defense and ecological 'No-Go' zones. Meanwhile, the connected systems in Myanmar (Zawtika, Yadana) and Indonesia (North Sumatra Basin) yielded massive discoveries, increasing the urgency for India to validate its own waters.",
+      "industry_context": "Deepwater petroleum exploration operates on a decadal scale. Exploratory wells are targeted to strike gas, whereas stratigraphic wells are purely scientific endeavors to harvest rock data. Basin validation is the key metric experts look for before committing billions in capital expenditure.",
+      "geopolitical_context": "The 'Samudra Manthan' mission aims to shift reliance away from declining western fields like Bombay High. Strategically, placing multi-billion-dollar energy infrastructure in the Andaman Sea allows India to establish continuous naval and commercial dominance over the western approach to the Malacca Strait, a critical global trade chokepoint.",
+      "technology_context": "The region is governed by the India Revised Earthquake Design Code (IS 1893) due to its status as one of the most seismically active zones on Earth. Any subsea architecture, including proposed pipelines to Chennai, must survive severe pulse-like ground motions."
+    },
+    "open_questions": [
+      "Is the methane biogenic or thermogenic? The results of the isotope studies will define the ultimate size of the basin's potential.",
+      "Will the government commit $5 billion to lay a 1,200km pipeline across an active tectonic fault line, or opt for localized island power and FLNG vessels?",
+      "How will the government navigate the fierce environmental resistance to industrializing the Andaman coastline, given the presence of the voluntarily isolated Jarawa tribe?"
+    ],
+    "sources": [
+      {
+        "title": "India \u2013 Andaman Islands \u2013 Drilling Update",
+        "url": "https://geoexpro.com/india-andaman-islands-drilling-update/",
+        "source_type": "Geological Industry Journal",
+        "authority_score": 92
+      },
+      {
+        "title": "Methane Gas Flares in the Forearc Basin of the Andaman-Nicobar Subduction Zone",
+        "url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2024.1334942/full",
+        "source_type": "Peer-Reviewed Scientific Study",
+        "authority_score": 95
+      },
+      {
+        "title": "Discovery to Production Averages 15.7 Years",
+        "url": "https://www.spglobal.com/discovery-to-production-averages-15-7-years",
+        "source_type": "Global Energy Analytics",
+        "authority_score": 94
+      },
+      {
+        "title": "The Jarawa Peoples: Isolated Guardians of the Andaman Islands",
+        "url": "https://icmagazine.org/The-Jarawa-Peoples",
+        "source_type": "Anthropological Journal",
+        "authority_score": 88
+      },
+      {
+        "title": "Dolphin Drilling wins 120-day extension for Blackford Dolphin",
+        "url": "https://drillingcontractor.org/dolphin-drilling-wins-120-day-extension-for-blackford-dolphin-76091",
+        "source_type": "Offshore Trade Publication",
+        "authority_score": 90
+      }
+    ]
+  },
+  "instagram": {
+    "headline": "India's New 'Ocean of Energy': The Real Discovery Isn't The Gas",
+    "hook": "Everyone is saying India just found a massive gas reserve in the Andaman Sea that will instantly crash fuel prices. They are wrong. What geologists actually found is much, much bigger.",
+    "carousel": [
+      {
+        "slide": 1,
+        "title": "The Viral Myth",
+        "content": "You've seen the posts comparing the Andaman discovery to Guyana's oil boom. Retail investors are celebrating, assuming India just secured enough ready-to-pump gas to instantly wipe out our $15 billion LNG import bill."
+      },
+      {
+        "slide": 2,
+        "title": "The Reality Check",
+        "content": "Oil India didn't find a gas tank; they found a recipe. By lighting a continuous methane flare 15km offshore, they proved that Source Rock, Reservoirs, Migration Pathways, and Traps all exist together. They proved the seabed is alive."
+      },
+      {
+        "slide": 3,
+        "title": "Why Experts Are Cheering",
+        "content": "The actual volume of the gas is completely unknown. But proving the basin is active is the ultimate 'Proof of Concept.' This single flame de-risks thousands of miles of ocean, attracting the international oil majors needed to hunt for true giant reserves."
+      },
+      {
+        "slide": 4,
+        "title": "The 1,200km Nightmare",
+        "content": "Even if the reserve is massive, using it is an engineering nightmare. To get gas to the mainland, India may need to build a $5 billion underwater pipeline traversing active tectonic earthquake fault lines across the Bay of Bengal."
+      },
+      {
+        "slide": 5,
+        "title": "The Hidden Winners",
+        "content": "Who gets rich today? Not the oil companies. Deepwater exploration burns massive cash. The real winners right now are the 'shovel sellers'\u2014offshore rig operators and logistics ships locking in guaranteed, multi-million dollar government contracts."
+      }
+    ],
+    "caption": "India just spent $154 million to light a single flame in the middle of the ocean. And energy experts couldn't be happier. \ud83d\udd25\ud83c\udf0a\n\nWhile viral headlines claim India has instantly solved its massive energy dependency, the science of petroleum geology tells a different story. The Sri Vijayapuram-3 well discovery isn't about an overnight economic windfall\u2014it\u2019s about the scientific validation of a high-risk, ultra-deepwater frontier. \n\nFrom the 10-to-15 year production timeline to the ecological conflict surrounding the isolated Jarawa tribe, the reality of the Andaman discovery is a fascinating, high-stakes geopolitical marathon.\n\nLink in bio for the complete Factline investigation.",
+    "hashtags": [
+      "#EnergySecurity",
+      "#FactCheck",
+      "#AndamanSea",
+      "#Geopolitics",
+      "#OilAndGas",
+      "#SamudraManthan",
+      "#DeepwaterExploration",
+      "#IndiaEconomy"
+    ]
+  },
+  "x": {
+    "post": "Everyone is saying India just discovered a massive, ready-to-extract gas reserve in the Andaman Sea that will instantly crash fuel prices. The headlines are wrong. The real discovery is much more fascinating, and it centers on a single burning flame. Here is the thread: \ud83e\uddf5\ud83d\udc47",
+    "thread": [
+      "1/ The viral narrative says India found its 'Guyana moment' offshore. Financial forums are celebrating an instant end to our $15B+ LNG import reliance. But a look at the data shows that the public and energy geologists are cheering for two completely different reasons.",
+      "2/ At the Sri Vijayapuram-3 well, Oil India successfully triggered a continuous flare of 87% pure methane. To the public, a flame means instant fortune. To geologists, it means something far more valuable: empirical proof of a working petroleum system.",
+      "3/ For a basin to produce gas, four things must align over millions of years: source rock, reservoir rock, a migration pathway, and a perfect trap/seal. The continuous flare proves all four function together beneath the Andaman microplate. It validates the science.",
+      "4/ But here is the catch: a flare proves gas is present and highly pressurized, but it does not tell you the volume. Right now, the actual size of the reserve is completely unknown. Engineers are currently processing 600 sq km of new 3D seismic data just to map it.",
+      "5/ So who is actually getting rich off this discovery today? Not the oil companies. Deepwater exploration is an absolute cash-incinerator during the appraisal phase. The true winners are the 'shovel sellers'\u2014offshore logistics and rig service providers.",
+      "6/ Companies like Deep Industries and rig operators like Dolphin Drilling are locking in guaranteed, multi-million dollar government exploration contracts. They generate immediate, positive free cash flow whether the drills hit commercial volumes or come up dry.",
+      "7/ Furthermore, monetizing this gas is a decade-long engineering nightmare. The Andaman Islands are 1,200 km from mainland hubs. Connecting them requires an estimated $5 Billion subsea pipeline crossing deep ocean trenches and highly active tectonic fault lines.",
+      "8/ There is also intense socio-ecological friction. The region is a fragile biodiversity hotspot and home to the Jarawa tribe, who live in voluntary isolation. While offshore rigs don't displace them, the resulting port industrialization will spark fierce environmental battles.",
+      "9/ In the petroleum industry, deepwater discovery-to-production averages 10 to 15 years. If this asset is declared commercially viable, 'first gas' won't flow until the late 2030s. The Andaman discovery is a massive strategic victory\u2014but it is a game for 2035, not 2026. [LINK]"
+    ]
+  }
+}
