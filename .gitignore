@@ -46,3 +46,7 @@ app.*.map.json
 
 .env
 cert.pem
+# Phase 2 subproject directory
+phase-2/
+*.xcuserstate
+
