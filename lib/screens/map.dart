@@ -48,6 +48,16 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  TileProvider _getTileProvider() {
+    try {
+      return FMTCTileProvider(
+        stores: {'factline_esri_v1': BrowseStoreStrategy.readUpdate},
+      );
+    } catch (_) {
+      return NetworkTileProvider();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final markers = _posts
@@ -88,11 +98,13 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               TileLayer(
                 urlTemplate:
-                    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
-                tileProvider: FMTCTileProvider(
-                  stores: {'factline_hq': BrowseStoreStrategy.readUpdate},
-                ),
+                    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+                fallbackUrl:
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                maxZoom: 16,
+                minZoom: 2,
+                userAgentPackageName: 'com.pratyakshkwatra.factline',
+                tileProvider: _getTileProvider(),
               ),
               if (heatCircles.isNotEmpty) CircleLayer(circles: heatCircles),
               if (markers.isNotEmpty)

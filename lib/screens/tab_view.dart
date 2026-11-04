@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:factline/api/models/user.dart';
 import 'package:factline/screens/dossier.dart';
+import 'package:factline/screens/game_ques.dart';
 import 'package:factline/screens/home.dart';
 import 'package:factline/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedColor: const Color(0xffD90429),
           ),
           CrystalNavigationBarItem(
+            icon: Icons.sports_esports_rounded,
+            unselectedIcon: Icons.sports_esports_outlined,
+            selectedColor: const Color(0xffD90429),
+          ),
+          CrystalNavigationBarItem(
             icon: Icons.map_rounded,
             unselectedIcon: Icons.map_outlined,
             selectedColor: const Color(0xffD90429),
@@ -90,6 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
               user: widget.user,
             ),
             DossierTab(authService: widget.authService),
+            GameQuesTab(
+              authService: widget.authService,
+              secureStorage: widget.secureStorage,
+              user: widget.user,
+            ),
             MapScreen(authService: widget.authService, user: widget.user),
             SettingsTab(
               authService: widget.authService,

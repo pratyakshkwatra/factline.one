@@ -40,7 +40,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>flutter</string>
 					<key>UISceneDelegateClassName</key>
-					<string>FlutterSceneDelegate</string>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
 				</dict>
@@ -49,6 +49,12 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Factline requires photo library access to upload news images and documents for forensic credibility analysis.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Factline requires camera access to capture breaking news artifacts and documents for verification.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Factline requires microphone access to record audio claims for forensic speech analysis.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

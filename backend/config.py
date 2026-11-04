@@ -7,6 +7,16 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://user:password@localhost:5432/factline"
 )
 
+if DATABASE_URL.startswith("postgresql://"):
+    try:
+        import psycopg
+    except ImportError:
+        try:
+            import psycopg2
+            DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
+        except ImportError:
+            pass
+
 SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 120))

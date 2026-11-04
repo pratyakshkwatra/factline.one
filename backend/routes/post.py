@@ -3,12 +3,12 @@ from sqlalchemy.orm import Session
 import os
 import shutil
 import uuid
-from typing import List
+from auth_deps import get_current_user, get_current_editor, get_optional_current_user
+from typing import List, Optional
 from database import get_db
 from models.user import User
 from models.post_model import Post, AnalysisStatus, Upvote, Downvote, View, NewsOutlet, Claim, ClaimSource, FactCheckSite, PostTag, RedFlag, TrustSignal
 import schemas
-from auth_deps import get_current_user, get_current_editor
 import config
 from datetime import datetime, timedelta
 from sqlalchemy import func, desc, asc
@@ -87,7 +87,10 @@ async def create_post(
     db.commit()
     db.refresh(db_post)
 
-    await TaskQueue.enqueue_analysis(db_post.id)
+    try:
+        await TaskQueue.enqueue_analysis(db_post.id)
+    except Exception as e:
+        print(f"Warning: Failed to enqueue forensic task to Redis: {e}")
 
     return db_post
 
@@ -446,34 +449,11 @@ def get_map_pins(db: Session = Depends(get_db)):
         Post.summary_easy
     ).filter(Post.latitude.isnot(None)).all()
 
-from task_queue import TaskQueue
-
-@router.post("/", response_model=schemas.PostOut)
-async def create_post(
-    post: schemas.PostCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    db_post = Post(
-        **post.dict(),
-        created_by=current_user.id,
-        analysis_status=AnalysisStatus.PENDING,
-        analysis_progress=0.0,
-        status_message="ESTABLISHING_FORENSIC_INGESTION"
-    )
-    db.add(db_post)
-    db.commit()
-    db.refresh(db_post)
-
-    await TaskQueue.enqueue_analysis(db_post.id)
-
-    return db_post
-
 @router.get("/{post_id:int}", response_model=schemas.PostOut)
 def get_post_detail(
     post_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: Optional[User] = Depends(get_optional_current_user)
 ):
     from sqlalchemy.orm import joinedload
     
@@ -510,8 +490,11 @@ def get_post_detail(
     dv = db.query(Downvote).filter_by(post_id=post.id).count()
     vc = db.query(View).filter_by(post_id=post.id).count()
     
-    is_up = db.query(Upvote).filter_by(user_id=current_user.id, post_id=post.id).first() is not None
-    is_down = db.query(Downvote).filter_by(user_id=current_user.id, post_id=post.id).first() is not None
+    is_up = False
+    is_down = False
+    if current_user:
+        is_up = db.query(Upvote).filter_by(user_id=current_user.id, post_id=post.id).first() is not None
+        is_down = db.query(Downvote).filter_by(user_id=current_user.id, post_id=post.id).first() is not None
 
     return schemas.PostOut.from_orm(post).copy(update={
         "upvote_downvote_count": uv - dv,

@@ -19,12 +19,12 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      email: json['email'],
-      isActive: json['is_active'],
-      accessToken: json['access_token'],
-      refreshToken: json['refresh_token'],
-      tokenType: json['token_type'],
+      id: json['id'] ?? 0,
+      email: json['email']?.toString(),
+      isActive: json['is_active'] ?? true,
+      accessToken: json['access_token']?.toString(),
+      refreshToken: json['refresh_token']?.toString(),
+      tokenType: json['token_type']?.toString(),
       role: json["role"] == "editor" ? Role.editor : Role.user,
     );
   }

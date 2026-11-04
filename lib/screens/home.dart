@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:factline/api/models/user.dart';
 import 'package:factline/api/post.dart';
 import 'package:factline/router/router.gr.dart';
+import 'package:factline/screens/game_ques.dart';
 import 'package:factline/services/auth.dart';
 import 'package:factline/widgets/breaking_news_carousel.dart';
 import 'package:factline/widgets/recommendations.dart';
@@ -63,12 +64,31 @@ class _HomeTabState extends State<HomeTab> {
                   Row(
                     children: [
                       _actionIcon(
+                        Icons.sports_esports_rounded,
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => Scaffold(
+                              backgroundColor: const Color(0xff0F0F0F),
+                              body: SafeArea(
+                                child: GameQuesTab(
+                                  authService: widget.authService,
+                                  secureStorage: widget.secureStorage,
+                                  user: widget.user,
+                                  isModal: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _actionIcon(
                         Icons.leaderboard_rounded,
                         () => context.router.push(
                           LeaderboardRoute(authService: widget.authService),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       _actionIcon(
                         Icons.add_rounded,
                         () => context.router.push(
@@ -78,8 +98,6 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      _actionIcon(Icons.notifications_none_rounded, () {}),
                     ],
                   ),
                 ],
@@ -100,7 +118,93 @@ class _HomeTabState extends State<HomeTab> {
                 }
               },
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => Scaffold(
+                      backgroundColor: const Color(0xff0F0F0F),
+                      body: SafeArea(
+                        child: GameQuesTab(
+                          authService: widget.authService,
+                          secureStorage: widget.secureStorage,
+                          user: widget.user,
+                          isModal: true,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xffD90429).withValues(alpha: 0.25),
+                        Colors.white.withValues(alpha: 0.03),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: const Color(0xffD90429).withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffD90429),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(
+                          Icons.sports_esports_rounded,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FactlineMerriweather(
+                              "Truth vs Deepfake Challenge",
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            FactlineInter(
+                              "Test your instincts against AI-doctored news stories.",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white60,
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.white38,
+                        size: 14,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 28),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

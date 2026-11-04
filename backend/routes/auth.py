@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
@@ -33,11 +33,41 @@ def sign_up(user: UserCreate, db: Session = Depends(get_db)):
     return {"message": "User registered successfully"}
 
 @router.post("/sign_in")
-def sign_in(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.email).first()
-    if not db_user or not verify_password(user.password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+async def sign_in(request: Request, db: Session = Depends(get_db)):
+    content_type = request.headers.get("content-type", "")
+    email = None
+    password = None
 
+    if "application/json" in content_type:
+        try:
+            body = await request.json()
+            email = body.get("email") or body.get("username")
+            password = body.get("password")
+        except Exception:
+            raise HTTPException(status_code=422, detail="Invalid JSON format")
+    elif "application/x-www-form-urlencoded" in content_type or "multipart/form-data" in content_type:
+        form = await request.form()
+        email = form.get("email") or form.get("username")
+        password = form.get("password")
+    else:
+        try:
+            body = await request.json()
+            email = body.get("email") or body.get("username")
+            password = body.get("password")
+        except Exception:
+            try:
+                form = await request.form()
+                email = form.get("email") or form.get("username")
+                password = form.get("password")
+            except Exception:
+                raise HTTPException(status_code=422, detail="Could not parse request body")
+
+    if not email or not password:
+        raise HTTPException(status_code=422, detail="Email/username and password are required")
+
+    db_user = db.query(User).filter(User.email == str(email).strip()).first()
+    if not db_user or not verify_password(password, db_user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token_data = {"sub": str(db_user.id), "role": db_user.role.value}
     
@@ -45,7 +75,6 @@ def sign_in(user: UserLogin, db: Session = Depends(get_db)):
     refresh_token = create_access_token(
         token_data, expires_delta=timedelta(days=7)
     )
-
 
     return {
         "access_token": access_token,
@@ -77,7 +106,13 @@ def refresh_token(refresh: RefreshToken, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Refresh token blacklisted")
     
     user_id = payload.get("sub")
-    db_user = db.query(User).filter(User.id == user_id).first()
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid token subject")
+    try:
+        user_id_int = int(user_id)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=401, detail="Invalid token subject format")
+    db_user = db.query(User).filter(User.id == user_id_int).first()
     if not db_user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
         

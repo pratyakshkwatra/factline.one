@@ -8,6 +8,27 @@ class AuthAPI {
   final _dio = ApiClient().dio;
   final _storage = const FlutterSecureStorage();
 
+  String _extractErrorMessage(DioException e, [String fallback = 'An Error Occurred']) {
+    if (e.response?.data is Map) {
+      final detail = e.response!.data['detail'];
+      if (detail != null) {
+        if (detail is String) return detail;
+        if (detail is List && detail.isNotEmpty) {
+          final first = detail.first;
+          if (first is Map && first['msg'] != null) return first['msg'].toString();
+        }
+        return detail.toString();
+      }
+      final msg = e.response!.data['message'];
+      if (msg != null) return msg.toString();
+    }
+    if (e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.connectionTimeout) {
+      return 'Cannot reach backend server. Please check your connection.';
+    }
+    return e.message ?? fallback;
+  }
+
   Future<User> signIn(String email, String password) async {
     try {
       final response = await _dio.post(
@@ -18,19 +39,27 @@ class AuthAPI {
       final data = response.data;
       final user = User.fromJson(data);
 
-      await _storage.write(key: 'access_token', value: user.accessToken);
-      await _storage.write(key: 'refresh_token', value: user.refreshToken);
+      if (user.accessToken != null) {
+        await _storage.write(key: 'access_token', value: user.accessToken);
+      }
+      if (user.refreshToken != null) {
+        await _storage.write(key: 'refresh_token', value: user.refreshToken);
+      }
 
       return user;
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        throw APIException('Invalid credentials', e.response!.statusCode);
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 401) {
+        throw APIException('Invalid credentials', 401);
       }
 
       throw APIException(
-        e.message ?? 'An Error Occurred',
-        e.response!.statusCode,
+        _extractErrorMessage(e, 'Sign in failed'),
+        statusCode,
       );
+    } catch (e) {
+      if (e is APIException) rethrow;
+      throw APIException(e.toString());
     }
   }
 
@@ -41,13 +70,17 @@ class AuthAPI {
         data: {'email': email, 'password': password},
       );
     } on DioException catch (e) {
-      if (e.response?.statusCode == 400) {
-        throw APIException('email already exists', e.response!.statusCode);
+      final statusCode = e.response?.statusCode;
+      if (statusCode == 400) {
+        throw APIException('Email already exists', 400);
       }
       throw APIException(
-        e.message ?? 'An Error Occurred',
-        e.response!.statusCode,
+        _extractErrorMessage(e, 'Registration failed'),
+        statusCode,
       );
+    } catch (e) {
+      if (e is APIException) rethrow;
+      throw APIException(e.toString());
     }
   }
 
@@ -60,10 +93,12 @@ class AuthAPI {
         '/auth/refresh_token',
         data: {'refresh_token': refreshToken},
       );
-      await _storage.write(
-        key: 'access_token',
-        value: res.data['access_token'],
-      );
+      if (res.data is Map && res.data['access_token'] != null) {
+        await _storage.write(
+          key: 'access_token',
+          value: res.data['access_token'],
+        );
+      }
       return User.fromJson(res.data);
     } catch (error) {
       await _storage.deleteAll();
@@ -72,14 +107,16 @@ class AuthAPI {
   }
 
   Future<void> logout(String refreshToken, String accessToken) async {
-    await _dio.post(
-      '/auth/sign_out',
-      queryParameters: {
-        'refresh_token': refreshToken,
-        "access_token": accessToken,
-      },
-      options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
-    );
+    try {
+      await _dio.post(
+        '/auth/sign_out',
+        queryParameters: {
+          'refresh_token': refreshToken,
+          "access_token": accessToken,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+    } catch (_) {}
     await _storage.deleteAll();
   }
 
@@ -92,9 +129,12 @@ class AuthAPI {
       return User.fromJson(response.data);
     } on DioException catch (e) {
       throw APIException(
-        e.message ?? 'An Error Occurred',
+        _extractErrorMessage(e, 'Session expired'),
         e.response?.statusCode,
       );
+    } catch (e) {
+      if (e is APIException) rethrow;
+      throw APIException(e.toString());
     }
   }
 }

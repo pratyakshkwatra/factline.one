@@ -13,12 +13,14 @@ class GameQuesTab extends StatefulWidget {
   final AuthService authService;
   final FlutterSecureStorage secureStorage;
   final User user;
+  final bool isModal;
 
   const GameQuesTab({
     super.key,
     required this.authService,
     required this.secureStorage,
     required this.user,
+    this.isModal = false,
   });
 
   @override
@@ -28,6 +30,7 @@ class GameQuesTab extends StatefulWidget {
 class _GameQuesTabState extends State<GameQuesTab> {
   int currentStep = 0;
   String? selectedCountryId;
+  bool _isLoading = false;
 
   final List<Map<String, String>> countries = [
     {"name": "Australia", "id": "au"},
@@ -61,10 +64,6 @@ class _GameQuesTabState extends State<GameQuesTab> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "";
-    if (currentStep == 0) title = "Select Your Country";
-    if (currentStep == 1) title = "Ready to Play?";
-
     return Container(
       color: const Color(0xff0F0F0F),
       child: Padding(
@@ -74,36 +73,48 @@ class _GameQuesTabState extends State<GameQuesTab> {
           children: [
             Row(
               children: [
-                if (currentStep > 0)
+                if (currentStep > 0 || widget.isModal) ...[
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        currentStep = currentStep - 1;
-                      });
+                      if (currentStep > 0) {
+                        setState(() {
+                          currentStep = currentStep - 1;
+                        });
+                      } else if (widget.isModal) {
+                        Navigator.of(context).pop();
+                      }
                     },
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
-                      size: 20,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                        size: 16,
+                      ),
                     ),
                   ),
-                const SizedBox(width: 8),
-                if (currentStep != 1)
-                  FactlineMerriweather(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  const SizedBox(width: 10),
+                ],
+                FactlineMerriweather(
+                  currentStep == 0 ? "Select Target Region" : "Forensic Assessment",
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
+                ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             if (currentStep == 0) ...[
               Expanded(
                 child: ListView.separated(
+                  padding: const EdgeInsets.only(bottom: 120),
                   itemCount: countries.length,
                   physics: const BouncingScrollPhysics(),
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
@@ -207,48 +218,64 @@ class _GameQuesTabState extends State<GameQuesTab> {
                           backgroundColor: const Color(0xffD90429),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 20,
+                            horizontal: 48,
+                            vertical: 18,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                           elevation: 0,
                         ),
-                        onPressed: () async {
-                          if (selectedCountryId == null) return;
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                if (selectedCountryId == null) return;
+                                setState(() => _isLoading = true);
 
-                          try {
-                            final gameApi = GameAPI();
-                            final query = GameQuery(
-                              country: selectedCountryId!,
-                            );
+                                try {
+                                  final gameApi = GameAPI();
+                                  final query = GameQuery(
+                                    country: selectedCountryId!,
+                                  );
 
-                            final article = await gameApi.generateGameArticle(
-                              query,
-                            );
+                                  final article = await gameApi.generateGameArticle(
+                                    query,
+                                  );
 
-                            if (!context.mounted) return;
-                            context.router.push(
-                              GamePlayRoute(article: article),
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: const Color(0xffD90429),
-                                content: FactlineInter("Network Error: $e"),
+                                  if (!context.mounted) return;
+                                  await context.router.push(
+                                    GamePlayRoute(article: article),
+                                  );
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: const Color(0xffD90429),
+                                        content: FactlineInter("Generation Notice: $e"),
+                                      ),
+                                    );
+                                  }
+                                } finally {
+                                  if (mounted) setState(() => _isLoading = false);
+                                }
+                              },
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : FactlineInter(
+                                "BEGIN ASSESSMENT",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 2,
+                                ),
                               ),
-                            );
-                          }
-                        },
-                        child: FactlineInter(
-                          "BEGIN ASSESSMENT",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2,
-                          ),
-                        ),
                       ),
                     ],
                   ),

@@ -36,6 +36,7 @@ services:
     command: ["python", "mass_ingest.py"]
     env_file: .env
     environment:
+      DATABASE_URL: postgresql://user:password@db:5432/factline
       QDRANT_HOST: qdrant
       QDRANT_PORT: 6333
       DATA_CACHE_DIR: /data
@@ -57,6 +58,8 @@ services:
       QDRANT_HOST: qdrant
       QDRANT_PORT: 6333
       REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -66,6 +69,7 @@ services:
         condition: service_started
     networks:
       - factline-net
+    restart: unless-stopped
 
   worker:
     build: ./backend
@@ -77,6 +81,8 @@ services:
       QDRANT_HOST: qdrant
       QDRANT_PORT: 6333
       REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend:/app
     depends_on:
       db:
         condition: service_healthy
@@ -84,6 +90,7 @@ services:
         condition: service_started
     networks:
       - factline-net
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine

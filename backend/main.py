@@ -17,12 +17,18 @@ app = FastAPI(
     version="1.0.0",
 )
 
+from logger import get_logger
+
+logger = get_logger("API")
+
+from fastapi.encoders import jsonable_encoder
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc):
-    print(f"DEBUG: Validation error on {request.url}: {exc.errors()}")
+    logger.warning("Validation error on %s: %s", request.url.path, exc.errors())
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors(), "message": "Validation Error"},
+        content={"detail": jsonable_encoder(exc.errors()), "message": "Validation Error"},
     )
 
 app.add_middleware(
@@ -43,6 +49,8 @@ from database import SessionLocal, engine, Base
 from seed import seed_forensic_news
 from websocket import manager
 
+background_tasks = set()
+
 @app.on_event("startup")
 async def startup_event():
     import time
@@ -59,11 +67,11 @@ async def startup_event():
             connected = True
         except Exception as e:
             retry_count += 1
-            print(f"Waiting for DB connection... (Attempt {retry_count}/{max_retries}): {e}")
+            logger.info("Waiting for database connection... (Attempt %s/%s)", retry_count, max_retries)
             await asyncio.sleep(2)
 
     if not connected:
-        print("CRITICAL: SQL Connection failed. Application might fail.")
+        logger.critical("Database connection failed. Application might fail.")
 
     Base.metadata.create_all(bind=engine)
 
@@ -86,21 +94,29 @@ async def startup_event():
             conn.execute(text("ALTER TABLE news_outlets ADD COLUMN IF NOT EXISTS img_url TEXT"))
             
             conn.commit()
-            print("DB Migrations (ALTER TABLE) completed successfully.")
+            logger.info("Database schema verified and up to date.")
     except Exception as e:
-        print(f"DB Migration Warning (Non-critical if tables fresh): {e}")
+        logger.warning("Database schema check notice: %s", e)
     
     loop = asyncio.get_running_loop()
     manager.set_loop(loop)
     
-    loop.create_task(manager.listen_to_redis())
+    redis_task = loop.create_task(manager.listen_to_redis())
+    background_tasks.add(redis_task)
+    redis_task.add_done_callback(background_tasks.discard)
     
-    print("DEBUG: Registered Routes:")
-    for route in app.routes:
-        methods = getattr(route, "methods", "WS")
-        print(f"DEBUG: Route {route.path} [{methods}] -> {route.name}")
+    logger.info("Factline API initialized. %s endpoints mounted.", len(app.routes))
 
-    loop.create_task(_run_background_seed())
+    seed_task = loop.create_task(_run_background_seed())
+    background_tasks.add(seed_task)
+    seed_task.add_done_callback(background_tasks.discard)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    for task in list(background_tasks):
+        task.cancel()
+    if background_tasks:
+        await asyncio.gather(*background_tasks, return_exceptions=True)
 
 async def _run_background_seed():
     import concurrent.futures

@@ -1,36 +1,39 @@
 import os
 import json
-import asyncio
-import redis.asyncio as redis
+import time
+import traceback
+import redis
 import agent
 from database import SessionLocal
 from models.post_model import Post, AnalysisStatus
 from task_queue import REDIS_URL, QUEUE_NAME
 from dotenv import load_dotenv
+from logger import get_logger
 
 load_dotenv()
+logger = get_logger("Worker")
 
-async def run_worker():
-    print(f"Connecting to Redis at {REDIS_URL}...")
+def run_worker():
+    logger.info("Connecting to Redis at %s...", REDIS_URL)
     client = redis.from_url(REDIS_URL, decode_responses=True)
+    logger.info("Connected to Redis successfully. Listening on '%s'...", QUEUE_NAME)
     
-    print("Forensic Worker connected to Redis successfully.")
-    print(f"Forensic Worker started looking for tasks in queue: {QUEUE_NAME}")
-    
+    # Check Google Gemini connection
     try:
         from google import genai
-        genai_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-        print("Checking available high-fidelity Truth-Signal models...")
-        models = genai_client.models.list()
-        print(f"Found available models. Ready for inference.")
+        if os.getenv("GOOGLE_API_KEY"):
+            genai_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+            logger.info("Google Gemini engine active (models/gemini-flash-latest).")
+        else:
+            logger.warning("GOOGLE_API_KEY is not set.")
     except Exception as e:
-        print(f"Analytical Model Discovery Failed: {e}")
+        logger.warning("Gemini discovery note: %s", e)
 
-    try:
-        while True:
-            # brpop returns (queue_name, data)
-            result = await client.brpop(QUEUE_NAME, timeout=0)
+    while True:
+        try:
+            result = client.brpop(QUEUE_NAME, timeout=5)
             if not result:
+                time.sleep(0.2)
                 continue
                 
             _, data_raw = result
@@ -38,30 +41,30 @@ async def run_worker():
                 data = json.loads(data_raw)
                 post_id = data.get("post_id")
                 if not post_id:
-                    print("Skipping message with no post_id")
                     continue
                 
-                print(f"Received task for post_id: {post_id}")
-                print(f"Starting forensic analysis for post_id: {post_id}")
-                
-                # Use to_thread for the synchronous database/engine work
-                await asyncio.to_thread(process_analysis, post_id)
-                print(f"Task finished for post_id: {post_id}")
+                logger.info("Forensic task dequeued for post #%s. Commencing multi-stage analysis...", post_id)
+                process_analysis(post_id)
+                logger.info("Forensic task finished for post #%s.", post_id)
                 
             except json.JSONDecodeError:
-                print(f"Failed to decode message: {data_raw}")
+                logger.error("Failed to decode queue message: %s", data_raw)
             except Exception as e:
-                print(f"Error processing task: {e}")
-                
-    finally:
-        await client.close()
+                logger.error("Error processing task for post #%s: %s", post_id, e)
+        except redis.exceptions.TimeoutError:
+            continue
+        except Exception as loop_e:
+            if "timeout" in str(loop_e).lower():
+                continue
+            logger.warning("Worker loop notice: %s", loop_e)
+            time.sleep(2)
 
 def process_analysis(post_id: int):
     db = SessionLocal()
     try:
         post = db.get(Post, post_id)
         if not post: 
-            print(f"Post {post_id} not found in database.")
+            logger.warning("Post #%s not found in database.", post_id)
             return
 
         from config import TAVILY_API_KEY
@@ -75,9 +78,9 @@ def process_analysis(post_id: int):
         )
         engine.analyze(news_article)
     except Exception as e:
-        print(f"Worker Error post_id {post_id}: {e}")
+        logger.error("Analysis pipeline failed on post #%s: %s", post_id, e)
     finally:
         db.close()
 
 if __name__ == "__main__":
-    asyncio.run(run_worker())
+    run_worker()

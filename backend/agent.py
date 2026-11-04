@@ -32,6 +32,9 @@ from models.post_model import (
 )
 from schemas import UserOut, PostOut
 from services.vector_service import VectorService
+from logger import get_logger
+
+logger = get_logger("Forensics")
 
 class NewsArticle:
     def __init__(self, title: str, body: str = "", media_url: str = None, media_type: str = "TEXT", source_url: str = None, **extra):
@@ -83,13 +86,13 @@ class NewsCredibilityEngine:
         tavily_key: str,
         db: Session,
         post_id: int,
-        cheap_model: str = "gemini-3.1-flash-lite-preview",
-        strong_model: str = "gemini-3.1-flash-lite-preview",
+        cheap_model: str = "models/gemini-flash-lite-latest",
+        strong_model: str = "models/gemini-flash-lite-latest",
     ):
         self.tavily = TavilyClient(api_key=tavily_key)
-        self.client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-        self.cheap_model_name = f"models/{cheap_model}" if not cheap_model.startswith("models/") else cheap_model
-        self.strong_model_name = f"models/{strong_model}" if not strong_model.startswith("models/") else strong_model
+        self.client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY")) if os.getenv("GOOGLE_API_KEY") else None
+        self.cheap_model_name = cheap_model
+        self.strong_model_name = strong_model
         self.main_model_name = self.strong_model_name
         self.db = db
         self.post_id = post_id
@@ -98,23 +101,38 @@ class NewsCredibilityEngine:
     def _call_gemini(self, model: str, contents: Any, config: Any = None):
         import time
         import random
-        max_retries = 5
-        for i in range(max_retries):
-            try:
-                if config:
-                    return self.client.models.generate_content(model=model, contents=contents, config=config)
-                else:
-                    return self.client.models.generate_content(model=model, contents=contents)
-            except Exception as e:
-                # Check for 429 RESOURCE_EXHAUSTED
-                if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
-                    wait_time = (2 ** i) + random.uniform(0, 1) + 30 # Base 30s for free tier
-                    print(f"Gemini Quota Exceeded. Retrying in {wait_time:.1f}s... (Attempt {i+1}/{max_retries})")
-                    time.sleep(wait_time)
-                    continue
-                raise e
-        # Final attempt
-        return self.client.models.generate_content(model=model, contents=contents, config=config if config else None)
+
+        if not self.client:
+            raise RuntimeError("Google Gemini is not configured. Please provide a valid GOOGLE_API_KEY.")
+
+        candidate_models = [
+            model if ("gemini" in model and not "google/" in model) else "models/gemini-flash-lite-latest",
+            "models/gemini-flash-lite-latest",
+            "models/gemini-flash-latest"
+        ]
+        # De-duplicate while preserving order
+        unique_models = list(dict.fromkeys(candidate_models))
+
+        last_error = None
+        for m in unique_models:
+            for attempt in range(3):
+                try:
+                    if config:
+                        return self.client.models.generate_content(model=m, contents=contents, config=config)
+                    else:
+                        return self.client.models.generate_content(model=m, contents=contents)
+                except Exception as e:
+                    last_error = e
+                    err_str = str(e)
+                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "503" in err_str or "UNAVAILABLE" in err_str:
+                        wait_time = (2 ** attempt) + random.uniform(0.5, 2.0)
+                        logger.warning("[Post #%s] Gemini model %s capacity pause, retrying in %.1fs (attempt %s/3)...", self.post_id, m, wait_time, attempt+1)
+                        time.sleep(wait_time)
+                        continue
+                    # Non-capacity error (e.g., 404 NOT_FOUND), switch immediately to the next candidate model
+                    logger.info("[Post #%s] Model %s failed (%s), trying fallback model...", self.post_id, m, err_str[:80])
+                    break
+        raise last_error
 
     def _update_progress(self, progress: float, message: str, status: AnalysisStatus = None):
         from redis_cache import RedisCache
@@ -131,7 +149,7 @@ class NewsCredibilityEngine:
         status_name = post.analysis_status.name if hasattr(post.analysis_status, 'name') else str(post.analysis_status)
         RedisCache.set_progress(self.post_id, status_name, progress, message)
         RedisCache.publish_status(self.post_id, status_name, progress, message)
-        print(f"DEBUG: Published progress for post {self.post_id}: {progress}% - {message}")
+        logger.info("[Post #%s] Stage %s%% | %s", self.post_id, int(progress), message)
 
     def _get_domain(self, url: str) -> str:
         from urllib.parse import urlparse
@@ -538,6 +556,10 @@ class NewsCredibilityEngine:
 
         while response.candidates and any(p.function_call for p in response.candidates[0].content.parts):
             tool_calls = [p.function_call for p in response.candidates[0].content.parts if p.function_call]
+            
+            # Record the model's function call turn
+            contents_list.append(response.candidates[0].content)
+
             for call in tool_calls:
                 function_name = call.name
                 arguments = call.args
@@ -548,12 +570,9 @@ class NewsCredibilityEngine:
                     self._update_progress(78, f"QUERY_STREAMS: {q}")
                     s = web_search_func(query=q, max_results=k)
 
+                    # Gemini API requires function response parts to have role="user"
                     contents_list.append(types.Content(
-                        role="model",
-                        parts=[types.Part.from_function_call(name=function_name, args=arguments)]
-                    ))
-                    contents_list.append(types.Content(
-                        role="tool",
+                        role="user",
                         parts=[types.Part.from_function_response(name=function_name, response={"results": s})]
                     ))
 

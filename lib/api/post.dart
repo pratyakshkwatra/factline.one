@@ -201,11 +201,11 @@ class PostAPI {
   Future<List<PostPin>> getMapPins() async {
     try {
       final accessToken = await _storage.read(key: 'access_token');
-      if (accessToken == null) throw APIException('Not authenticated', 401);
-
       final response = await _dio.get(
         '/posts/map/pins',
-        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+        options: accessToken != null
+            ? Options(headers: {'Authorization': 'Bearer $accessToken'})
+            : null,
       );
       final List data = response.data;
 
@@ -221,11 +221,11 @@ class PostAPI {
   Future<Post?> getPostDetail(int postId) async {
     try {
       final accessToken = await _storage.read(key: 'access_token');
-      if (accessToken == null) throw APIException('Not authenticated', 401);
-
       final response = await _dio.get(
         '/posts/$postId',
-        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+        options: accessToken != null
+            ? Options(headers: {'Authorization': 'Bearer $accessToken'})
+            : null,
       );
       return Post.fromJson(response.data);
     } on DioException catch (e) {

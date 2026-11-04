@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:factline/api/auth.dart';
 import 'package:factline/router/router.dart';
 import 'package:factline/services/auth.dart';
@@ -9,9 +10,36 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FMTCObjectBoxBackend().initialise(maxDatabaseSize: 100000000);
-  await FMTCStore('mapStore').manage.create();
-  await FMTCStore('factline_hq').manage.create();
+
+  // Suppress uncaught asynchronous font network lookup exceptions
+  PlatformDispatcher.instance.onError = (error, stack) {
+    final err = error.toString();
+    if (err.contains('fonts.gstatic.com') || err.contains('Failed to load font')) {
+      debugPrint("Handled font lookup notice: $error");
+      return true;
+    }
+    return false;
+  };
+
+  FlutterError.onError = (details) {
+    if (details.exceptionAsString().contains('fonts.gstatic.com') ||
+        details.exceptionAsString().contains('Failed to load font')) {
+      debugPrint("Handled font framework error: ${details.exception}");
+      return;
+    }
+    FlutterError.presentError(details);
+  };
+  try {
+    await FMTCObjectBoxBackend().initialise(maxDatabaseSize: 100000000);
+    await FMTCStore('mapStore').manage.create();
+    try {
+      await FMTCStore('factline_dark_v2').manage.delete();
+      await FMTCStore('factline_hq').manage.delete();
+    } catch (_) {}
+    await FMTCStore('factline_esri_v1').manage.create();
+  } catch (e) {
+    debugPrint("Map tile caching initialization notice: $e");
+  }
 
   final authAPI = AuthAPI();
   final secureStorage = const FlutterSecureStorage();

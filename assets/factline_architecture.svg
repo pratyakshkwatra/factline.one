@@ -1,0 +1,703 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1850" width="100%" height="100%" style="background:#080b11; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bg-glow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#121829" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#070a10" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Linear Gradients for Cards & Borders -->
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#4facfe"/>
+    </linearGradient>
+
+    <linearGradient id="purple-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b224ef"/>
+      <stop offset="100%" stop-color="#7579ff"/>
+    </linearGradient>
+
+    <linearGradient id="emerald-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5a0"/>
+      <stop offset="100%" stop-color="#00d9f5"/>
+    </linearGradient>
+
+    <linearGradient id="amber-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb300"/>
+      <stop offset="100%" stop-color="#ff6b00"/>
+    </linearGradient>
+
+    <linearGradient id="crimson-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff2a6d"/>
+      <stop offset="100%" stop-color="#9b00e8"/>
+    </linearGradient>
+
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#151b2b" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0e1320" stop-opacity="0.98"/>
+    </linearGradient>
+
+    <linearGradient id="card-inner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a233a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#101726" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+
+    <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Arrow Markers -->
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#00f2fe"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#b224ef"/>
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#00f5a0"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ffb300"/>
+    </marker>
+  </defs>
+
+  <!-- Background base -->
+  <rect width="2400" height="1850" fill="url(#bg-glow)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.06">
+    <path d="M 0,0 L 2400,0 M 0,100 L 2400,100 M 0,200 L 2400,200 M 0,300 L 2400,300 M 0,400 L 2400,400 M 0,500 L 2400,500 M 0,600 L 2400,600 M 0,700 L 2400,700 M 0,800 L 2400,800 M 0,900 L 2400,900 M 0,1000 L 2400,1000 M 0,1100 L 2400,1100 M 0,1200 L 2400,1200 M 0,1300 L 2400,1300 M 0,1400 L 2400,1400 M 0,1500 L 2400,1500 M 0,1600 L 2400,1600 M 0,1700 L 2400,1700 M 0,1800 L 2400,1800" stroke="#4facfe" stroke-width="1"/>
+    <path d="M 0,0 L 0,1850 M 100,0 L 100,1850 M 200,0 L 200,1850 M 300,0 L 300,1850 M 400,0 L 400,1850 M 500,0 L 500,1850 M 600,0 L 600,1850 M 700,0 L 700,1850 M 800,0 L 800,1850 M 900,0 L 900,1850 M 1000,0 L 1000,1850 M 1100,0 L 1100,1850 M 1200,0 L 1200,1850 M 1300,0 L 1300,1850 M 1400,0 L 1400,1850 M 1500,0 L 1500,1850 M 1600,0 L 1600,1850 M 1700,0 L 1700,1850 M 1800,0 L 1800,1850 M 1900,0 L 1900,1850 M 2000,0 L 2000,1850 M 2100,0 L 2100,1850 M 2200,0 L 2200,1850 M 2300,0 L 2300,1850" stroke="#4facfe" stroke-width="1"/>
+  </g>
+
+  <!-- ==================== HEADER ==================== -->
+  <g transform="translate(80, 50)">
+    <rect x="0" y="0" width="2240" height="110" rx="16" fill="url(#card-grad)" stroke="#1e293b" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="25" y="24" width="62" height="62" rx="12" fill="url(#cyan-glow)"/>
+    <!-- Logo Icon -->
+    <path d="M 45 42 L 67 42 L 53 58 L 65 58 L 47 72 L 51 60 L 41 60 Z" fill="#080b11"/>
+    
+    <text x="105" y="52" fill="#ffffff" font-size="28" font-weight="800" letter-spacing="1">FACTLINE V1: SYSTEM ARCHITECTURE &amp; FORENSIC DATAFLOW</text>
+    <text x="105" y="76" fill="#94a3b8" font-size="14" font-weight="500">Autonomous News Credibility Engine • Multi-Modal Claims Forensic Grounding • Real-Time Distributed Telemetry</text>
+    
+    <!-- Meta Badges -->
+    <rect x="1680" y="35" width="130" height="38" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="1745" y="59" fill="#00f2fe" font-size="13" font-weight="700" text-anchor="middle">FASTAPI + REDIS</text>
+
+    <rect x="1825" y="35" width="120" height="38" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="1885" y="59" fill="#00f5a0" font-size="13" font-weight="700" text-anchor="middle">KAFKA QUEUE</text>
+
+    <rect x="1960" y="35" width="135" height="38" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="2027" y="59" fill="#b224ef" font-size="13" font-weight="700" text-anchor="middle">GEMINI 3.1 FLASH</text>
+
+    <rect x="2110" y="35" width="95" height="38" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="2157" y="59" fill="#ffb300" font-size="13" font-weight="700" text-anchor="middle">QDRANT DB</text>
+  </g>
+
+  <!-- ==================== LAYER 1: CLIENT PRESENTATION (FLUTTER) ==================== -->
+  <g transform="translate(80, 190)">
+    <rect x="0" y="0" width="500" height="690" rx="16" fill="url(#card-grad)" stroke="#00f2fe" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="500" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#00f2fe"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">1. CLIENT LAYER (FLUTTER APPLICATION)</text>
+
+    <!-- Sub-card: Ingestion Channels -->
+    <g transform="translate(25, 75)">
+      <rect x="0" y="0" width="450" height="175" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="20" y="28" fill="#38bdf8" font-size="14" font-weight="700">MULTI-MODAL INGESTION INTERFACE</text>
+      
+      <!-- Input item 1 -->
+      <rect x="20" y="45" width="125" height="55" rx="8" fill="#0f172a" stroke="#334155"/>
+      <text x="82" y="68" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">URL Submission</text>
+      <text x="82" y="86" fill="#64748b" font-size="10" text-anchor="middle">Web news articles</text>
+
+      <!-- Input item 2 -->
+      <rect x="160" y="45" width="130" height="55" rx="8" fill="#0f172a" stroke="#334155"/>
+      <text x="225" y="68" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">Image / Clipping</text>
+      <text x="225" y="86" fill="#64748b" font-size="10" text-anchor="middle">Screenshots / Print</text>
+
+      <!-- Input item 3 -->
+      <rect x="305" y="45" width="125" height="55" rx="8" fill="#0f172a" stroke="#334155"/>
+      <text x="367" y="68" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">Raw Text Claims</text>
+      <text x="367" y="86" fill="#64748b" font-size="10" text-anchor="middle">Copy-pasted rumor</text>
+
+      <rect x="20" y="115" width="410" height="42" rx="8" fill="#0d1f36" stroke="#0284c7" stroke-dasharray="4 2"/>
+      <text x="35" y="141" fill="#7dd3fc" font-size="12" font-weight="600">User Narrative Binding: Suspicion prompts &amp; source bias focus</text>
+    </g>
+
+    <!-- Sub-card: Live Investigative HUD -->
+    <g transform="translate(25, 275)">
+      <rect x="0" y="0" width="450" height="215" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="20" y="28" fill="#00f5a0" font-size="14" font-weight="700">LIVE INVESTIGATIVE HUD (STATE SUBSCRIBER)</text>
+      
+      <!-- Progress Bar Graphic -->
+      <rect x="20" y="45" width="410" height="24" rx="12" fill="#0b1322" stroke="#1e293b"/>
+      <rect x="22" y="47" width="280" height="20" rx="10" fill="url(#cyan-glow)"/>
+      <text x="225" y="62" fill="#080b11" font-size="11" font-weight="800" text-anchor="middle">70% - CROSS_REFERENCING_GLOBAL_CLAIMS</text>
+
+      <!-- Vertical State Timeline Graphic -->
+      <g transform="translate(20, 85)">
+        <circle cx="10" cy="12" r="5" fill="#00f5a0"/>
+        <line x1="10" y1="17" x2="10" y2="35" stroke="#00f5a0" stroke-width="2"/>
+        <text x="25" y="16" fill="#e2e8f0" font-size="11" font-weight="600">INGESTING (5% - 20%): Crawl &amp; Tesseract OCR</text>
+
+        <circle cx="10" cy="40" r="5" fill="#00f5a0"/>
+        <line x1="10" y1="45" x2="10" y2="65" stroke="#00f5a0" stroke-width="2"/>
+        <text x="25" y="44" fill="#e2e8f0" font-size="11" font-weight="600">REFINING (25% - 40%): Gemini Flash News Editor</text>
+
+        <circle cx="10" cy="70" r="5" fill="#00f2fe"/>
+        <line x1="10" y1="75" x2="10" y2="95" stroke="#334155" stroke-width="2"/>
+        <text x="25" y="74" fill="#38bdf8" font-size="11" font-weight="700">GROUNDING (65% - 85%): Multi-Stream Tavily Search</text>
+
+        <circle cx="10" cy="100" r="5" fill="#475569"/>
+        <text x="25" y="104" fill="#94a3b8" font-size="11">FINALIZING (90% - 100%): 4-Vector Verdict Synthesis</text>
+      </g>
+    </g>
+
+    <!-- Sub-card: Forensic Report View -->
+    <g transform="translate(25, 515)">
+      <rect x="0" y="0" width="450" height="150" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="20" y="28" fill="#e2e8f0" font-size="14" font-weight="700">FORENSIC REPORT VIEWER (TRANSPARENCY HUB)</text>
+      
+      <rect x="20" y="42" width="195" height="42" rx="6" fill="#0f172a" stroke="#334155"/>
+      <text x="32" y="67" fill="#cbd5e1" font-size="11">Scraped Intel Hub (Sources)</text>
+
+      <rect x="235" y="42" width="195" height="42" rx="6" fill="#0f172a" stroke="#334155"/>
+      <text x="247" y="67" fill="#cbd5e1" font-size="11">Atomic Evidence Chain</text>
+
+      <rect x="20" y="94" width="195" height="42" rx="6" fill="#0f172a" stroke="#334155"/>
+      <text x="32" y="119" fill="#cbd5e1" font-size="11">Credibility Gauge (0-100)</text>
+
+      <rect x="235" y="94" width="195" height="42" rx="6" fill="#0f172a" stroke="#334155"/>
+      <text x="247" y="119" fill="#cbd5e1" font-size="11">Raw Telemetry Terminal Logs</text>
+    </g>
+  </g>
+
+  <!-- ==================== LAYER 2: GATEWAY & MESSAGING ==================== -->
+  <g transform="translate(630, 190)">
+    <rect x="0" y="0" width="500" height="690" rx="16" fill="url(#card-grad)" stroke="#38bdf8" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="500" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#38bdf8"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">2. API GATEWAY &amp; DISTRIBUTED PIPELINE</text>
+
+    <!-- FastAPI Component -->
+    <g transform="translate(25, 75)">
+      <rect x="0" y="0" width="450" height="195" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <rect x="15" y="15" width="34" height="34" rx="8" fill="#0284c7"/>
+      <text x="24" y="38" fill="#ffffff" font-size="18" font-weight="900">⚡</text>
+      <text x="60" y="32" fill="#ffffff" font-size="15" font-weight="700">FASTAPI ASYNC GATEWAY (main.py)</text>
+      <text x="60" y="48" fill="#94a3b8" font-size="11">Uvicorn ASGI • Pydantic v2 • JWT Security Middleware</text>
+
+      <!-- Endpoints listing -->
+      <g transform="translate(15, 65)">
+        <rect x="0" y="0" width="420" height="32" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <rect x="6" y="6" width="48" height="20" rx="4" fill="#0284c7"/>
+        <text x="30" y="20" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">POST</text>
+        <text x="65" y="21" fill="#38bdf8" font-size="12" font-family="monospace">/api/v1/posts/</text>
+        <text x="220" y="20" fill="#64748b" font-size="11">Submit claims, URL, or image</text>
+
+        <rect x="0" y="38" width="420" height="32" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <rect x="6" y="44" width="48" height="20" rx="4" fill="#10b981"/>
+        <text x="30" y="58" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">GET</text>
+        <text x="65" y="59" fill="#34d399" font-size="12" font-family="monospace">/api/v1/posts/{id}</text>
+        <text x="230" y="58" fill="#64748b" font-size="11">Poll post details &amp; verdict</text>
+
+        <rect x="0" y="76" width="420" height="32" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <rect x="6" y="82" width="48" height="20" rx="4" fill="#8b5cf6"/>
+        <text x="30" y="96" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">WS</text>
+        <text x="65" y="97" fill="#c084fc" font-size="12" font-family="monospace">/ws/post/{id}</text>
+        <text x="200" y="96" fill="#64748b" font-size="11">Live telemetry streaming push</text>
+      </g>
+    </g>
+
+    <!-- Kafka Topic Card -->
+    <g transform="translate(25, 295)">
+      <rect x="0" y="0" width="450" height="155" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="20" y="28" fill="#00f5a0" font-size="14" font-weight="700">KAFKA / REDIS INGESTION QUEUE</text>
+      <text x="20" y="46" fill="#94a3b8" font-size="11">Decoupled Asynchronous Forensic Job Queue (task_queue.py)</text>
+
+      <rect x="20" y="60" width="410" height="75" rx="8" fill="#0b1728" stroke="#00f5a0" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="35" y="85" fill="#e2e8f0" font-size="12" font-weight="700">Topic: news-forensics</text>
+      <text x="35" y="103" fill="#94a3b8" font-size="11">Payload: { post_id: 1042, user_id: 88, source_url: "...", media_url: "..." }</text>
+      <text x="35" y="122" fill="#00f5a0" font-size="11" font-weight="600">→ Dispatched immediately without blocking client HTTP thread</text>
+    </g>
+
+    <!-- Redis Pub/Sub Card -->
+    <g transform="translate(25, 475)">
+      <rect x="0" y="0" width="450" height="190" rx="12" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="20" y="28" fill="#ff2a6d" font-size="14" font-weight="700">REDIS PUB/SUB TELEMETRY BUS (redis_cache.py)</text>
+      <text x="20" y="46" fill="#94a3b8" font-size="11">Low-latency Worker-to-Gateway status propagation</text>
+
+      <g transform="translate(20, 60)">
+        <rect x="0" y="0" width="410" height="48" rx="8" fill="#180b1e" stroke="#ff2a6d" stroke-width="1"/>
+        <text x="15" y="22" fill="#fda4af" font-size="11" font-weight="700">Channel: forensic_updates_{post_id}</text>
+        <text x="15" y="38" fill="#e2e8f0" font-size="10" font-family="monospace">{"status": "GROUNDING", "progress": 65, "msg": "SURFACING_INTEL"}</text>
+
+        <rect x="0" y="58" width="410" height="52" rx="8" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="78" fill="#94a3b8" font-size="11">FastAPI WebSocket server subscribes to channel and relays</text>
+        <text x="15" y="96" fill="#38bdf8" font-size="11" font-weight="600">instantly to user's Flutter phone HUD at 60 FPS.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== LAYER 3: FORENSIC CORE ENGINE ==================== -->
+  <g transform="translate(1180, 190)">
+    <rect x="0" y="0" width="670" height="690" rx="16" fill="url(#card-grad)" stroke="#b224ef" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="670" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#b224ef"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">3. FORENSIC CORE INTELLIGENCE ENGINE (agent.py)</text>
+
+    <!-- Sub-step 1: Ingestion & Crawl -->
+    <g transform="translate(25, 75)">
+      <rect x="0" y="0" width="620" height="110" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1"/>
+      <rect x="15" y="15" width="28" height="28" rx="6" fill="#b224ef"/>
+      <text x="24" y="34" fill="#ffffff" font-size="14" font-weight="800">1</text>
+      <text x="55" y="27" fill="#ffffff" font-size="13" font-weight="700">PRIMARY SOURCE EXTRACTION &amp; OCR</text>
+      <text x="55" y="41" fill="#a855f7" font-size="11">BeautifulSoup4 Web Crawler • Tesseract Optical Character Recognition</text>
+
+      <text x="20" y="66" fill="#cbd5e1" font-size="11">• Scrapes raw HTML article body via custom User-Agent and strips script/style tags.</text>
+      <text x="20" y="84" fill="#cbd5e1" font-size="11">• If image: Runs <tspan fill="#38bdf8">pytesseract.image_to_string()</tspan> and checks C2PA provenance signatures.</text>
+      <text x="20" y="100" fill="#cbd5e1" font-size="11">• Queries <tspan fill="#f59e0b">NewsOutlet</tspan> whitelist (Reuters, AP, BBC, PIB) or blocks on blacklisted domains.</text>
+    </g>
+
+    <!-- Sub-step 2: Gemini Refinement -->
+    <g transform="translate(25, 198)">
+      <rect x="0" y="0" width="620" height="110" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1"/>
+      <rect x="15" y="15" width="28" height="28" rx="6" fill="#b224ef"/>
+      <text x="24" y="34" fill="#ffffff" font-size="14" font-weight="800">2</text>
+      <text x="55" y="27" fill="#ffffff" font-size="13" font-weight="700">GEMINI EDITORIAL REFINEMENT (cheap_model)</text>
+      <text x="55" y="41" fill="#a855f7" font-size="11">Prompt: Professional News Editor • Filter Bias Fluff • Standardize Core Content</text>
+
+      <text x="20" y="66" fill="#cbd5e1" font-size="11">• Strips sensational clickbait adjectives and isolates uncorroborated assertions.</text>
+      <text x="20" y="84" fill="#cbd5e1" font-size="11">• Saves cleaned text into <tspan fill="#38bdf8">post.refined_body</tspan> for reproducible semantic downstream audit.</text>
+      <text x="20" y="100" fill="#cbd5e1" font-size="11">• Implements exponential backoff with quota retry protection against Gemini 429 errors.</text>
+    </g>
+
+    <!-- Sub-step 3: Atomic Claims Extraction -->
+    <g transform="translate(25, 321)">
+      <rect x="0" y="0" width="620" height="110" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1"/>
+      <rect x="15" y="15" width="28" height="28" rx="6" fill="#b224ef"/>
+      <text x="24" y="34" fill="#ffffff" font-size="14" font-weight="800">3</text>
+      <text x="55" y="27" fill="#ffffff" font-size="13" font-weight="700">DECONSTRUCTION INTO ATOMIC CLAIMS (JSON Mode)</text>
+      <text x="55" y="41" fill="#a855f7" font-size="11">Multilingual Detection (EN, HI, MR) • Extract ≥5 Verifiable Propositions</text>
+
+      <text x="20" y="66" fill="#cbd5e1" font-size="11">• Categorizes claims into: <tspan fill="#f43f5e" font-weight="700">QUANTITATIVE</tspan> (statistics), <tspan fill="#3b82f6" font-weight="700">ATTRIBUTION</tspan> (quotes), <tspan fill="#10b981" font-weight="700">EVENT</tspan> (incidents).</text>
+      <text x="20" y="84" fill="#cbd5e1" font-size="11">• Emits structured schema: { short_title, summary_easy, tags, language, claims: [...] }.</text>
+      <text x="20" y="100" fill="#cbd5e1" font-size="11">• Generates comprehensive 3-paragraph plain-language executive summary.</text>
+    </g>
+
+    <!-- Sub-step 4: Qdrant Vector DB -->
+    <g transform="translate(25, 444)">
+      <rect x="0" y="0" width="620" height="105" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1"/>
+      <rect x="15" y="15" width="28" height="28" rx="6" fill="#b224ef"/>
+      <text x="24" y="34" fill="#ffffff" font-size="14" font-weight="800">4</text>
+      <text x="55" y="27" fill="#ffffff" font-size="13" font-weight="700">HISTORICAL BENCHMARK GROUNDING (VectorService)</text>
+      <text x="55" y="41" fill="#a855f7" font-size="11">Qdrant Vector Database (Port 6333) • Pre-Ingested LIAR Dataset Benchmarks</text>
+
+      <text x="20" y="66" fill="#cbd5e1" font-size="11">• Calculates dense vector cosine similarity against 12,000+ vetted historical claims.</text>
+      <text x="20" y="84" fill="#cbd5e1" font-size="11">• Flags recurring recycled urban legends, old hoaxes, or previously debunked narratives.</text>
+    </g>
+
+    <!-- Sub-step 5: Deep Synthesis -->
+    <g transform="translate(25, 562)">
+      <rect x="0" y="0" width="620" height="105" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1"/>
+      <rect x="15" y="15" width="28" height="28" rx="6" fill="#b224ef"/>
+      <text x="24" y="34" fill="#ffffff" font-size="14" font-weight="800">5</text>
+      <text x="55" y="27" fill="#ffffff" font-size="13" font-weight="700">VERDICT SYNTHESIS &amp; PERSISTENCE (main_model)</text>
+      <text x="55" y="41" fill="#a855f7" font-size="11">Final Forensic Grounding Verdict • Relational SQL Persistence</text>
+
+      <text x="20" y="66" fill="#cbd5e1" font-size="11">• Consolidates Search Evidence + Vector Distance + Source Scores into single audit.</text>
+      <text x="20" y="84" fill="#cbd5e1" font-size="11">• Commits to PostgreSQL tables: <tspan fill="#34d399">Post, Claim, ClaimSource, RedFlag, TrustSignal</tspan>.</text>
+    </g>
+  </g>
+
+  <!-- ==================== LAYER 4: MULTI-STREAM SEARCH & GROUNDING ==================== -->
+  <g transform="translate(1900, 190)">
+    <rect x="0" y="0" width="420" height="690" rx="16" fill="url(#card-grad)" stroke="#ffb300" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="420" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#ffb300"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">4. TAVILY GROUNDING PIPELINE</text>
+
+    <!-- Tavily Client Details -->
+    <g transform="translate(20, 75)">
+      <rect x="0" y="0" width="380" height="95" rx="10" fill="url(#card-inner)" stroke="#26344f" stroke-width="1.5"/>
+      <text x="15" y="25" fill="#fcd34d" font-size="13" font-weight="700">TAVILY ADVANCED API CLIENT</text>
+      <text x="15" y="42" fill="#94a3b8" font-size="11">Search Depth: 'advanced' • Domain Filtering</text>
+      <text x="15" y="62" fill="#cbd5e1" font-size="11">Query format:</text>
+      <text x="15" y="78" fill="#38bdf8" font-size="10" font-family="monospace">"{claim}" rebuttal OR fact-check</text>
+    </g>
+
+    <!-- Grounding Streams Breakdown -->
+    <g transform="translate(20, 185)">
+      <!-- Stream 1 -->
+      <rect x="0" y="0" width="380" height="105" rx="10" fill="url(#card-inner)" stroke="#334155" stroke-width="1"/>
+      <circle cx="25" cy="25" r="8" fill="#3b82f6"/>
+      <text x="45" y="29" fill="#93c5fd" font-size="13" font-weight="700">OFFICIAL NEWS ARCHIVES</text>
+      <text x="15" y="55" fill="#cbd5e1" font-size="11">• Reuters, Associated Press, BBC, The Hindu</text>
+      <text x="15" y="73" fill="#cbd5e1" font-size="11">• Cross-checks wire timestamps &amp; primary statements</text>
+      <text x="15" y="91" fill="#64748b" font-size="10">Weight: Part of 40% Grounding Depth</text>
+
+      <!-- Stream 2 -->
+      <rect x="0" y="118" width="380" height="105" rx="10" fill="url(#card-inner)" stroke="#334155" stroke-width="1"/>
+      <circle cx="25" cy="143" r="8" fill="#10b981"/>
+      <text x="45" y="147" fill="#6ee7b7" font-size="13" font-weight="700">GOVERNMENT &amp; NGO REGISTRIES</text>
+      <text x="15" y="173" fill="#cbd5e1" font-size="11">• pib.gov.in, who.int, un.org, official gazettes</text>
+      <text x="15" y="191" fill="#cbd5e1" font-size="11">• Official rebuttals, policy PDFs, court records</text>
+      <text x="15" y="209" fill="#64748b" font-size="10">Weight: Primary Rebuttal Benchmark</text>
+
+      <!-- Stream 3 -->
+      <rect x="0" y="236" width="380" height="115" rx="10" fill="url(#card-inner)" stroke="#334155" stroke-width="1"/>
+      <circle cx="25" cy="261" r="8" fill="#f97316"/>
+      <text x="45" y="265" fill="#fdba74" font-size="13" font-weight="700">SOCIAL INTEL &amp; CROWD NOTES</text>
+      <text x="15" y="291" fill="#cbd5e1" font-size="11">• Twitter Community Notes &amp; Reddit discussions</text>
+      <text x="15" y="309" fill="#cbd5e1" font-size="11">• Scrapes top 5 relevant community threads</text>
+      <text x="15" y="327" fill="#cbd5e1" font-size="11">• Calculates crowd-sentiment polarization entropy</text>
+      <text x="15" y="343" fill="#64748b" font-size="10">Weight: 15% Social Context Metric</text>
+
+      <!-- Stream 4 -->
+      <rect x="0" y="364" width="380" height="110" rx="10" fill="url(#card-inner)" stroke="#334155" stroke-width="1"/>
+      <circle cx="25" cy="389" r="8" fill="#a855f7"/>
+      <text x="45" y="393" fill="#d8b4fe" font-size="13" font-weight="700">DEDICATED FACT-CHECK SITES</text>
+      <text x="15" y="419" fill="#cbd5e1" font-size="11">• Snopes, PolitiFact, FactCheck.org, AltNews</text>
+      <text x="15" y="437" fill="#cbd5e1" font-size="11">• Matches existing forensic rulings on rumor</text>
+      <text x="15" y="455" fill="#64748b" font-size="10">Stores URLs into ClaimSource &amp; FactCheckSite</text>
+    </g>
+  </g>
+
+  <!-- ==================== CONNECTING ARROWS (TOP SECTION) ==================== -->
+  <!-- Layer 1 to Layer 2 -->
+  <path d="M 580,260 L 630,260" stroke="#00f2fe" stroke-width="3" fill="none" marker-end="url(#arrow-cyan)"/>
+  <text x="605" y="250" fill="#00f2fe" font-size="11" font-weight="700" text-anchor="middle">HTTP POST</text>
+
+  <!-- Layer 2 to Layer 1 (WS) -->
+  <path d="M 630,570 L 580,570" stroke="#ff2a6d" stroke-width="3" stroke-dasharray="6 4" fill="none" marker-end="url(#arrow-cyan)"/>
+  <text x="605" y="560" fill="#ff2a6d" font-size="11" font-weight="700" text-anchor="middle">WS TELEMETRY</text>
+
+  <!-- Layer 2 to Layer 3 (Worker Pickup) -->
+  <path d="M 1130,370 L 1180,370" stroke="#00f5a0" stroke-width="3" fill="none" marker-end="url(#arrow-emerald)"/>
+  <text x="1155" y="360" fill="#00f5a0" font-size="11" font-weight="700" text-anchor="middle">KAFKA JOB</text>
+
+  <!-- Layer 3 to Layer 2 (Redis Progress Updates) -->
+  <path d="M 1180,530 L 1130,530" stroke="#ff2a6d" stroke-width="3" fill="none" marker-end="url(#arrow-cyan)"/>
+  <text x="1155" y="520" fill="#ff2a6d" font-size="11" font-weight="700" text-anchor="middle">REDIS PUB</text>
+
+  <!-- Layer 3 to Layer 4 (Tavily Query) -->
+  <path d="M 1850,230 L 1900,230" stroke="#ffb300" stroke-width="3" fill="none" marker-end="url(#arrow-amber)"/>
+  <text x="1875" y="220" fill="#ffb300" font-size="11" font-weight="700" text-anchor="middle">TAVILY API</text>
+
+  <!-- Layer 4 back to Layer 3 (Evidence Results) -->
+  <path d="M 1900,530 L 1850,530" stroke="#00f5a0" stroke-width="3" stroke-dasharray="6 4" fill="none" marker-end="url(#arrow-emerald)"/>
+  <text x="1875" y="520" fill="#00f5a0" font-size="11" font-weight="700" text-anchor="middle">EVIDENCE</text>
+
+  <!-- ==================== LOWER SECTION: SCORING MATRIX & DATABASE ==================== -->
+  <!-- 5. FORENSIC SCORING MATRIX -->
+  <g transform="translate(80, 930)">
+    <rect x="0" y="0" width="1380" height="420" rx="16" fill="url(#card-grad)" stroke="#00f5a0" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="1380" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#00f5a0"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">5. MULTI-VECTOR FORENSIC SCORING MATRIX &amp; VERDICT GENERATION</text>
+
+    <!-- Formula Box -->
+    <g transform="translate(25, 70)">
+      <rect x="0" y="0" width="1330" height="50" rx="8" fill="#0a1827" stroke="#00f5a0" stroke-width="1.5"/>
+      <text x="25" y="31" fill="#e2e8f0" font-size="15" font-weight="700">FINAL CREDIBILITY FORMULA:</text>
+      <text x="260" y="31" fill="#00f5a0" font-size="15" font-weight="800" font-family="monospace">Score = 0.40 × GroundingDepth + 0.30 × SourceAuthority + 0.15 × SocialContext + 0.15 × NeuralIntegrity</text>
+    </g>
+
+    <!-- 4 Vector Cards -->
+    <g transform="translate(25, 140)">
+      <!-- Vector 1 -->
+      <rect x="0" y="0" width="315" height="135" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="48" height="24" rx="6" fill="#0284c7"/>
+      <text x="39" y="31" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">30%</text>
+      <text x="75" y="31" fill="#e2e8f0" font-size="13" font-weight="700">SOURCE AUTHORITY</text>
+      <text x="15" y="58" fill="#38bdf8" font-size="11" font-weight="600">Trust Signals:</text>
+      <text x="15" y="74" fill="#cbd5e1" font-size="10">Whitelisted domain (PIB, Reuters), HTTPS,</text>
+      <text x="15" y="88" fill="#cbd5e1" font-size="10">transparent editorial contact, primary origin.</text>
+      <text x="15" y="106" fill="#f43f5e" font-size="11" font-weight="600">Red Flags:</text>
+      <text x="15" y="120" fill="#cbd5e1" font-size="10">Blacklisted TLD, obfuscated WHOIS record.</text>
+
+      <!-- Vector 2 -->
+      <rect x="338" y="0" width="315" height="135" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="48" height="24" rx="6" fill="#10b981"/>
+      <text x="39" y="31" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">40%</text>
+      <text x="75" y="31" fill="#e2e8f0" font-size="13" font-weight="700">GROUNDING DEPTH</text>
+      <text x="15" y="58" fill="#34d399" font-size="11" font-weight="600">Trust Signals:</text>
+      <text x="15" y="74" fill="#cbd5e1" font-size="10">Official press release, court affidavit,</text>
+      <text x="15" y="88" fill="#cbd5e1" font-size="10">cross-verified by 3+ independent outlets.</text>
+      <text x="15" y="106" fill="#f43f5e" font-size="11" font-weight="600">Red Flags:</text>
+      <text x="15" y="120" fill="#cbd5e1" font-size="10">Contradicts official record; isolated claim.</text>
+
+      <!-- Vector 3 -->
+      <rect x="676" y="0" width="315" height="135" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="48" height="24" rx="6" fill="#f59e0b"/>
+      <text x="39" y="31" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">15%</text>
+      <text x="75" y="31" fill="#e2e8f0" font-size="13" font-weight="700">SOCIAL CONTEXT</text>
+      <text x="15" y="58" fill="#fbbf24" font-size="11" font-weight="600">Trust Signals:</text>
+      <text x="15" y="74" fill="#cbd5e1" font-size="10">Community Notes corroboration, low entropy,</text>
+      <text x="15" y="88" fill="#cbd5e1" font-size="10">organic multi-region spread profile.</text>
+      <text x="15" y="106" fill="#f43f5e" font-size="11" font-weight="600">Red Flags:</text>
+      <text x="15" y="120" fill="#cbd5e1" font-size="10">Coordinated bot amplification, high entropy.</text>
+
+      <!-- Vector 4 -->
+      <rect x="1015" y="0" width="315" height="135" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="48" height="24" rx="6" fill="#8b5cf6"/>
+      <text x="39" y="31" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">15%</text>
+      <text x="75" y="31" fill="#e2e8f0" font-size="13" font-weight="700">NEURAL INTEGRITY</text>
+      <text x="15" y="58" fill="#c084fc" font-size="11" font-weight="600">Trust Signals:</text>
+      <text x="15" y="74" fill="#cbd5e1" font-size="10">Valid C2PA cryptographic signature, unaltered</text>
+      <text x="15" y="88" fill="#cbd5e1" font-size="10">EXIF metadata, natural lighting gradient.</text>
+      <text x="15" y="106" fill="#f43f5e" font-size="11" font-weight="600">Red Flags:</text>
+      <text x="15" y="120" fill="#cbd5e1" font-size="10">GAN warp artifacts, stripped camera headers.</text>
+    </g>
+
+    <!-- Verdict Badges Banner -->
+    <g transform="translate(25, 295)">
+      <rect x="0" y="0" width="1330" height="100" rx="10" fill="#0c1220" stroke="#1e293b"/>
+      <text x="20" y="24" fill="#94a3b8" font-size="12" font-weight="700">AUDIT VERDICT TIERS (UI BADGES &amp; USER MEANING):</text>
+
+      <!-- Badge 1 -->
+      <g transform="translate(20, 38)">
+        <rect x="0" y="0" width="235" height="48" rx="8" fill="#06321f" stroke="#00f5a0" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#00f5a0"/>
+        <text x="35" y="22" fill="#00f5a0" font-size="12" font-weight="800">VERIFIED (85-100%)</text>
+        <text x="35" y="38" fill="#a7f3d0" font-size="10">Multiple primary sources agree</text>
+      </g>
+
+      <!-- Badge 2 -->
+      <g transform="translate(285, 38)">
+        <rect x="0" y="0" width="235" height="48" rx="8" fill="#0c2d3a" stroke="#00f2fe" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#00f2fe"/>
+        <text x="35" y="22" fill="#00f2fe" font-size="12" font-weight="800">VETTED (60-84%)</text>
+        <text x="35" y="38" fill="#bae6fd" font-size="10">Accepted; minor citations missing</text>
+      </g>
+
+      <!-- Badge 3 -->
+      <g transform="translate(550, 38)">
+        <rect x="0" y="0" width="235" height="48" rx="8" fill="#302409" stroke="#f59e0b" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#f59e0b"/>
+        <text x="35" y="22" fill="#fbbf24" font-size="12" font-weight="800">UNCERTAIN (40-59%)</text>
+        <text x="35" y="38" fill="#fde68a" font-size="10">Emerging intel; active void</text>
+      </g>
+
+      <!-- Badge 4 -->
+      <g transform="translate(815, 38)">
+        <rect x="0" y="0" width="245" height="48" rx="8" fill="#36170d" stroke="#f97316" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#f97316"/>
+        <text x="35" y="22" fill="#fb923c" font-size="12" font-weight="800">CONTROVERSIAL (20-39%)</text>
+        <text x="35" y="38" fill="#fed7aa" font-size="10">Direct conflict between records</text>
+      </g>
+
+      <!-- Badge 5 -->
+      <g transform="translate(1085, 38)">
+        <rect x="0" y="0" width="225" height="48" rx="8" fill="#3b0d19" stroke="#ef4444" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#ef4444"/>
+        <text x="35" y="22" fill="#f87171" font-size="12" font-weight="800">REFUTED / FRAUD (0-19%)</text>
+        <text x="35" y="38" fill="#fecaca" font-size="10">Falsehood or synthetic fake</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 6. PERSISTENCE LAYER (POSTGRESQL & QDRANT) -->
+  <g transform="translate(1500, 930)">
+    <rect x="0" y="0" width="820" height="420" rx="16" fill="url(#card-grad)" stroke="#7579ff" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="820" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#7579ff"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">6. PERSISTENCE &amp; DATABASE SCHEMA (PostgreSQL &amp; Qdrant)</text>
+
+    <!-- PostgreSQL Relational Schema -->
+    <g transform="translate(25, 70)">
+      <rect x="0" y="0" width="460" height="325" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="30" height="26" rx="4" fill="#3b82f6"/>
+      <text x="21" y="33" fill="#ffffff" font-size="13" font-weight="900">SQL</text>
+      <text x="55" y="32" fill="#93c5fd" font-size="13" font-weight="700">POSTGRESQL 15 SCHEMA (database.py)</text>
+
+      <g transform="translate(15, 55)">
+        <rect x="0" y="0" width="430" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="20" fill="#38bdf8" font-size="11" font-weight="700">Post Table (Core Entity)</text>
+        <text x="12" y="36" fill="#94a3b8" font-size="10">id, title, body, refined_body, credibility_score, status, raw_json</text>
+
+        <rect x="0" y="56" width="430" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="76" fill="#38bdf8" font-size="11" font-weight="700">Claim &amp; ClaimSource Tables</text>
+        <text x="12" y="92" fill="#94a3b8" font-size="10">post_id, text, verdict, confidence, reason, historical_ctx, source_url</text>
+
+        <rect x="0" y="112" width="430" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="132" fill="#38bdf8" font-size="11" font-weight="700">TrustSignal &amp; RedFlag Tables</text>
+        <text x="12" y="148" fill="#94a3b8" font-size="10">post_id, signal (whitelisted domain, HTTPS), flag (TLD, GAN artifact)</text>
+
+        <rect x="0" y="168" width="430" height="48" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="188" fill="#38bdf8" font-size="11" font-weight="700">NewsOutlet &amp; FactCheckSite Tables</text>
+        <text x="12" y="204" fill="#94a3b8" font-size="10">domain, is_whitelisted, is_blacklisted, credibility_score</text>
+
+        <rect x="0" y="224" width="430" height="38" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="244" fill="#38bdf8" font-size="11" font-weight="700">User, Token, PostTag Tables</text>
+        <text x="12" y="256" fill="#94a3b8" font-size="10">user_id, hashed_password, tag, created_at</text>
+      </g>
+    </g>
+
+    <!-- Qdrant Vector Store Box -->
+    <g transform="translate(505, 70)">
+      <rect x="0" y="0" width="290" height="325" rx="10" fill="url(#card-inner)" stroke="#334155"/>
+      <rect x="15" y="15" width="30" height="26" rx="4" fill="#ffb300"/>
+      <text x="21" y="33" fill="#080b11" font-size="13" font-weight="900">VEC</text>
+      <text x="55" y="32" fill="#fcd34d" font-size="13" font-weight="700">QDRANT VECTOR DB</text>
+
+      <g transform="translate(15, 55)">
+        <rect x="0" y="0" width="260" height="70" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="22" fill="#fbbf24" font-size="11" font-weight="700">mass_ingest.py Loader</text>
+        <text x="12" y="40" fill="#cbd5e1" font-size="10">Loads LIAR dataset &amp; historical</text>
+        <text x="12" y="55" fill="#cbd5e1" font-size="10">politifact benchmarks into memory.</text>
+
+        <rect x="0" y="80" width="260" height="70" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="102" fill="#fbbf24" font-size="11" font-weight="700">Dense Embeddings</text>
+        <text x="12" y="120" fill="#cbd5e1" font-size="10">Vector Dimension: 768 / 1536</text>
+        <text x="12" y="135" fill="#cbd5e1" font-size="10">Distance Metric: Cosine Similarity</text>
+
+        <rect x="0" y="160" width="260" height="85" rx="6" fill="#0f172a" stroke="#1e293b"/>
+        <text x="12" y="182" fill="#fbbf24" font-size="11" font-weight="700">Real-Time Search</text>
+        <text x="12" y="200" fill="#cbd5e1" font-size="10">Sub-10ms nearest neighbor search</text>
+        <text x="12" y="215" fill="#cbd5e1" font-size="10">identifies repeated disinformation</text>
+        <text x="12" y="230" fill="#cbd5e1" font-size="10">across multi-year archives.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== BOTTOM DEPLOYMENT & STATE MACHINE SUMMARY ==================== -->
+  <g transform="translate(80, 1390)">
+    <rect x="0" y="0" width="2240" height="390" rx="16" fill="url(#card-grad)" stroke="#1e293b" stroke-width="2" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="2240" height="50" rx="16" fill="url(#card-inner)"/>
+    <circle cx="30" cy="25" r="7" fill="#38bdf8"/>
+    <text x="50" y="31" fill="#ffffff" font-size="16" font-weight="700" letter-spacing="0.5">7. END-TO-END STATE TRANSITION LIFECYCLE &amp; DOCKER ORCHESTRATION</text>
+
+    <!-- State Transition Pipeline Graph -->
+    <g transform="translate(30, 75)">
+      <text x="10" y="20" fill="#38bdf8" font-size="13" font-weight="700">HUD STATE MACHINE EXECUTION LIFECYCLE:</text>
+
+      <!-- Step 1 -->
+      <g transform="translate(10, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#38bdf8" font-size="12" font-weight="800">1. PENDING (0%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">Client dispatches payload</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">FastAPI stores Post record</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Enqueues to Kafka topic</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: PENDING</text>
+      </g>
+
+      <!-- Arrow 1 -->
+      <path d="M 270,95 L 300,95" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+      <!-- Step 2 -->
+      <g transform="translate(310, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#00f2fe" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#00f2fe" font-size="12" font-weight="800">2. INGESTING (5-20%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">Worker picks up job</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">Crawls source domain URL</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Tesseract OCR if image</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: INGESTING</text>
+      </g>
+
+      <!-- Arrow 2 -->
+      <path d="M 570,95 L 600,95" stroke="#00f2fe" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+      <!-- Step 3 -->
+      <g transform="translate(610, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#c084fc" font-size="12" font-weight="800">3. REFINING (25-40%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">Gemini Flash News Editor</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">Strips emotional fluff</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Standardizes factual body</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: REFINING</text>
+      </g>
+
+      <!-- Arrow 3 -->
+      <path d="M 870,95 L 900,95" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+      <!-- Step 4 -->
+      <g transform="translate(910, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#a78bfa" font-size="12" font-weight="800">4. VERIFYING (45-60%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">Extracts 5+ atomic claims</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">Language detection (EN/HI)</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Generates 3-para summary</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: VERIFYING</text>
+      </g>
+
+      <!-- Arrow 4 -->
+      <path d="M 1170,95 L 1200,95" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+      <!-- Step 5 -->
+      <g transform="translate(1210, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#fbbf24" font-size="12" font-weight="800">5. GROUNDING (65-85%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">Tavily Advanced Search</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">Qdrant Vector DB lookup</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Community Notes analysis</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: GROUNDING</text>
+      </g>
+
+      <!-- Arrow 5 -->
+      <path d="M 1470,95 L 1500,95" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+
+      <!-- Step 6 -->
+      <g transform="translate(1510, 40)">
+        <rect x="0" y="0" width="250" height="110" rx="8" fill="#0f172a" stroke="#00f5a0" stroke-width="1.5"/>
+        <text x="20" y="26" fill="#00f5a0" font-size="12" font-weight="800">6. FINALIZING (90-99%)</text>
+        <text x="20" y="46" fill="#cbd5e1" font-size="10">4-Vector Matrix calculation</text>
+        <text x="20" y="62" fill="#94a3b8" font-size="10">Computes 0-100 score</text>
+        <text x="20" y="78" fill="#94a3b8" font-size="10">Assigns badge tier</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="700">Status: FINALIZING</text>
+      </g>
+
+      <!-- Arrow 6 -->
+      <path d="M 1770,95 L 1800,95" stroke="#00f5a0" stroke-width="2" marker-end="url(#arrow-emerald)"/>
+
+      <!-- Step 7 -->
+      <g transform="translate(1810, 40)">
+        <rect x="0" y="0" width="270" height="110" rx="8" fill="#062e1e" stroke="#00f5a0" stroke-width="2"/>
+        <text x="20" y="26" fill="#34d399" font-size="12" font-weight="800">7. COMPLETED (100%)</text>
+        <text x="20" y="46" fill="#e2e8f0" font-size="10">Persisted to PostgreSQL</text>
+        <text x="20" y="62" fill="#a7f3d0" font-size="10">Full Report JSON emitted</text>
+        <text x="20" y="78" fill="#a7f3d0" font-size="10">WebSocket pushes final payload</text>
+        <text x="20" y="94" fill="#00f5a0" font-size="9" font-weight="800">Status: COMPLETED</text>
+      </g>
+    </g>
+
+    <!-- Docker Compose Orchestration Footer -->
+    <g transform="translate(40, 245)">
+      <rect x="0" y="0" width="2160" height="110" rx="10" fill="#080e18" stroke="#1e293b"/>
+      <text x="25" y="28" fill="#e2e8f0" font-size="13" font-weight="700">DOCKER CONTAINER ORCHESTRATION &amp; NETWORKING (docker-compose.yml):</text>
+
+      <g transform="translate(25, 42)">
+        <rect x="0" y="0" width="330" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#38bdf8" font-size="11" font-weight="700">factline-backend (Port 8000)</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">FastAPI REST + WebSocket Gateway</text>
+
+        <rect x="350" y="0" width="330" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#a855f7" font-size="11" font-weight="700">factline-worker</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">Python autonomous NewsCredibilityEngine</text>
+
+        <rect x="700" y="0" width="330" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#00f5a0" font-size="11" font-weight="700">factline-db (Port 5432)</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">PostgreSQL 15 Alpine (postgres_data)</text>
+
+        <rect x="1050" y="0" width="330" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#ffb300" font-size="11" font-weight="700">factline-qdrant (Port 6333)</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">Qdrant Vector Database Engine</text>
+
+        <rect x="1400" y="0" width="330" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#f43f5e" font-size="11" font-weight="700">factline-redis (Port 6379)</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">Redis 7 Alpine Telemetry &amp; Caching</text>
+
+        <rect x="1750" y="0" width="380" height="50" rx="6" fill="#0f172a" stroke="#334155"/>
+        <text x="15" y="22" fill="#34d399" font-size="11" font-weight="700">factline-ingestor</text>
+        <text x="15" y="38" fill="#94a3b8" font-size="10">mass_ingest.py (LIAR &amp; Politifact dataset pre-loader)</text>
+      </g>
+    </g>
+  </g>
+</svg>

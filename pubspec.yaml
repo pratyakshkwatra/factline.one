@@ -43,3 +43,4 @@ flutter:
   assets:
     - assets/news_bg_1.jpg
     - assets/news_bg_2.jpg
+    - google_fonts/

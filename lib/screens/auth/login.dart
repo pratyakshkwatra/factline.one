@@ -55,11 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on APIException catch (e) {
       if (mounted) {
-        showErrorSnackbar("${e.code}: ${e.message}", context);
+        final prefix = e.code != null ? "${e.code}: " : "";
+        showErrorSnackbar("$prefix${e.message}", context);
       }
     } catch (error) {
       if (mounted) {
-        showErrorSnackbar("Unexpected error. Please try again.", context);
+        showErrorSnackbar("Unexpected error: $error", context);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);

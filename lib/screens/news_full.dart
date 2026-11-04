@@ -32,7 +32,6 @@ class _NewsFullScreenState extends State<NewsFullScreen> {
   final PostAPI _postAPI = PostAPI();
   String? _translatedTitle;
   String? _translatedSummary;
-  bool _isTranslating = false;
   WebSocketChannel? _channel;
 
   @override
@@ -151,7 +150,6 @@ class _NewsFullScreenState extends State<NewsFullScreen> {
 
   Future<void> _translateContent(String langCode) async {
     if (!mounted) return;
-    setState(() => _isTranslating = true);
 
     final tTitle = await TranslationService().translateAsync(
       _currentPost.title,
@@ -164,7 +162,6 @@ class _NewsFullScreenState extends State<NewsFullScreen> {
       setState(() {
         _translatedTitle = tTitle;
         _translatedSummary = tSummary;
-        _isTranslating = false;
       });
     }
   }

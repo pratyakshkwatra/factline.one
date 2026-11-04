@@ -125,15 +125,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             }
                           } on APIException catch (exception) {
                             if (context.mounted) {
+                              final prefix = exception.code != null ? "${exception.code}: " : "";
                               showErrorSnackbar(
-                                "${exception.code}: ${exception.message}",
+                                "$prefix${exception.message}",
                                 context,
                               );
                             }
-                          } catch (_) {
+                          } catch (e) {
                             if (context.mounted) {
                               showErrorSnackbar(
-                                "Critical Initialization Error. Try again.",
+                                "Initialization Error: $e",
                                 context,
                               );
                             }
